@@ -1,69 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Greeting from "../components/Greeting"
-import Card from "../components/Card.astro"
 
-const pageTitle = "Home Page";
+const pageTitle = "Andrew Flores";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-    <h2>My awesome home page subtitle</h2>
-
-    <Greeting client:load messages={["Hej", "Hallo", "Hola", "Habari"]} />
-
     <main>
-        <p class="instructions">
-            To get started, open the directory <code>src/pages</code> in your project.<br />
-            <strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
+        <p>
+            Hello! I'm a Software Engineer currently residing in Duluth, Minnesota. I write Angular applications by day and build upon my Homelab by night.
         </p>
-        <ul role="list" class="link-card-grid">
-            <Card
-                href="https://docs.astro.build/"
-                title="Documentation"
-                body="Learn how Astro works and explore the official API docs."
-            />
-            <Card
-                href="https://astro.build/integrations/"
-                title="Integrations"
-                body="Supercharge your project with new frameworks and libraries."
-            />
-            <Card
-                href="https://astro.build/themes/"
-                title="Themes"
-                body="Explore a galaxy of community-built starter themes."
-            />
-            <Card
-                href="https://astro.build/chat/"
-                title="Community"
-                body="Come say hi to our amazing Discord community. ❤️"
-            />
-        </ul>
+        
+        <p>
+            There is an incredible amount of information available on the internet for any given topic and it can be challenging to cut through the noise to find the nuggets of gold. My goal is to present what I have learned in a concise and easy-to-follow format so that others can grasp the same concepts more efficiently than I did.
+        </p>
     </main>
 </BaseLayout>
-
-<style>
-	.instructions {
-		margin-bottom: 2rem;
-		border: 1px solid rgba(var(--accent-light), 25%);
-		background: linear-gradient(rgba(var(--accent-dark), 66%), rgba(var(--accent-dark), 33%));
-		padding: 1.5rem;
-		border-radius: 8px;
-	}
-	.instructions code {
-		font-size: 0.8em;
-		font-weight: bold;
-		background: rgba(var(--accent-light), 12%);
-		color: rgb(var(--accent-light));
-		border-radius: 4px;
-		padding: 0.3em 0.4em;
-	}
-	.instructions strong {
-		color: rgb(var(--accent-light));
-	}
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 2rem;
-		padding: 0;
-	}
-</style>

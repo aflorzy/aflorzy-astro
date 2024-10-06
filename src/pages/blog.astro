@@ -7,10 +7,20 @@ const allPosts = await Astro.glob('./posts/*.md');
 const pageTitle = "Blog";
 ---
 <BaseLayout pageTitle={pageTitle}>
-    <p>This is where I will post about my journey learning Astro.</p>
+  <p>This is where I will post about my journey learning Astro.</p>
     
-    <ul>
-      {allPosts.map((post) => <BlogPost url={post.url} title={post.frontmatter.title} />)}
-    </ul>
+  <ul class="link-card-grid">
+    {allPosts.map((post) => <BlogPost url={post.url} title={post.frontmatter.title} description={post.frontmatter.description} />)}
+  </ul>
 
-  </BaseLayout>
+</BaseLayout>
+
+<style>
+  .link-card-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+		gap: 2rem;
+		padding: 0;
+  }
+</style>

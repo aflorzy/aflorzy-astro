@@ -13,6 +13,21 @@
 html {
   font-family: system-ui, sans-serif;
   background: #13151a;
+  color: white;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
+li {
+  list-style: none;
 }
 
 code {
