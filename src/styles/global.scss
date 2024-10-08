@@ -69,15 +69,15 @@ h1 {
 /* nav styles */
 
 .hamburger {
-  padding-right: 20px;
   cursor: pointer;
+  padding-top: 1rem;
 
   .line {
     display: block;
     width: 40px;
     height: 5px;
     margin-bottom: 10px;
-    background-color: #ff9776;
+    background-color: #4c1d95;
   }
 }
   
@@ -85,7 +85,7 @@ h1 {
   width: 100%;
   top: 5rem;
   left: 48px;
-  background-color: #ff9776;
+  background-color: #4c1d95;
   display: none;
   margin: 0;
   
@@ -100,8 +100,19 @@ h1 {
 
     &:hover,
     &:focus {
-      background-color: #ff9776;
+      background-color: #4c1d95;
     }
+  }
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 0.1rem 2%;
+
+  .logo {
+    height: 64px;
   }
 }
   
@@ -126,6 +137,12 @@ h1 {
       display: inline-block;
       padding: 15px 20px;
     }
+  }
+
+  header {
+    justify-content: flex-start;
+    align-items: center;
+    margin: 1rem 10%;
   }
 
   .hamburger {
