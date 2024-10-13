@@ -1,0 +1,48 @@
+---
+layout: ../../layouts/MarkdownPostLayout.astro
+title: 'DayTrackr'
+pubDate: 2024-10-12
+description: ''
+authors: ['Andrew Flores']
+# image:
+#     url: 'https://docs.astro.build/assets/rose.webp'
+#     alt: 'DayTrackr calendar page'
+---
+
+## About
+
+DayTracker originated as a simple parser program for the data I have been collecting for several years. At the end of each day, I write a list of events that happened throughout the course of the day.
+
+I started taking these daily notes while in high school (2017) because I noticed the days had started to blend together and I had a hard time remembering which activities I had done even a few days prior.
+
+## Example Data
+
+Below is an example of what I would write down for a (rather mundane) day.
+```
+Monday- Breakfast, work, meetings, lunch, code, walk, supper, YouTube
+```
+
+## Parsing Algorithm
+
+Since each day is written on its own line and prefixed with `<day of week>- `, and each event is separated by a comma, I can pass in a long list of days and parse it out to a list of `Day` objects.
+
+1. Assign a `date` to the first day in the list
+2. Validate list of days is in order and no days are missing (Monday-Sunday)
+3. Construct an array of events from each day
+    - `const events = dayString.split('- ')[1].split(', ');`
+4. Assemble a `Day` object for each day
+    - `const day: Day = { date, events };`
+
+## Working with the Data
+
+The next phase step was to create a UI for viewing, adding, and editing days. I chose to create a custom calendar component where each day indicates whether it contains any events or not. When a day is selected, its events are displayed in a list where I can add and edit them.
+
+## Creating User Accounts
+
+Now that the interface was set up to support CRUD operations on each day, I thought it would be a great learning opportunity to add users and authentication so more people could use this as an app for themselves.
+
+Since the backend was written in Java/Spring, I went down the road of "rolling my own" auth using Spring Security. This proved to be an excellent tool for learning, but made me realize how difficult it is to create a robust authorization service from scratch. In the future, I will strongly consider using a third-party service to handle all this while supporting OAuth and MFA out of the box.
+
+## The Future
+
+My wife and I are currently the only active users of DayTrackr and we access a self-hosted instance of the app. I still have a healthy backlog of features to implement, but would like to release it to the public at some point.

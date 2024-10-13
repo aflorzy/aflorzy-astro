@@ -3,17 +3,19 @@ interface Props {
 	title: string;
 	body: string;
 	href: string;
+	image?: { url: string; alt: string };
 }
 
-const { href, title, body } = Astro.props;
+const { href, title, body, image } = Astro.props;
 ---
 
 <li class="link-card">
 	<a href={href}>
 		<h2>
 			{title}
-			<span>&rarr;</span>
 		</h2>
+
+		{ image && <img src={image.url} alt={image.alt} />}
 		<p>
 			{body}
 		</p>
@@ -42,10 +44,18 @@ const { href, title, body } = Astro.props;
 		background-color: #23262d;
 		opacity: 0.8;
 	}
+
+	.link-card img {
+		max-width: 100%;
+		width: 300px;
+	}
+
 	h2 {
 		margin: 0;
+		margin-bottom: 0.5rem;
 		font-size: 1.25rem;
 		transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+		text-align: center;
 	}
 	p {
 		margin-top: 0.5rem;

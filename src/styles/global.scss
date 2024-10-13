@@ -124,6 +124,14 @@ header {
   display: flex;
   flex-wrap: wrap;
 }
+
+.link-card-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 0;
+}
   
 @media screen and (min-width: 636px) {
   .nav-links {

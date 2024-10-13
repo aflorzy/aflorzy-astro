@@ -1,0 +1,28 @@
+---
+layout: ../../layouts/MarkdownPostLayout.astro
+title: 'FloTrade'
+pubDate: 2024-10-12
+description: ''
+authors: ['Andrew Flores', 'Tom Flores']
+# image:
+#     url: 'https://docs.astro.build/assets/rose.webp'
+#     alt: 'FloTrade order manager page'
+---
+
+## About
+
+FloTrade was developed in response to an antiquated bond-trading solution at a medium-sized financial institution. Treasury Bill and Note trades can be constructed with an intuitive interface. A list of trades can then be exported in the exact format that the clearinghouse expects.
+
+See FloTrade in action [here](https://flotrade.aflorzy.com/)
+
+## Benefits 
+
+FloTrade reduces errors by providing validations in every step in the lifecycle of a trade.
+
+## Results
+
+After one month of near full-time usage by **10 traders**, a total of **2212** trades amounting to over **$1.2 billion** were entered into FloTrade.
+
+## Future
+
+Add support for CD trades, along with Corporate and Municipal bonds.
