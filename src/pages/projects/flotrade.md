@@ -4,9 +4,9 @@ title: 'FloTrade'
 pubDate: 2024-10-12
 description: ''
 authors: ['Andrew Flores', 'Tom Flores']
-# image:
-#     url: 'https://docs.astro.build/assets/rose.webp'
-#     alt: 'FloTrade order manager page'
+image:
+    url: '/images/flotrade.png'
+    alt: 'FloTrade logo'
 ---
 
 ## About
@@ -26,3 +26,28 @@ After one month of near full-time usage by **10 traders**, a total of **2212** t
 ## Future
 
 Add support for CD trades, along with Corporate and Municipal bonds.
+
+## Tech Stack
+### Dev
+* Angular
+    - Karma
+    - Prettier
+    - ESLint
+    - MomentJS
+    - SheetJS
+    - SweetAlert2
+    - JS PDF
+    - ChartJS
+    - Html2Canvas
+    - ng2-Charts
+* Spring Boot
+    - Spring Data JPA
+    - Lombok
+    - Spring Mail
+* MySQL
+
+### CI/CD
+* Docker (Compose)
+* Jenkins
+* Automated Builds and Deployments*
+    - TODO: Currently triggering builds and deployments manually

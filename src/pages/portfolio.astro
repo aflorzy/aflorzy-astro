@@ -7,8 +7,6 @@ const allProjects = await Astro.glob('./projects/*.md');
 const pageTitle = "My Projects";
 ---
 <BaseLayout pageTitle={pageTitle}>
-  <p>Check out the projects I've worked on!</p>
-    
   <ul class="link-card-grid">
     {allProjects.map((project) => <PortfolioProject url={project.url} title={project.frontmatter.title} description={project.frontmatter.description} image={project.frontmatter.image} />)}
   </ul>

@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+
 interface Props {
 	title: string;
 	body: string;
@@ -47,7 +49,7 @@ const { href, title, body, image } = Astro.props;
 
 	.link-card img {
 		max-width: 100%;
-		width: 300px;
+		max-width: 15rem;
 	}
 
 	h2 {

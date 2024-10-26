@@ -4,9 +4,9 @@ title: 'DayTrackr'
 pubDate: 2024-10-12
 description: ''
 authors: ['Andrew Flores']
-# image:
-#     url: 'https://docs.astro.build/assets/rose.webp'
-#     alt: 'DayTrackr calendar page'
+image:
+    url: '/images/daytrackr.png'
+    alt: 'DayTrackr logo'
 ---
 
 ## About
@@ -46,3 +46,23 @@ Since the backend was written in Java/Spring, I went down the road of "rolling m
 ## The Future
 
 My wife and I are currently the only active users of DayTrackr and we access a self-hosted instance of the app. I still have a healthy backlog of features to implement, but would like to release it to the public at some point.
+
+## Tech Stack
+### Dev
+* Angular
+    - NGRX
+    - Karma
+    - Prettier
+    - ESLint
+* Spring Boot
+    - Spring Security
+    - Spring Data JPA
+    - Lombok
+    - Spring Mail
+* MySQL
+
+### CI/CD
+* Docker (Compose)
+* Jenkins
+* Automated Builds and Deployments*
+    - TODO: Currently triggering builds and deployments manually
