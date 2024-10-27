@@ -18,9 +18,7 @@ I started taking these daily notes while in high school (2017) because I noticed
 ## Example Data
 
 Below is an example of what I would write down for a (rather mundane) day.
-```
-Monday- Breakfast, work, meetings, lunch, code, walk, supper, YouTube
-```
+>Monday- Breakfast, work, meetings, lunch, code, walk, supper, YouTube
 
 ## Parsing Algorithm
 
@@ -29,9 +27,13 @@ Since each day is written on its own line and prefixed with `<day of week>- `, a
 1. Assign a `date` to the first day in the list
 2. Validate list of days is in order and no days are missing (Monday-Sunday)
 3. Construct an array of events from each day
-    - `const events = dayString.split('- ')[1].split(', ');`
+    ```ts
+    const events = dayString.split('- ')[1].split(', ');
+    ```
 4. Assemble a `Day` object for each day
-    - `const day: Day = { date, events };`
+    ```ts
+    const day: Day = { date, events };
+    ```
 
 ## Working with the Data
 
