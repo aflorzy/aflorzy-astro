@@ -1,0 +1,31 @@
+---
+layout: ../../layouts/MarkdownPostLayout.astro
+title: 'Intro to Linux and the Terminal'
+pubDate: 2024-10-27
+description: 'Learn the essentials of interacting with linux systems and become familiarized with the terminal'
+authors: ['Andrew Flores']
+# image:
+#     url: 'https://docs.astro.build/assets/rose.webp'
+#     alt: 'The Astro logo on a dark background with a pink glow.'
+tags: ["linux", "tutorial"]
+---
+UNIX file structure is something helpful to know about since it is the base of Linux and Mac OS's.
+
+After a while, the terminal becomes a very comfortable place. Your hands can stay on the keyboard and type out a bunch of commands as soon as they go through your brain, all without moving your hand to the mouse to click something. It might not seem like a big deal, but at a certain point, your brain will move very quickly and you'll become limited by how fast you can interact with the computer. The keyboard is a fantastic interface for efficiency.
+
+
+Now that you're sold on Linux and have an instance up and running, I'm going to run through some of the fundemental concepts and commands that you should know when using Linux.
+
+Important locations in the UNIX file structure
+/ is root, the very top of the directory structure. Something to note is that folders are usually referred to Directories on Linux, but people will always know what you're talking about. You will hear me say both words, but I am working on saying directory more.
+/home contains the the user profile folders. My user directory is at /home/aflorzy. You will notice that the file path next to your username will show the current directory you are in, but it will only show the ~ tilde ~ when you are in your user directory. You can navigate to any directory by typing `cd <dirname>` cd stands for Change Directory. If you `cd ~` or simply `cd`, you will be navigated to your user directory.
+
+`ls` List files in the current directory. You can type the path of another directory after it to list the contents of that folder. `ls /var`. `ls -l` lists them in a vertical format that is easier to read, and also shows some more information about the files, like permissions, size, and modified date. This is a good time to talk about flags. The `-l` we typed is called a 'flag' and tells the ls command to do something special, depending on the flag we provide it with. If we add another flag `a`, so the new command is `ls -la` (which is the same as `ls -l -a`, which will make more sense when you see larger commands that use multiple flags), we see some new files shown in the list. These files and directories are hidden by default, but you can show them by running that command.
+In each directory, there are two directories called `.` and `..`. These are special ones because they refer to the current directory, and the directory that is one level up, or back. If we do `cd ..`, notice that we navigate back one directory. If we then do `cd .`, notice that we remain in the same directory. The single period is actually incredibly useful and you will see why here in a second.
+`mv` Move a file to a new location. This command will come in handy pretty often. It is used to move files to new locations, or even the same location with a different name. For example, if we run `mv image.png /home/aflorzy`, it will move the file to that location. Now I will move it back to our current directory by running `mv /home/aflorzy/image.png .`. The period references our current directory, so it moved it back to exactly where we are. Also, since there is no default command to rename a file, we can do it by this `mv image.png image2.png`. Run ls to see that is changed. I will change it back with a slightly different syntax `mv ./image2.png ./image.png`. Prefixing the filenames with `./` just explicitly defines that we want the file image2.png in our current directory to 'move' to image.png in our current directory.
+`cp` Copy a file to a new location. Copy is very similar in syntax to `mv`, but it doesn't move the file, it creates a new instance of it in the other location. `cp image.png /home/aflorzy`. Make sure that image.png exists in both locations.
+`rm` Now you want to delete the extra file you just copied, you can use the remove command. `rm /home/aflorzy/image.png`. There is a flag that you should remember whenever you need to delete a directory. `rm -rf`. It will give you a hard time if you don't use these flags while deleting a directory, but it makes sure that the directory, along with all of its contents, are deleted.
+
+#### Essential Tips
+`TAB` key auto-completes file names and commands
+`Up-arrow` Brings up the previous commands!

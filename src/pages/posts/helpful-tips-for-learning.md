@@ -1,0 +1,15 @@
+---
+layout: ../../layouts/MarkdownPostLayout.astro
+title: 'Helpful Tips for Beginners'
+pubDate: 2024-10-27
+description: 'How to approach learning technical concepts and retain the knowledge you gain'
+authors: ['Andrew Flores']
+# image:
+#     url: 'https://docs.astro.build/assets/rose.webp'
+#     alt: 'The Astro logo on a dark background with a pink glow.'
+tags: ["tips", "learning", "philosophy"]
+---
+
+It is okay to do things the inefficient way, especially at first. Use don't use a bomb to kill an ant. More overhead and knowledge required for doing it the better/efficient way. I like to just get it working which motivates me with dopamine and the fact that I can start playing with the next steps. I also know that it CAN be done, so I won't get as frustrated going back and trying it again the complicated way.
+
+Take detailed notes about what you're learning -- write them in simple and precise words so that a non-technical person would be able to read them and understand the concept you're learning about. You have mastered a subject if you know it well enough to teach it and be able to answer follow up questions confidently. Writing scripts for these videos is teaching me to be precise in my wording and challenges me to fill the gaps in my understanding. I have the big picture of a lot of technologies, but I don't know them at a fine enough grain to teach them effectively.

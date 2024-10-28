@@ -2,7 +2,7 @@
 layout: ../../layouts/MarkdownPostLayout.astro
 title: 'FloTrade'
 pubDate: 2024-10-12
-description: ''
+description: 'US Treasury Bond order entry and inventory management system.'
 authors: ['Andrew Flores', 'Tom Flores']
 image:
     url: '/images/flotrade.png'

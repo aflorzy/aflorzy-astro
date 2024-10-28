@@ -1,13 +1,8 @@
 @use "sass:color";
+@import "./colors";
+@import "./cards";
 
 /* Color Variables */
-$color-primary: #234143;
-$color-secondary: #7FC29B;
-$color-tertiary: #CB904D;
-$color-dark: #0E131F;
-$color-light: #E7E6F7;
-$color-accent: #79ADDC;
-
 
 /* Global Styles */
 body {
@@ -96,7 +91,7 @@ pre {
 img {
   max-width: 100%;
   display: block;
-  margin: 1rem 0;
+  // margin: 1rem 0;
 }
 
 /* Tables */
@@ -187,14 +182,18 @@ header {
 .tags {
   display: flex;
   flex-wrap: wrap;
-}
+  gap: 1rem;
 
-.link-card-grid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 2rem;
-  padding: 0;
+  .tag {
+    padding: 0.5rem 1rem;
+    background-color: $color-primary;
+    border-radius: 0.5rem;
+    transition: 0.3s ease-in-out;
+
+    &:hover {
+      filter: brightness(1.4);
+    }
+  }
 }
 
 @media screen and (min-width: 636px) {

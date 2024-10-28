@@ -2,7 +2,7 @@
 layout: ../../layouts/MarkdownPostLayout.astro
 title: 'DayTrackr'
 pubDate: 2024-10-12
-description: ''
+description: 'Calendar app to document daily activities.'
 authors: ['Andrew Flores']
 image:
     url: '/images/daytrackr.png'

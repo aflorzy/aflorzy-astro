@@ -10,8 +10,6 @@ const pageTitle = "Tag Index";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-    <h2>View All Tags</h2>
-
     { tags?.length && (
         <div class="tags">
             { tags.map((tag) => <Tag tag={tag} /> ) }
