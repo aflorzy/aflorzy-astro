@@ -1,13 +1,8 @@
 ---
 import Card from "./Card.astro";
+import { formatDate } from "../scripts/formatDate";
 
-const { url, title, description } = Astro.props;
+const { url, title, description, pubDate, tags } = Astro.props;
 ---
 
-<Card href={url} title={title} body={description} />
-
-<style>
-    li {
-        max-width: 5rem;
-    }
-</style>
+<Card href={url} title={title} body={description} date={formatDate(pubDate)} tags={tags} />

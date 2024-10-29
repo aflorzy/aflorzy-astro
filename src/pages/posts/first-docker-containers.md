@@ -44,12 +44,12 @@ As a quick breakdown of what's happening here, we are constructing a docker run 
 
 ```bash
 docker run -d \
-	-p 9000:9000 \
-	--name portainer \
-	--restart=always \
-	-v /var/run/docker.sock:/var/run/docker.sock \
-	-v ./data:/data \
-	portainer/portainer-ce:latest
+        -p 9000:9000 \
+        --name portainer \
+        --restart=always \
+        -v /var/run/docker.sock:/var/run/docker.sock \
+        -v ./data:/data \
+        portainer/portainer-ce:latest
 ```
 
 Hit `Enter` and the image should begin pulling down to your computer! Once the service is started, you can double check by running `docker ps` again. Now there should be an entry with the name 'Portainer'! The port listed should be 9000, and you can interact with its interface by opening a browser and going to `localhost:9000`. Congratulations! You have spun up your first Docker container!
@@ -71,15 +71,14 @@ Define a volume where you would put your html files if you actually wanted to us
 version: '3'
 
 services:
-	nginx:
-		image: nginx:latest
-		container_name: nginx
-		restart: always
-		ports:
-			- 80:80
-		volumes:
-			- /config/nginx/html:/usr/share/nginx/html
-		
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - /config/nginx/html:/usr/share/nginx/html
 ```
 
 Once the commands are written, you can 'Deploy the stack' which will pull down the nginx image and spin up the container. Once it is successfully up, you can verify in your terminal by running `docker ps`, then go to your web browser at `localhost:80`. A unique thing to note is that port 80 will disappear from the URL because all URLs point to port 80 by default if a different port is not specified.

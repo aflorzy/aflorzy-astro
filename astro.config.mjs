@@ -5,6 +5,8 @@ import node from '@astrojs/node';
 
 import preact from '@astrojs/preact';
 
+import icon from 'astro-icon';
+
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
@@ -14,5 +16,5 @@ export default defineConfig({
   }),
 
   site: "https://blog.aflorzy.com",
-  integrations: [preact()]
+  integrations: [preact(), icon()]
 });

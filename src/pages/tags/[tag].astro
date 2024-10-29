@@ -27,6 +27,6 @@ const { posts } = Astro.props;
     <p>Posts tagged with <mark>{tag}</mark></p>
 
     <ul class="link-card-grid">
-        {posts?.map((post) => <BlogPost url={post.url} title={post.frontmatter.title} description={post.frontmatter.description} />)}
+        {posts?.map((post) => <BlogPost url={post.url} title={post.frontmatter.title} description={post.frontmatter.description} pubDate={post.frontmatter.pubDate} />)}
     </ul>
 </BaseLayout>
