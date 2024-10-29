@@ -1,3 +1,5 @@
+@use "colors";
+
 .link-card {
     list-style: none;
     display: flex;
@@ -26,7 +28,7 @@
     }
 
     p {
-        color: $color-light;
+        color: colors.$color-light;
     }
 
     .left {

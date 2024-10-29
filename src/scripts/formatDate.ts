@@ -37,7 +37,7 @@ const DateFormat: Record<Formats, Intl.DateTimeFormatOptions> = {
 };
 
 const formatDate = (
-  date: any,
+  date: string | number | Date,
   dateFormat: Intl.DateTimeFormatOptions = DateFormat.mediumDate
 ) => new Date(date.toString()).toLocaleString("en-US", dateFormat);
 

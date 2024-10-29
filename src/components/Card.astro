@@ -10,7 +10,7 @@ interface Props {
   image?: { url: string; alt: string };
 }
 
-const { href, title, body, date, tags, image } = Astro.props;
+const { href, title, body, date, tags, image }: Props = Astro.props;
 ---
 
 <li class="link-card">

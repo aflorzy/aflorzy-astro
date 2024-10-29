@@ -7,16 +7,16 @@
       "typescriptreact" // Enable .tsx
     ],
     "prettier.documentSelectors": ["**/*.astro"],
-    "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit"
-    },
+        "source.fixAll.eslint": "explicit"
+      },
+    "editor.formatOnSave": true,
     "[astro]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[javascript]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
-      },
+    },
     "[javascriptreact]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -24,6 +24,6 @@
       "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
   }

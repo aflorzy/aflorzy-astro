@@ -1,4 +1,5 @@
 import tsParser from "@typescript-eslint/parser";
+import tseslint from "typescript-eslint";
 import parser from "astro-eslint-parser";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -15,6 +16,7 @@ const compat = new FlatCompat({
 
 export default [
   ...compat.extends("plugin:astro/recommended"),
+  ...tseslint.configs.recommended,
   {
     languageOptions: {
       parser: tsParser,
@@ -41,5 +43,26 @@ export default [
     },
 
     rules: {},
+  },
+  {
+    // Lint JavaScript and TypeScript files
+    files: ["**/*.js", "**/*.ts", "**/*.jsx", "**/*.tsx"],
+    languageOptions: {
+      parser: tsParser,
+      ecmaVersion: "latest",
+      sourceType: "module",
+      parserOptions: {
+        tsconfigRootDir: ".",
+      },
+    },
+    plugins: {
+      "@typescript-eslint": tseslint.plugin,
+    },
+    rules: {
+      // Add any rules specific to these files here
+    },
+  },
+  {
+    ignores: ["src/env.d.ts"],
   },
 ];

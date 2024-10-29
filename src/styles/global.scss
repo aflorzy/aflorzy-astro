@@ -1,13 +1,13 @@
 @use "sass:color";
-@import "./colors";
-@import "./cards";
+@use "colors";
+@use "cards";
 
 /* Color Variables */
 
 /* Global Styles */
 body {
-  background-color: $color-dark;
-  color: $color-light;
+  background-color: colors.$color-dark;
+  color: colors.$color-light;
   font-family: Arial, sans-serif;
   line-height: 1.6;
   padding: 1rem;
@@ -20,7 +20,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;
-  color: $color-secondary;
+  color: colors.$color-secondary;
 }
 
 h1 { font-size: 2.5rem; }
@@ -36,7 +36,7 @@ p {
 
 /* Links */
 a {
-  color: $color-tertiary;
+  color: colors.$color-tertiary;
   text-decoration: none;
 }
 
@@ -55,23 +55,23 @@ li {
 }
 
 mark {
-    background-color: $color-tertiary;
+    background-color: colors.$color-tertiary;
 }
 
 /* Blockquotes */
 blockquote {
   margin: 1.5rem 0;
   padding-left: 1.5rem;
-  border-left: 4px solid $color-tertiary;
-  color: $color-light;
+  border-left: 4px solid colors.$color-tertiary;
+  color: colors.$color-light;
   font-style: italic;
 }
 
 /* Code */
 pre, code {
   font-family: 'Courier New', Courier, monospace;
-  background-color: color.adjust($color-dark, $lightness: -5%);
-  color: $color-tertiary;
+  background-color: color.adjust(colors.$color-dark, $lightness: -5%);
+  color: colors.$color-tertiary;
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -102,22 +102,22 @@ table {
 }
 
 th, td {
-  border: 1px solid $color-primary;
+  border: 1px solid colors.$color-primary;
   padding: 0.5rem;
   text-align: left;
 }
 
 th {
-  background-color: color.adjust($color-dark, $lightness: -2%);
+  background-color: color.adjust(colors.$color-dark, $lightness: -2%);
 }
 
 /* Gradient Background Examples */
 .gradient-primary {
-  background: linear-gradient(135deg, $color-primary, $color-secondary);
+  background: linear-gradient(135deg, colors.$color-primary, colors.$color-secondary);
 }
 
 .gradient-secondary {
-  background: linear-gradient(135deg, $color-secondary, $color-tertiary);
+  background: linear-gradient(135deg, colors.$color-secondary, colors.$color-tertiary);
 }
 
 /* nav styles */
@@ -137,7 +137,7 @@ nav {
     width: 40px;
     height: 5px;
     margin-bottom: 10px;
-    background-color: $color-light;
+    background-color: colors.$color-light;
   }
 }
   
@@ -159,7 +159,7 @@ nav {
 
     &:hover,
     &:focus {
-      background-color: $color-primary;
+      background-color: colors.$color-primary;
     }
   }
 }
@@ -186,7 +186,7 @@ header {
 
   .tag {
     padding: 0 0.5em;
-    background-color: $color-primary;
+    background-color: colors.$color-primary;
     border-radius: 0.5rem;
     transition: 0.3s ease-in-out;
 
