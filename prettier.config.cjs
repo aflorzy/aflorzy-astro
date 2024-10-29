@@ -1,7 +1,7 @@
 /** @type {import("prettier").Config} */
 
 module.exports = {
-  ...require('prettier-config-standard'),
+  ...require("prettier-config-standard"),
   printWidth: 80,
   tabWidth: 2,
   useTabs: false,
@@ -14,13 +14,17 @@ module.exports = {
   bracketSameLine: true,
   arrowParens: "always",
   endOfLine: "lf",
-  plugins: [require.resolve('prettier-plugin-astro')],
+  plugins: [require.resolve("prettier-plugin-astro")],
   overrides: [
     {
-      files: '*.astro',
+      files: "*.astro",
       options: {
-        parser: 'astro'
-      }
-    }
+        parser: "astro",
+      },
+    },
+    {
+      files: ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      options: { parser: "typescript" },
+    },
   ],
-}
+};
