@@ -1,16 +1,26 @@
 ---
-import BlogPost from '../components/BlogPost.astro';
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BlogPost from "../components/BlogPost.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
-const allPosts = await Astro.glob('./posts/*.md');
+const allPosts = await Astro.glob("./posts/*.md");
 
 const pageTitle = "Blog";
 ---
+
 <BaseLayout pageTitle={pageTitle}>
   <p>This is where I will post about my journey learning Astro.</p>
-    
-  <ul class="link-card-grid">
-    {allPosts.map((post) => <BlogPost url={post.url} title={post.frontmatter.title} description={post.frontmatter.description} pubDate={post.frontmatter.pubDate} tags={post.frontmatter.tags} />)}
-  </ul>
 
+  <ul class="link-card-grid">
+    {
+      allPosts.map((post) => (
+        <BlogPost
+          url={post.url}
+          title={post.frontmatter.title}
+          description={post.frontmatter.description}
+          pubDate={post.frontmatter.pubDate}
+          tags={post.frontmatter.tags}
+        />
+      ))
+    }
+  </ul>
 </BaseLayout>

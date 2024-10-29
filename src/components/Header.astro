@@ -1,16 +1,15 @@
 ---
 import Hamburger from "./Hamburger.astro";
 import Navigation from "./Navigation.astro";
-import { Image } from 'astro:assets';
-import logo from "../assets/logo.png"
-
+import { Image } from "astro:assets";
+import logo from "../assets/logo.png";
 ---
 
 <header>
-    <Image src={logo} alt="Aflorzy logo" width="64" height="64" loading="eager" />
+  <Image src={logo} alt="Aflorzy logo" width="64" height="64" loading="eager" />
 
-    <nav>
-        <Hamburger />
-        <Navigation />
-    </nav>
+  <nav>
+    <Hamburger />
+    <Navigation />
+  </nav>
 </header>

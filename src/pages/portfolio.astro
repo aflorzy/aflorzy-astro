@@ -1,14 +1,23 @@
 ---
-import PortfolioProject from '../components/PortfolioProject.astro';
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PortfolioProject from "../components/PortfolioProject.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
-const allProjects = await Astro.glob('./projects/*.md');
+const allProjects = await Astro.glob("./projects/*.md");
 
 const pageTitle = "My Projects";
 ---
+
 <BaseLayout pageTitle={pageTitle}>
   <ul class="link-card-grid">
-    {allProjects.map((project) => <PortfolioProject url={project.url} title={project.frontmatter.title} description={project.frontmatter.description} image={project.frontmatter.image} />)}
+    {
+      allProjects.map((project) => (
+        <PortfolioProject
+          url={project.url}
+          title={project.frontmatter.title}
+          description={project.frontmatter.description}
+          image={project.frontmatter.image}
+        />
+      ))
+    }
   </ul>
-
 </BaseLayout>

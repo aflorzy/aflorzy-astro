@@ -1,9 +1,9 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
-title: 'Helpful Tips for Beginners'
+title: "Helpful Tips for Beginners"
 pubDate: 2024-10-27
-description: 'How to approach learning technical concepts and retain the knowledge you gain'
-authors: ['Andrew Flores']
+description: "How to approach learning technical concepts and retain the knowledge you gain"
+authors: ["Andrew Flores"]
 # image:
 #     url: 'https://docs.astro.build/assets/rose.webp'
 #     alt: 'The Astro logo on a dark background with a pink glow.'

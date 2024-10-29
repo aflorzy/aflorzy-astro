@@ -1,18 +1,18 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
-title: 'Intro to Linux and the Terminal'
+title: "Intro to Linux and the Terminal"
 pubDate: 2024-10-27
-description: 'Learn the essentials of interacting with linux systems and become familiarized with the terminal'
-authors: ['Andrew Flores']
+description: "Learn the essentials of interacting with linux systems and become familiarized with the terminal"
+authors: ["Andrew Flores"]
 # image:
 #     url: 'https://docs.astro.build/assets/rose.webp'
 #     alt: 'The Astro logo on a dark background with a pink glow.'
 tags: ["linux", "tutorial"]
 ---
+
 UNIX file structure is something helpful to know about since it is the base of Linux and Mac OS's.
 
 After a while, the terminal becomes a very comfortable place. Your hands can stay on the keyboard and type out a bunch of commands as soon as they go through your brain, all without moving your hand to the mouse to click something. It might not seem like a big deal, but at a certain point, your brain will move very quickly and you'll become limited by how fast you can interact with the computer. The keyboard is a fantastic interface for efficiency.
-
 
 Now that you're sold on Linux and have an instance up and running, I'm going to run through some of the fundemental concepts and commands that you should know when using Linux.
 
@@ -27,5 +27,6 @@ In each directory, there are two directories called `.` and `..`. These are spec
 `rm` Now you want to delete the extra file you just copied, you can use the remove command. `rm /home/aflorzy/image.png`. There is a flag that you should remember whenever you need to delete a directory. `rm -rf`. It will give you a hard time if you don't use these flags while deleting a directory, but it makes sure that the directory, along with all of its contents, are deleted.
 
 #### Essential Tips
+
 `TAB` key auto-completes file names and commands
 `Up-arrow` Brings up the previous commands!

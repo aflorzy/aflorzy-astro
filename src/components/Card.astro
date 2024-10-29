@@ -1,59 +1,62 @@
 ---
-import { Icon } from 'astro-icon/components'
+import { Icon } from "astro-icon/components";
 
 interface Props {
-	title: string;
-	body: string;
-	href: string;
-	date?: string;
-	tags?: string[];
-	image?: { url: string; alt: string };
+  title: string;
+  body: string;
+  href: string;
+  date?: string;
+  tags?: string[];
+  image?: { url: string; alt: string };
 }
 
 const { href, title, body, date, tags, image } = Astro.props;
 ---
 
 <li class="link-card">
-	<a href={href}>
-		<div class="left">
-			{ title && (<h3> {title} </h3>) }
+  <a href={href}>
+    <div class="left">
+      {title && <h3> {title} </h3>}
 
-			{ body && (<p> {body} </p>) }
+      {body && <p> {body} </p>}
 
-			<div class="footer">
-				{ date && (
-					<span class="date">
-						<Icon name="mdi:calendar" /> {date}
-					</span>
-				) }
+      <div class="footer">
+        {
+          date && (
+            <span class="date">
+              <Icon name="mdi:calendar" /> {date}
+            </span>
+          )
+        }
 
-				{ tags?.length && (
-					<div class="tags">
-						{ tags.slice(0, 3).map((tag) => (
-							<span class="tag">{tag}</span>
-						)) }
-					</div>
-				)}
-			</div>
-		</div>
+        {
+          tags?.length && (
+            <div class="tags">
+              {tags.slice(0, 3).map((tag) => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          )
+        }
+      </div>
+    </div>
 
-		<div class="right" style={`background-image: url(${image?.url})`}>
-		</div>
-	</a>
+    <div class="right" style={`background-image: url(${image?.url})`}></div>
+  </a>
 </li>
 
 <style>
-	.date {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		gap: 0.5rem;
-	}
+  .date {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
 
-	.footer {
-		width: 100%;
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-	}
+  .footer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 </style>

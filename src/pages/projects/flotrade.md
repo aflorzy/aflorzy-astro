@@ -1,12 +1,12 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
-title: 'FloTrade'
+title: "FloTrade"
 pubDate: 2024-10-12
-description: 'US Treasury Bond order entry and inventory management system.'
-authors: ['Andrew Flores', 'Tom Flores']
+description: "US Treasury Bond order entry and inventory management system."
+authors: ["Andrew Flores", "Tom Flores"]
 image:
-    url: '/images/flotrade.png'
-    alt: 'FloTrade logo'
+  url: "/images/flotrade.png"
+  alt: "FloTrade logo"
 ---
 
 ## About
@@ -15,7 +15,7 @@ FloTrade was developed in response to an antiquated bond-trading solution at a m
 
 See FloTrade in action [here](https://flotrade.aflorzy.com/)
 
-## Benefits 
+## Benefits
 
 FloTrade reduces errors by providing validations in every step in the lifecycle of a trade.
 
@@ -28,26 +28,29 @@ After one month of near full-time usage by **10 traders**, a total of **2212** t
 Add support for CD trades, along with Corporate and Municipal bonds.
 
 ## Tech Stack
+
 ### Dev
-* Angular
-    - Karma
-    - Prettier
-    - ESLint
-    - MomentJS
-    - SheetJS
-    - SweetAlert2
-    - JS PDF
-    - ChartJS
-    - Html2Canvas
-    - ng2-Charts
-* Spring Boot
-    - Spring Data JPA
-    - Lombok
-    - Spring Mail
-* MySQL
+
+- Angular
+  - Karma
+  - Prettier
+  - ESLint
+  - MomentJS
+  - SheetJS
+  - SweetAlert2
+  - JS PDF
+  - ChartJS
+  - Html2Canvas
+  - ng2-Charts
+- Spring Boot
+  - Spring Data JPA
+  - Lombok
+  - Spring Mail
+- MySQL
 
 ### CI/CD
-* Docker (Compose)
-* Jenkins
-* Automated Builds and Deployments*
-    - TODO: Currently triggering builds and deployments manually
+
+- Docker (Compose)
+- Jenkins
+- Automated Builds and Deployments\*
+  - TODO: Currently triggering builds and deployments manually

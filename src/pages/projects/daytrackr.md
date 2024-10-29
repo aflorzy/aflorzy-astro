@@ -1,12 +1,12 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
-title: 'DayTrackr'
+title: "DayTrackr"
 pubDate: 2024-10-12
-description: 'Calendar app to document daily activities.'
-authors: ['Andrew Flores']
+description: "Calendar app to document daily activities."
+authors: ["Andrew Flores"]
 image:
-    url: '/images/daytrackr.png'
-    alt: 'DayTrackr logo'
+  url: "/images/daytrackr.png"
+  alt: "DayTrackr logo"
 ---
 
 ## About
@@ -18,7 +18,8 @@ I started taking these daily notes while in high school (2017) because I noticed
 ## Example Data
 
 Below is an example of what I would write down for a (rather mundane) day.
->Monday- Breakfast, work, meetings, lunch, code, walk, supper, YouTube
+
+> Monday- Breakfast, work, meetings, lunch, code, walk, supper, YouTube
 
 ## Parsing Algorithm
 
@@ -27,13 +28,13 @@ Since each day is written on its own line and prefixed with `<day of week>- `, a
 1. Assign a `date` to the first day in the list
 2. Validate list of days is in order and no days are missing (Monday-Sunday)
 3. Construct an array of events from each day
-    ```ts
-    const events = dayString.split('- ')[1].split(', ');
-    ```
+   ```ts
+   const events = dayString.split("- ")[1].split(", ");
+   ```
 4. Assemble a `Day` object for each day
-    ```ts
-    const day: Day = { date, events };
-    ```
+   ```ts
+   const day: Day = { date, events };
+   ```
 
 ## Working with the Data
 
@@ -50,21 +51,24 @@ Since the backend was written in Java/Spring, I went down the road of "rolling m
 My wife and I are currently the only active users of DayTrackr and we access a self-hosted instance of the app. I still have a healthy backlog of features to implement, but would like to release it to the public at some point.
 
 ## Tech Stack
+
 ### Dev
-* Angular
-    - NGRX
-    - Karma
-    - Prettier
-    - ESLint
-* Spring Boot
-    - Spring Security
-    - Spring Data JPA
-    - Lombok
-    - Spring Mail
-* MySQL
+
+- Angular
+  - NGRX
+  - Karma
+  - Prettier
+  - ESLint
+- Spring Boot
+  - Spring Security
+  - Spring Data JPA
+  - Lombok
+  - Spring Mail
+- MySQL
 
 ### CI/CD
-* Docker (Compose)
-* Jenkins
-* Automated Builds and Deployments*
-    - TODO: Currently triggering builds and deployments manually
+
+- Docker (Compose)
+- Jenkins
+- Automated Builds and Deployments\*
+  - TODO: Currently triggering builds and deployments manually

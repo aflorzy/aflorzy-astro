@@ -1,9 +1,9 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
-title: 'Linux as Your Primary OS'
+title: "Linux as Your Primary OS"
 pubDate: 2024-10-27
-description: 'Learn why immersing yourself in Linux can kickstart your homelab journey'
-authors: ['Andrew Flores']
+description: "Learn why immersing yourself in Linux can kickstart your homelab journey"
+authors: ["Andrew Flores"]
 # image:
 #     url: 'https://docs.astro.build/assets/rose.webp'
 #     alt: 'The Astro logo on a dark background with a pink glow.'
@@ -11,9 +11,11 @@ tags: ["linux", "opinion"]
 ---
 
 ## What is a Homelab?
+
 Homelabbing is how you learn about servers without any risk of breaking things in a production environment at an IT job you have.
 
 ## Why should you install Linux?
+
 I use Linux because it is a very common operating system for servers.
 There are many distributions, or flavors, of Linux, and the one you choose doesn't make too big of a difference in what you are able to do with your homelab.
 Linux distros are all UNIX at their core, which is a command-line only operating system. There are still command line versions of Linux, which are typically branded as server operating systems, but there are many very popular flavors with graphical interfaces.

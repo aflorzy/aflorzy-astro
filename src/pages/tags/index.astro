@@ -2,7 +2,7 @@
 import Tag from "../../components/Tag.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-const allPosts = await Astro.glob('../posts/*.md');
+const allPosts = await Astro.glob("../posts/*.md");
 
 const tags = [...new Set(allPosts.map((post) => post.frontmatter.tags).flat())];
 
@@ -10,9 +10,13 @@ const pageTitle = "Tag Index";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-    { tags?.length && (
-        <div class="tags">
-            { tags.map((tag) => <Tag tag={tag} /> ) }
-        </div>
-    )}
+  {
+    tags?.length && (
+      <div class="tags">
+        {tags.map((tag) => (
+          <Tag tag={tag} />
+        ))}
+      </div>
+    )
+  }
 </BaseLayout>
