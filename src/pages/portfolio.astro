@@ -2,7 +2,7 @@
 import PortfolioProject from "../components/PortfolioProject.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const allProjects = await Astro.glob("./projects/*.md");
+const allProjects = await Astro.glob("./projects/*.{md,mdx}");
 
 const pageTitle = "My Projects";
 ---
