@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
 title: "Getting Started with Homelab"
-pubDate: 2024-10-27
+pubDate: 2024-11-1
 description: "How to start your homelab journey."
 authors: ["Andrew Flores"]
 # image:
@@ -10,4 +10,24 @@ authors: ["Andrew Flores"]
 tags: ["homelab", "tutorial"]
 ---
 
-# {frontmatter.title}
+## What is a Homelab?
+
+Could be setting up software services
+Shared network storage
+Usually involves connecting devices together on your network.
+Docker is a must. Very easy to learn! See [this post](./first-docker-containers) for how to get started with Docker!
+
+## Why you should start building a homelab
+
+Excellent place to learn and test new things. Easily transferrable to your IT job, or can even help you get a new job.
+Have extra hardware laying around? Virtually all computers can be used as servers!
+
+## Portainer
+
+The first service I suggest installing in your homelab is Portainer. It helps you spin up containers quickly with an intuitive <abbr title="Graphical User Interface">GUI</abbr>.
+
+I prefer using docker compose (or Portainer "Stacks").
+
+Using Portainer abstracts away the commands you need to run in the terminal, which is helpful for following tutorials that might assume you're using a different operating system than you actually are.
+
+I made the switch to using Ubuntu linux full-time a few years ago so that I could become more familiarized with the <abbr title="Operating System">OS</abbr> It proved to be a great learning experience and I am now much more comfortable installing software and interacting with the filesystem using the terminal. See [this other post](./why-linux-as-primary-os) for the whole story on why this switch to Linux was so impactful to my learning.
