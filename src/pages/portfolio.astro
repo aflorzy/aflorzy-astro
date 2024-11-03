@@ -1,8 +1,11 @@
 ---
 import PortfolioProject from "../components/PortfolioProject.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getAllProjects } from "../utilities/getProjects.astro";
 
-const allProjects = await Astro.glob("./projects/*.{md,mdx}");
+const allProjects = await getAllProjects().then((allPosts) =>
+  allPosts.filter((post) => !post.frontmatter.disabled)
+);
 
 const pageTitle = "My Projects";
 ---

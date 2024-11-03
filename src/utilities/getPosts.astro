@@ -1,0 +1,7 @@
+---
+export const allPosts = await Astro.glob("../pages/posts/*.{md,mdx}");
+
+export const enabledPosts = allPosts.filter(
+  (post) => !post.frontmatter.disabled
+);
+---

@@ -8,7 +8,8 @@
     ],
     "prettier.documentSelectors": ["**/*.astro"],
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
+        "source.fixAll.eslint": "always",
+        "source.organizeImports": "always",
       },
     "editor.formatOnSave": true,
     "[astro]": {
@@ -24,6 +25,12 @@
       "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[markdown]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[mdx]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
   }

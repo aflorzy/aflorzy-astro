@@ -1,0 +1,101 @@
+---
+layout: ../../layouts/MarkdownPostLayout.astro
+title: "Install Docker on any Operating System"
+pubDate: 2024-11-2
+description: "Learn how to get Docker running on your system so you can start working with containers!"
+authors: ["Andrew Flores"]
+# image:
+#     url: 'https://docs.astro.build/assets/rose.webp'
+#     alt: 'The Astro logo on a dark background with a pink glow.'
+tags: ["docker", "tutorial"]
+disabled: false
+---
+
+## Docker Desktop (Windows/Mac)
+
+Docker desktop provides you with an interactive GUI for spinning up new containers and managing existing ones. Installing Docker Desktop is a simple and reliable method that is supported on both Windows and Mac operating systems\*.
+
+Note that the Docker daemon is also installed during this process which enables you to use the command line to run `docker` commands directly from the terminal.
+
+1. Download the correct `.exe` installer from the [offical downloads page](https://www.docker.com/products/docker-desktop/)
+
+2. Double-click the downloaded file and follow the installation steps.
+
+3. Find the new app in your Start Menu or task bar and open it up!
+
+4. See [below](#what-now) for Next Steps!
+
+While the Docker Desktop GUI provides a nice interface for starting new containers, it is limited in comparison with other free container management software such as [Portainer](https://github.com/portainer/portainer) and [Dockge](https://github.com/louislam/dockge). I recommend that you also start getting familiar with using the command line to interact with Docker instead of relying on the abstractions that Docker Desktop provides.
+
+- [Windows Reference](https://docs.docker.com/desktop/install/windows-install/)
+- [Mac OS Reference](https://docs.docker.com/desktop/install/mac-install/)
+
+---
+
+\* Some linux distributions also support the installation of Docker Desktop but am opting to not elaborate on those methods here as desktop environments can vary and many linux installations are <abbr title="UNIX-like, no graphical interface">headless</abbr> and would not benefit from the full Docker Desktop installation.
+
+## Linux
+
+There are several accepted ways to install docker on Linux and the methods can vary depending on the distribution/flavor of Linux you have.
+
+### Debian/Ubuntu
+
+#### docker.io
+
+```bash
+sudo apt install docker.io
+```
+
+I have had used this command on all major versions of Ubuntu in recent years and it has worked flawlessly. It comes with command-line support for both `docker` and `docker-compose` commands out of the box.
+
+#### apt
+
+Disclaimer: This section is copied verbatim from the [official Docker Ubuntu guide](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository).
+
+1. Set up Docker's `apt` repository
+
+```bash
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
+
+2. Install the Docker packages
+
+```bash
+ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+3. Verify that the Docker Engine installation is successful by running the hello-world image.
+
+```bash
+sudo docker run hello-world
+```
+
+- This command downloads a test image and runs it in a container. When the container runs, it prints a confirmation message and exits.
+
+- [Ubuntu Reference](https://docs.docker.com/desktop/install/linux/ubuntu/)
+
+### Other Linux distributions
+
+- [Fedora Reference](https://docs.docker.com/engine/install/fedora/)
+- [Raspberry Pi Reference](https://docs.docker.com/engine/install/raspberry-pi-os/)
+- [Red Hat (RHEL) Reference](https://docs.docker.com/engine/install/rhel/)
+- [CentOS Reference](https://docs.docker.com/engine/install/centos/)
+- [SUSE (SLES s390x) Reference](https://docs.docker.com/engine/install/sles/)
+
+## What now?
+
+Congratulations! The world of Docker is now available at your fingertips. Time to start finding some containers to run!
+
+Check out [this post](./first-docker-containers) for tips on how to spin-up your first useful container.

@@ -1,8 +1,13 @@
 ---
 import BlogPost from "../components/BlogPost.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { enabledPosts } from "../utilities/getPosts.astro";
 
-const allPosts = await Astro.glob("./posts/*.{md,mdx}");
+let posts = enabledPosts.sort(
+  (a, b) =>
+    new Date(b.frontmatter.pubDate).getTime() -
+    new Date(a.frontmatter.pubDate).getTime()
+);
 
 const pageTitle = "Blog";
 ---
@@ -12,7 +17,7 @@ const pageTitle = "Blog";
 
   <ul class="link-card-grid">
     {
-      allPosts.map((post) => (
+      posts.map((post) => (
         <BlogPost
           url={post.url}
           title={post.frontmatter.title}

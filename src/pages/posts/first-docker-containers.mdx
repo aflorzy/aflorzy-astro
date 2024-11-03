@@ -1,13 +1,14 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
 title: "Getting Started with Docker"
-pubDate: 2024-10-27
+pubDate: 2024-11-1
 description: "Spinning up your first Docker containers"
 authors: ["Andrew Flores"]
 # image:
 #     url: 'https://docs.astro.build/assets/rose.webp'
 #     alt: 'The Astro logo on a dark background with a pink glow.'
 tags: ["docker", "tutorial"]
+disabled: false
 ---
 
 Docker has fundamentally changed the way I install applications and services on my computer and every other machine that I use as a server.
@@ -30,7 +31,7 @@ This is why Docker is so powerful. You just let the software developers create i
 
 ### Spinning up a container
 
-Well with that background out of the way, lets get our first container spun up! As you might notice, I am using a Linux operating system called Uboontu, or Ubuntu. Your operating system doesn't matter very much, as long as you are able to install Docker to the point where you can open up a terminal or command prompt and type "docker ps" and it doesn't tell you that the command is unknown. I will circle back to installing Docker in a couple minutes, but I am just excited to show you how simple it is to spin up a brand new container. If the command doesn't fail, you will see all of your currently running containers, which, at this point, should be nothing.
+Well with that background out of the way, lets get our first container spun up! As you might notice, I am using a Linux operating system called Ubuntu. Your operating system doesn't matter very much, as long as you are able to install Docker to the point where you can open up a terminal or command prompt and type "docker ps" and it doesn't tell you that the command is unknown. See [my other post](./how-to-install-docker) if you still need to install Docker. If the command doesn't fail, you will see all of your currently running containers, which, at this point, should be nothing.
 
 The very first container I always choose after setting up a new computer or server is Portainer. I'll show you why portainer is so special once we run this command.
 This is called a 'Docker run' command, and it can get quite long if you have a lot of configuration settings you want to pass to the new container.
@@ -54,7 +55,7 @@ docker run -d \
         portainer/portainer-ce:latest
 ```
 
-Hit `Enter` and the image should begin pulling down to your computer! Once the service is started, you can double check by running `docker ps` again. Now there should be an entry with the name 'Portainer'! The port listed should be 9000, and you can interact with its interface by opening a browser and going to `localhost:9000`. Congratulations! You have spun up your first Docker container!
+Hit <kbd>Enter</kbd> and the image should begin pulling down to your computer! Once the service is started, you can double check by running `docker ps` again. Now there should be an entry with the name 'Portainer'! The port listed should be 9000, and you can interact with its interface by opening a browser and going to `localhost:9000`. Congratulations! You have spun up your first Docker container!
 
 As I said earlier, Portainer is always my first container on a new computer because it allows me to easily start and manage any subsequent containers all in one place. To start using it, create an administrator account with a username and password, and you'll be landed on the home page. Set up the default environment by clicking _these buttons_, then enter that environment.
 
@@ -99,64 +100,3 @@ Each time I try to run a big compose file that I find online, I always encounter
 If possible, always spin up a container with the absolute bare minimum configuration. No bells and whistles, just get it running so you're able to make sure it's running by visiting its web interface if there is one.
 Then, stop the container, add a thing or two to get closer to the fully functional version that you originally found online.
 Doing it this way ensures that you don't go down a bunch of irrelevant rabbit holes when, in reality, the root cause is much simpler or higher level.
-
-You could even put all these commands and files on a flash drive or store them in google drive and be able to set up a new computer with the exact same services
-
-You can start, stop, and restart these services using simple commands
-It becomes addicting to spin up new containers because it is so easy to do. Eventually you'll end up with a large number of containers, likely using multiple docker-compose files or docker run commands. This is why almost everybody uses a container management service to have a nice interface to spin up and manage your Docker containers.
-
-Portainer is the one I have always used and continue to use to this day. For that reason, it will be our first container. You can spin up portainer by using this command. You can, of course, find all these references in the video's description.
-
-In my videos, you will almost always see me using portainer stacks for my docker containers, even if there is only one service in the file. It is easier to read in YAML format, you don't have to write down the command and execute it later because it is already saved in a standalone file, and because then I can use portainer as the central location for updating all of my stacks. I recommend you start doing it this way too until you have a solid foundation on how docker works.
-
-Demonstration:
-spin up a container using docker run
-spin down the container
-create a docker-compose file, highlighting the differences and similarities
-spin up the compose file, and bring it back down.
-Run `docker ps` and visit the web interface after each spin-up
-
-Now set up a compose file with 2 containers, show they both work
-
-Conclusion
-I have found it is always best to change and upgrade things incrementally when using Docker.
-Each time I try to run a big compose file that I find online, I always encounter issues because I don't understand the way it works.
-If possible, always spin up a container with the absolute bare minimum configuration. No bells and whistles, just get it running so you're able to make sure it's running by visiting its web interface if there is one.
-Then, stop the container, add a thing or two to get closer to the fully functional version that you originally found online.
-Doing it this way ensures that you don't go down a bunch of irrelevant rabbit holes when, in reality, the root cause is much simpler or higher level.
-
-#### Portainer Continued
-
-I have multiple servers on my network, with docker containers running on each of them because that is the best way to manage services in my experience.
-I always use Portainer to manage these containers, so the first container I spin up on an new machine is always Portainer.
-The problem encountered here is that you will end up with multiple instances of Portainer on your network, all accessable by different web interface URLs.
-Portainer offers a solution to this by adding new 'Environments'.
-
-To allow your Portainer instance to be added as an environment on your primary server, you have to spin up a new container/stack called portainer-agent. This exposes your docker socket to a port on your machine which can be accessed by your new primary Portainer instance.
-
-```yaml
-version: "3.2"
-
-services:
-  portainer-agent:
-    container_name: portainer-agent
-    image: portainer/agent:2.19.4
-    ports:
-      - 9001:9001
-    restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /var/lib/docker/volumes:/var/lib/docker/volumes
-```
-
-Once the agent container is running, go to your primary Portainer instance and navigate to Environments -> + Add environment -> Docker Standalone -> Start Wizard -> Agent
-Here, enter a name for the server you're adding, along with its IP address and port of the Portainer instance you just configured.
-Click Connect
-Click Home in left pane
-See the new environment!
-
-You will not be able to configure existing stacks using this method, but you are able to create new stacks!
-
-This method is most effective if you are configuring a brand new server with no containers yet installed.
-If this is the case for you, you don't even need to create a Portainer container on your new server! Just spin up the portainer-agent and connect to it from your master Portainer instance.
-From there you are able to create new stacks for all of your server that are connected.
