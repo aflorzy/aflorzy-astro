@@ -4,7 +4,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { getAllProjects } from "../utilities/getProjects.astro";
 
 const allProjects = await getAllProjects().then((allPosts) =>
-  allPosts.filter((post) => !post.frontmatter.disabled)
+  allPosts.filter((post) => post.frontmatter.enabled)
 );
 
 const pageTitle = "My Projects";
