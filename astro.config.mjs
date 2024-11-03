@@ -1,22 +1,33 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
-import node from '@astrojs/node';
+import node from "@astrojs/node";
 
-import preact from '@astrojs/preact';
+import preact from "@astrojs/preact";
 
-import icon from 'astro-icon';
+import icon from "astro-icon";
 
-import mdx from '@astrojs/mdx';
+import mdx from "@astrojs/mdx";
+
+import partytown from "@astrojs/partytown";
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
+  output: "server",
 
   adapter: node({
-    mode: 'standalone'
+    mode: "standalone",
   }),
 
   site: "https://blog.aflorzy.com",
-  integrations: [preact(), icon(), mdx()]
+  integrations: [
+    preact(),
+    icon(),
+    mdx(),
+    partytown({
+      config: {
+        forward: ["dataLayer.push"],
+      },
+    }),
+  ],
 });

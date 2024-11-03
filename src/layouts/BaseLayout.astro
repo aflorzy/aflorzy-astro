@@ -24,6 +24,7 @@ const { pageTitle } = Astro.props;
           dl = l != "dataLayer" ? "&l=" + l : "";
         j["async"] = true;
         j["src"] = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        j["type"] = "text/partytown";
         // @ts-expect-error Error comes from Google Tag Manager
         f.parentNode.insertBefore(j, f);
       })(window, document, "script", "dataLayer", "GTM-TBX4N52R");
