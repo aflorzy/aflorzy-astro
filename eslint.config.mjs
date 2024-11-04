@@ -1,10 +1,12 @@
+/* eslint-disable @cspell/spellchecker */
+import cspellConfigs from "@cspell/eslint-plugin/recommended";
+import { FlatCompat } from "@eslint/eslintrc";
+import js from "@eslint/js";
 import tsParser from "@typescript-eslint/parser";
-import tseslint from "typescript-eslint";
 import parser from "astro-eslint-parser";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import tseslint from "typescript-eslint";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,6 +19,7 @@ const compat = new FlatCompat({
 export default [
   ...compat.extends("plugin:astro/recommended"),
   ...tseslint.configs.recommended,
+  cspellConfigs,
   {
     languageOptions: {
       parser: tsParser,
@@ -26,6 +29,19 @@ export default [
       parserOptions: {
         tsconfigRootDir: ".",
       },
+    },
+  },
+  {
+    rules: {
+      "@cspell/spellchecker": [
+        "error",
+        {
+          configFile: new URL(
+            "./cspell.config.yaml",
+            import.meta.url
+          ).toString(),
+        },
+      ],
     },
   },
   {

@@ -33,4 +33,7 @@
     "[mdx]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
+    "cSpell.enableFiletypes": [
+      "md", "mdx"
+    ],
   }

@@ -27,7 +27,7 @@ docker run hello-world
 
 Run this command in your terminal to see if hello-world works for you.
 
-This is the essentially the simplest container that can be run, and doesn't serve much utility aside from a <abbr title="AKA Sanity/Confidence Test">smoke test</abbr>. Most containers that you will run are going to require a few more parameters to start properly, so the rest of this article will cover how to interpret some of the cases you will encouter.
+This is the essentially the simplest container that can be run, and doesn't serve much utility aside from a <abbr title="AKA Sanity/Confidence Test">smoke test</abbr>. Most containers that you will run are going to require a few more parameters to start properly, so the rest of this article will cover how to interpret some of the cases you will encounter.
 
 ## Portainer
 
@@ -141,7 +141,7 @@ Defines the [restart policy](https://docs.docker.com/engine/containers/start-con
 - `no` (default)
   - If restart policy is not specified, or is explicitly specified as `no`, the container will remain stopped
 - `on-failure[:max-retries]`
-  - Only attempt to restart the container if an internal error occured (non-qualifying events include manually stopping the container, restarting the host, or restarting the Docker daemon). You can specify a `max-retries` number to prevent an infinite stream of retry events. For example, `restart: on-failure:5` to attempt a restart five times.
+  - Only attempt to restart the container if an internal error occurred (non-qualifying events include manually stopping the container, restarting the host, or restarting the Docker daemon). You can specify a `max-retries` number to prevent an infinite stream of retry events. For example, `restart: on-failure:5` to attempt a restart five times.
 - `always`
   - Always try to restart the container after it has stopped. This is useful for services that are critical to your business or homelab. You are still able to manually stop the container with `docker stop <container-name>`, and the container will not attempt to restart until the Docker daemon/engine is restarted, or you manually start the container again.
 - `unless-stopped`
@@ -203,4 +203,4 @@ volumes:
 
 Now that you have your first useful container up and running, go find some more! How about setting up a dashboard to easily view all your services? [Homepage](https://gethomepage.dev/) is the dashboard container I have been running for a while and it works great! Otherwise, some quick Google searches for "Homelab Services" will yield plenty of suggestions from fellow homelabbers.
 
-One last piece of advice: try to avoid copying "all-in-one" Docker Compose files that you find online. There most likely isn't anything malicious about them, but my experience with them has led to many headaches and hours of troubleshooting. I have found it is best to start with the minimum viable configuration for each service, and ensure that all of the containers are able to successfully spin up and that their web interface can be accessed. Then, start adding in some extra parameters that were in the online example such as environment variables or volume mounts, and check that the containers can stil spin up as expected. It is much easier to diagnose where problems arose when you configured the containers incrementally.
+One last piece of advice: try to avoid copying "all-in-one" Docker Compose files that you find online. There most likely isn't anything malicious about them, but my experience with them has led to many headaches and hours of troubleshooting. I have found it is best to start with the minimum viable configuration for each service, and ensure that all of the containers are able to successfully spin up and that their web interface can be accessed. Then, start adding in some extra parameters that were in the online example such as environment variables or volume mounts, and check that the containers can still spin up as expected. It is much easier to diagnose where problems arose when you configured the containers incrementally.

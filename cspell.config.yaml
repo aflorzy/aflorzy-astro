@@ -1,0 +1,32 @@
+language: en
+checkComments: true
+checkIdentifiers: true
+checkJSXText: false
+checkStrings: true
+checkStringTemplates: true
+ignoreImportProperties: true
+ignoreImports: true
+numSuggestions: 4
+useGitignore: true
+words:
+  - aflorzy
+  - andrewflorzy
+  - andrewtflores
+  - astro
+  - daytrackr
+  - distros
+  - Dockge
+  - Florzy
+  - flotrade
+  - frontmatter
+  - homelab
+  - homelabbers
+  - homelabbing
+  - Macbook
+  - NGRX
+  - partytown
+  - SLES
+files:
+  - "**/*.{md,mdx}"
+ignoreRegExpList:
+  - /^\s*```[\s\S]*?^\s*```/gm
