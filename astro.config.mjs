@@ -11,6 +11,9 @@ import mdx from "@astrojs/mdx";
 
 import partytown from "@astrojs/partytown";
 
+import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
+import expressiveCode from "astro-expressive-code";
+
 // https://astro.build/config
 export default defineConfig({
   output: "server",
@@ -23,6 +26,9 @@ export default defineConfig({
   integrations: [
     preact(),
     icon(),
+    expressiveCode({
+      plugins: [pluginLineNumbers()],
+    }),
     mdx(),
     partytown({
       config: {

@@ -11,41 +11,33 @@ tags: ["docker", "tutorial"]
 enabled: true
 ---
 
-Docker has fundamentally changed the way I install applications and services on my computer and every other machine that I use as a server.
+Welcome to the world of Docker and containerization! Containers are incredibly useful for making applications portable so they can easily be started up on any computer and behave the exact same way on each. [Docker](https://www.docker.com/) is far and away the most widespread containerization platform, although there are alternatives such as [Podman](https://podman.io/) that are gaining popularity in recent years.
 
-Docker allows you to essentially install, update, and manage services without cluttering up your computer by installing a bunch of software dependencies that bloat your filesystem.
-The ease of use and organized nature of self-contained Docker containers is what draws me away from installing programs the way I have my entire life.
+If you haven't installed Docker on your system yet, go check out my [Docker Installation Guide](./how-to-install-docker.mdx) before continuing here.
 
-## What is a service?
+There are two primary ways you can <abbr title="run/start">spin up</abbr> Docker containers. Each has its own benefits and I will elaborate more below.
 
-In order to provide some background clarity on why Docker makes your life easier, let me first define the term 'service'.
-A service is simply a program that runs on your computer in the background. Your computer has many services that start up when you turn on your computer, then stay running in order to serve their function in the larger operating system.
-Docker has made it incredibly easy for me to install, or 'spin-up' new containers, each with their own primary piece of software installed inside of it, so that now I have been able to try out tons of software that I never would have otherwise, because it would just be too much work to install them manually.
+## Quick Start
 
-### How does a container work?
+The first container Docker's documentation suggests running is "[hello-world](https://hub.docker.com/_/hello-world)". This is typically run to ensure that Docker commands can be run in your terminal, that images can be pulled from Docker's own container registry ([hub.docker.com](https://hub.docker.com/)), and that there are no unforeseen errors along the way.
 
-Conceptually, you can think of containers as very lightweight virtual machines. It's like having a tiny linux operating system running inside of _your_ computer. Each container is typically designed to serve one specific purpose and that is to run a single program as a service. If you want multiple services, you can either spin up multiple containers, or even build your own docker container 'image' with the exact software configuration you need.
-People create their own images all the time, and then upload the image file to a cloud registry like [docker hub](https://hub.docker.com), where anybody can pull that image to their own computer and spin up a container from it. Any container created from an image will have the exact same configuration as the creator had when they built it.
+```bash showLineNumbers=false
+docker run hello-world
+```
 
-This is why Docker is so powerful. You just let the software developers create images with the software that you want, then spin up a container and start using it immediately. Very little configuration needed
+Run this command in your terminal to see if hello-world works for you.
 
-### Spinning up a container
+This is the essentially the simplest container that can be run, and doesn't serve much utility aside from a <abbr title="AKA Sanity/Confidence Test">smoke test</abbr>. Most containers that you will run are going to require a few more parameters to start properly, so the rest of this article will cover how to interpret some of the cases you will encouter.
 
-Well with that background out of the way, lets get our first container spun up! As you might notice, I am using a Linux operating system called Ubuntu. Your operating system doesn't matter very much, as long as you are able to install Docker to the point where you can open up a terminal or command prompt and type "docker ps" and it doesn't tell you that the command is unknown. See [my other post](./how-to-install-docker) if you still need to install Docker. If the command doesn't fail, you will see all of your currently running containers, which, at this point, should be nothing.
+Portainer is always the first container I spin up after installing Docker, and I will use it in all of my examples in this article due to its relative simplicity and immensely useful capabilities. I will dive deeper into Portainer [later on](#portainer) in this article.
 
-The very first container I always choose after setting up a new computer or server is Portainer. I'll show you why portainer is so special once we run this command.
-This is called a 'Docker run' command, and it can get quite long if you have a lot of configuration settings you want to pass to the new container.
-Writing the command in a text editor before pasting it in your terminal is usually a good idea so you can click around and edit lines easily.
-The backslashes (\) are only for readability purposes so you can omit these and just type the command in one line.
+## Docker Run
 
-As a quick breakdown of what's happening here, we are constructing a docker run command, with the first flag `-d`. This allows the command to continue running in the background even after you close the terminal window.
-`-p 9000:9000` maps which port the service is running on inside of the container to which port the service will be exposed to on your host machine. The left side of the colon is your host machine's port, and the right side is the container's port. Do not change the container's port since the image creator has already decided that 9000 is the port they want it to run on.
-`--name portainer` assigns the container a human-readable name so we can easily identify it down the line.
-`--restart=always` Tells the container to restart itself automatically if you manually stop it or reboot your computer
-`-v` defines a volume. There are two parts to defining a volume, separated by a colon (:). The left side of the colon is the file path on your host computer. The right side is the file path inside of the container. In most cases if you found the command online, you do not want to change the path inside the container because it's pointing to something important and we do not have the freedom to choose the location of it. Volumes typically work bidirectionally: meaning that the same file will be synchronized back and forth on your host machine and inside of the container. This first volume declaration points to the docker socket on our host machine and gives the container access to it. The second volume will store all of Portainer's configuration data when you make changes inside of its user intrerface. This data folder is pointing to our current directory in a folder called `data`.
-`portainer/portainer-ce:latest` is the name of the docker image. By default, Docker searches Docker Hub for an image tagged with this name and pulls it down to your computer if you haven't pulled it down before.
+`docker run` commands are a quick and convenient way to spin up individual containers by copy-pasting a single command into your terminal. Many Docker examples online will provide you with a `docker run` command that you can use as a "one click" solution to running the container on your own machine.
 
-```bash
+Although these commands can be convenient, I tend to avoid using them to spin up containers in favor of [Docker Compose](#docker-compose) that provides other benefits that better suit my needs.
+
+```bash showLineNumbers=false
 docker run -d \
         -p 9000:9000 \
         --name portainer \
@@ -55,48 +47,103 @@ docker run -d \
         portainer/portainer-ce:latest
 ```
 
-Hit <kbd>Enter</kbd> and the image should begin pulling down to your computer! Once the service is started, you can double check by running `docker ps` again. Now there should be an entry with the name 'Portainer'! The port listed should be 9000, and you can interact with its interface by opening a browser and going to `localhost:9000`. Congratulations! You have spun up your first Docker container!
+Note: This is a single command but is written to appear multi-line using `\` at the end of each component for ease of readability. Feel free to type the command out in one line without those characters and it will behave the same.
 
-As I said earlier, Portainer is always my first container on a new computer because it allows me to easily start and manage any subsequent containers all in one place. To start using it, create an administrator account with a username and password, and you'll be landed on the home page. Set up the default environment by clicking _these buttons_, then enter that environment.
+## Docker Compose
 
-### Second container docker-compose Nginx
+Docker Compose is a file-based approach to initializing containers, and has a couple major benefits over the `docker run` command.
 
-Now, to spin up your second container, we're going to get rid of the long `docker run` command that we ran earlier and instead use docker-compose. Portainer has a super easy way to create compose files. Click Stacks, and Add Stack. Give it a name 'nginx'. Then in the Web Editor box, copy these lines in.
-
-First, we define which compose version we are using. You'll see different versions used here for different containers, and I really don't think it matters which one you use.
-Then we will define our service, which in our case we will only have one.
-Tell it which nginx image to pull from Docker Hub
-Give the container a human-readable name
-Tell the container to restart any time our computer restarts
-Define which ports to listen on. This will expose the nginx web server on port 80 on our machine
-Define a volume where you would put your html files if you actually wanted to use this to host a website. This is pointing to a folder in my root directory called `config` which I always use to hold the data of each of my containers. This container is called nginx, and there is a folder called html inside that the container will watch for updates to whichever files you put in there.
+1. Container configuration is stored in a file that can be easily edited and checked into <abbr title="e.g. GitHub">version control systems</abbr> in order to keep files backed up and stored in a single place.
+2. Multiple containers can be added to a single Compose file and all of them can easily be spun up or down simultaneously. This is very helpful when your application requires multiple full-stack technologies such as a frontend, backend, and database. Each can be defined in its own container, with all of the configurations residing inside of a single `docker-compose.yml` file.
 
 ```yaml
-version: "3"
+version: 3
 
 services:
-  nginx:
-    image: nginx:latest
-    container_name: nginx
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
     restart: always
     ports:
-      - 80:80
+      - 9000:9000
     volumes:
-      - /config/nginx/html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock
+    - ./data:/data
 ```
 
-Once the commands are written, you can 'Deploy the stack' which will pull down the nginx image and spin up the container. Once it is successfully up, you can verify in your terminal by running `docker ps`, then go to your web browser at `localhost:80`. A unique thing to note is that port 80 will disappear from the URL because all URLs point to port 80 by default if a different port is not specified.
+1. Create a new folder called `portainer` and `cd` into it
+2. Paste these lines into a new file named `docker-compose.yml`
+3. Run `docker-compose up -d` or `docker compose up -d` depending on the version of Docker you have installed.
+4. Verify that Portainer is now running in the background by executing `docker ps` and finding `portainer` in the list.
+5. Navigate to the web interface in your browser by visiting `http://localhost:9000`
 
-I recommend you always use docker compose files (or Portainer stacks) to initialize new containers. It is a static text file that you don't need to store in another file just to copy and paste when you want to start the container again. You can easily edit properties and redeploy with your updates.
+## Breaking It Down
 
-### Wrapping up Portainer
+Referencing the Docker Compose YAML from above, we're going to go line-by-line to understand the purpose of each.
 
-There is quite a bit more to Portainer, and I recommend that you get this running on your own and spin up some containers! It is very easy to find docker compose files online, even for services that you never knew you needed! If for some reason, you're only able to find docker run commands for your service online, you can just convert the command text to a compose file manually or even use an online converter. There is one linked in the description that I have used before and works fairly well.
+```yaml startLineNumber=1
+version: 3
+```
 
-### Conclusion
+Specifying `version` actually appears to be obsolete according to [the docs](https://docs.docker.com/reference/compose-file/version-and-name/#version-top-level-element-obsolete), but all examples of Docker Compose configs that I see online include it. The version number also doesn't seem to have much effect from my experience, and specifying `3` or `3.8` (with or without surrounding quotation marks) should work in most cases.
 
-I have found it is always best to change and upgrade things incrementally when using Docker.
-Each time I try to run a big compose file that I find online, I always encounter issues because I don't understand the way it works.
-If possible, always spin up a container with the absolute bare minimum configuration. No bells and whistles, just get it running so you're able to make sure it's running by visiting its web interface if there is one.
-Then, stop the container, add a thing or two to get closer to the fully functional version that you originally found online.
-Doing it this way ensures that you don't go down a bunch of irrelevant rabbit holes when, in reality, the root cause is much simpler or higher level.
+```yaml startLineNumber=3
+services:
+  portainer:
+```
+
+```yaml startLineNumber=5
+image: portainer/portainer-ce:latest
+```
+
+```yaml startLineNumber=6
+container_name: portainer
+```
+
+```yaml startLineNumber=7
+restart: always
+```
+
+Defines the [restart policy](https://docs.docker.com/engine/containers/start-containers-automatically/#use-a-restart-policy) for the container. The restart policy comes into play whenever a container is stopped for any reason. Reasons for stopping include an internal container error, a restart of the host computer running Docker, or a restart of the Docker service itself. The possible options are as follows:
+
+- `no` (default)
+  - If restart policy is not specified, or is explicitly specified as `no`, the container will remain stopped
+- `on-failure[:max-retries]`
+- `always`
+  - Always try to restart the container after it has stopped. This is useful for services that are critical to your business or homelab. You are still able to manually stop the container with `docker stop <container-name>`, and the container will not attempt to restart until the Docker daemon/engine is restarted, or you manually start the container again.
+- `unless-stopped`
+  - This is similar to `always`, but it will not attempt to automatically restart even after the Docker daemon/engine restarts
+
+```yaml startLineNumber=8
+ports:
+  - 9000:9000
+```
+
+Defines the ports to expose on your host machine. Services are usually running inside of the containers, and the service often times exposes a web interface on a port that you can visit in your web browser (e.g. `http://localhost:**9000**`). Containers allow you to map the internal container port to a port on your host machine. You are allowed to change the port that is used on your computer, but not the internal port as that was defined by the author of the container image and the image would need to be rebuilt if a change was to be made there.
+
+```yaml
+ports:
+  - <port on host machine>**:**<port inside container>
+  - 9000:9000
+  - 81:80
+```
+
+Some containers have internal services running on multiple ports, and you can map each of them to ports on your host machine by defining a list. The right-hand side of the colon (:) is the internal container port, and cannot be changed. Docker syntax always follows this pattern of host:container, even for non- port-related configuration.
+
+```yaml startLineNumber=10
+volumes:
+  - /var/run/docker.sock:/var/run/docker.sock
+  - ./data:/data
+```
+
+## Portainer
+
+Portainer is a Docker management tool that provides an intuitive web interface for interacting with your containers. I use it almost exclusively to start up new containers and edit existing ones.
+
+There is a feature called "Stacks" that is equivalent to using Docker Compose. You can write your compose YAML in the text box, and include any secrets in the environment variables section.
+
+## Final Thoughts
+
+Now that you have your first useful container up and running, go find some more! How about setting up a dashboard to easily view all your services? [Homepage](https://gethomepage.dev/) is the dashboard container I have been running for a while and it works great! Otherwise, some quick Google searches for "Homelab Services" will yield plenty of suggestions from fellow homelabbers.
+
+One last piece of advice: try to avoid copying "all-in-one" Docker Compose files that you find online. There most likely isn't anything malicious about them, but my experience with them has led to many headaches and hours of troubleshooting. I have found it is best to start with the minimum viable configuration for each service, and ensure that all of the containers are able to successfully spin up and that their web interface can be accessed. Then, start adding in some extra parameters that were in the online example such as environment variables or volume mounts, and check that the containers can stil spin up as expected. It is much easier to diagnose where problems arose when you configured the containers incrementally.

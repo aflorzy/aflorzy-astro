@@ -16,18 +16,34 @@ body {
 }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: bold;
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;
   color: colors.$color-secondary;
 }
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.75rem; }
-h4 { font-size: 1.5rem; }
-h5, h6 { font-size: 1.25rem; }
+h1 {
+  font-size: 2.5rem;
+}
+h2 {
+  font-size: 2rem;
+}
+h3 {
+  font-size: 1.75rem;
+}
+h4 {
+  font-size: 1.5rem;
+}
+h5,
+h6 {
+  font-size: 1.25rem;
+}
 
 /* Paragraphs */
 p {
@@ -45,7 +61,8 @@ a:hover {
 }
 
 /* Lists */
-ul, ol {
+ul,
+ol {
   margin: 1rem 0;
   padding-left: 1.5rem;
 }
@@ -55,7 +72,7 @@ li {
 }
 
 mark {
-    background-color: colors.$color-tertiary;
+  background-color: colors.$color-tertiary;
 }
 
 /* Blockquotes */
@@ -68,8 +85,9 @@ blockquote {
 }
 
 /* Code */
-pre, code {
-  font-family: 'Courier New', Courier, monospace;
+pre,
+code {
+  font-family: "Courier New", Courier, monospace;
   color: colors.$color-tertiary;
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
@@ -101,8 +119,7 @@ kbd {
   border-style: solid;
   border-width: 1px 3px 4px;
   padding: 0 5px;
-  background-color: #d2d2d2;
-  background-color: rgba(210, 210, 210, 0.9);
+  background-color: #555;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -132,7 +149,8 @@ table {
   margin: 1rem 0;
 }
 
-th, td {
+th,
+td {
   border: 1px solid colors.$color-primary;
   padding: 0.5rem;
   text-align: left;
@@ -144,11 +162,19 @@ th {
 
 /* Gradient Background Examples */
 .gradient-primary {
-  background: linear-gradient(135deg, colors.$color-primary, colors.$color-secondary);
+  background: linear-gradient(
+    135deg,
+    colors.$color-primary,
+    colors.$color-secondary
+  );
 }
 
 .gradient-secondary {
-  background: linear-gradient(135deg, colors.$color-secondary, colors.$color-tertiary);
+  background: linear-gradient(
+    135deg,
+    colors.$color-secondary,
+    colors.$color-tertiary
+  );
 }
 
 /* nav styles */
@@ -171,14 +197,14 @@ nav {
     background-color: colors.$color-light;
   }
 }
-  
+
 .nav-links {
   width: 100%;
   top: 5rem;
   left: 48px;
   display: none;
   margin: 0;
-  
+
   a {
     display: block;
     text-align: center;
@@ -205,9 +231,9 @@ header {
     height: 64px;
   }
 }
-  
+
 .expanded {
-    display: unset;
+  display: unset;
 }
 
 .tags {
@@ -234,7 +260,7 @@ header {
     position: static;
     width: auto;
     background: none;
-    
+
     a {
       display: inline-block;
       padding: 15px 20px;
@@ -248,6 +274,6 @@ header {
   }
 
   .hamburger {
-      display: none;
+    display: none;
   }
 }
