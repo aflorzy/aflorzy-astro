@@ -39,6 +39,14 @@ pipeline {
                 sh "docker run --rm -v ${workspace}:/workspace runner:latest npm install --prefix /workspace"
             }
         }
+        stage ('Lint') {
+            environment {
+                workspace = pwd()
+            }
+            steps {
+                sh "docker run --rm -v ${workspace}:/workspace runner:latest npm run lint --prefix /workspace"
+            }
+        }
         stage ('Compile') {
             environment {
                 workspace = pwd()
