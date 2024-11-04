@@ -1,8 +1,8 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
 title: "Getting Started with Docker"
-pubDate: 2024-11-1
-description: "Spinning up your first Docker containers"
+pubDate: 2024-11-4
+description: "Spin up your first containers using Docker Run and Docker Compose!"
 authors: ["Andrew Flores"]
 # image:
 #     url: 'https://docs.astro.build/assets/rose.webp'
@@ -29,7 +29,15 @@ Run this command in your terminal to see if hello-world works for you.
 
 This is the essentially the simplest container that can be run, and doesn't serve much utility aside from a <abbr title="AKA Sanity/Confidence Test">smoke test</abbr>. Most containers that you will run are going to require a few more parameters to start properly, so the rest of this article will cover how to interpret some of the cases you will encouter.
 
-Portainer is always the first container I spin up after installing Docker, and I will use it in all of my examples in this article due to its relative simplicity and immensely useful capabilities. I will dive deeper into Portainer [later on](#portainer) in this article.
+## Portainer
+
+Portainer is always the first container I spin up after installing Docker, and I will use it in all of the following examples in this article due to its relative simplicity and immensely useful capabilities.
+
+Portainer is a Docker management tool that provides an intuitive web interface for interacting with your containers. I use it almost exclusively to start new containers and edit existing ones.
+
+There is a feature called "Stacks" that is equivalent to using Docker Compose. You can write your compose YAML in the text box, and include any secrets in the environment variables section.
+
+See their official Docker docs [here](https://docs.portainer.io/start/install-ce/server/docker/linux).
 
 ## Docker Run
 
@@ -87,18 +95,42 @@ version: 3
 
 Specifying `version` actually appears to be obsolete according to [the docs](https://docs.docker.com/reference/compose-file/version-and-name/#version-top-level-element-obsolete), but all examples of Docker Compose configs that I see online include it. The version number also doesn't seem to have much effect from my experience, and specifying `3` or `3.8` (with or without surrounding quotation marks) should work in most cases.
 
+---
+
 ```yaml startLineNumber=3
 services:
   portainer:
 ```
 
+Specifies a list of services in the Docker Compose file. Individual service names are listed with one indent before them. All service configurations are defined with 2+ indents, per [YAML object notation](https://spacelift.io/blog/yaml#basic-yaml-syntax). For example:
+
+```yaml showLineNumbers=false
+services:
+  service1:
+    image: image-1
+  service2:
+    image: image-2
+  serviceN:
+    image: image-n
+```
+
+---
+
 ```yaml startLineNumber=5
 image: portainer/portainer-ce:latest
 ```
 
+Defines the [Portainer](https://hub.docker.com/r/portainer/portainer-ce) image to pull down from Docker Hub and instantiate the container with. See the "Tags" tab at that link for variations of the `portainer/portainer-ce` image. I use the `latest` tag which allows the container to use the most recent release. Note that an updated image will not be pulled to your machine automatically while the container is running.
+
+---
+
 ```yaml startLineNumber=6
 container_name: portainer
 ```
+
+Provides a friendly name for the container so you can easily find it in a list, such as the one produced by the `docker ps` command.
+
+---
 
 ```yaml startLineNumber=7
 restart: always
@@ -109,26 +141,31 @@ Defines the [restart policy](https://docs.docker.com/engine/containers/start-con
 - `no` (default)
   - If restart policy is not specified, or is explicitly specified as `no`, the container will remain stopped
 - `on-failure[:max-retries]`
+  - Only attempt to restart the container if an internal error occured (non-qualifying events include manually stopping the container, restarting the host, or restarting the Docker daemon). You can specify a `max-retries` number to prevent an infinite stream of retry events. For example, `restart: on-failure:5` to attempt a restart five times.
 - `always`
   - Always try to restart the container after it has stopped. This is useful for services that are critical to your business or homelab. You are still able to manually stop the container with `docker stop <container-name>`, and the container will not attempt to restart until the Docker daemon/engine is restarted, or you manually start the container again.
 - `unless-stopped`
   - This is similar to `always`, but it will not attempt to automatically restart even after the Docker daemon/engine restarts
+
+---
 
 ```yaml startLineNumber=8
 ports:
   - 9000:9000
 ```
 
-Defines the ports to expose on your host machine. Services are usually running inside of the containers, and the service often times exposes a web interface on a port that you can visit in your web browser (e.g. `http://localhost:**9000**`). Containers allow you to map the internal container port to a port on your host machine. You are allowed to change the port that is used on your computer, but not the internal port as that was defined by the author of the container image and the image would need to be rebuilt if a change was to be made there.
+Defines the ports to expose on your host machine. Services are usually running inside of the containers, and the service often times exposes a web interface on a port that you can visit in your web browser (e.g. `http://localhost:9000`). Containers allow you to map the internal container port to a port on your host machine. You are allowed to change the port that is used on your computer, but not the internal port as that was defined by the author of the container image and the image would need to be rebuilt if a change was to be made there.
 
-```yaml
+```yaml showLineNumbers=false
 ports:
-  - <port on host machine>**:**<port inside container>
+  - <port on host machine>:<port inside container>
   - 9000:9000
   - 81:80
 ```
 
 Some containers have internal services running on multiple ports, and you can map each of them to ports on your host machine by defining a list. The right-hand side of the colon (:) is the internal container port, and cannot be changed. Docker syntax always follows this pattern of host:container, even for non- port-related configuration.
+
+---
 
 ```yaml startLineNumber=10
 volumes:
@@ -136,11 +173,31 @@ volumes:
   - ./data:/data
 ```
 
-## Portainer
+Volumes provide a way for containers to persist data. Volumes can either be [bind mounts](https://docs.docker.com/engine/storage/bind-mounts/) or [Docker Volumes](https://docs.docker.com/engine/storage/volumes/).
 
-Portainer is a Docker management tool that provides an intuitive web interface for interacting with your containers. I use it almost exclusively to start up new containers and edit existing ones.
+Docker Volumes:
 
-There is a feature called "Stacks" that is equivalent to using Docker Compose. You can write your compose YAML in the text box, and include any secrets in the environment variables section.
+- I find Docker Volumes to be difficult to work with because their contents cannot be easily viewed. They are most useful when you don't need to access the data within them, but you still need some data persisted for your
+  container across container restarts and rebuilds.
+
+Bind Mounts:
+
+- These are what I use 90% of the time when mapping volumes for my containers. It works by specifying a file path on your host system and a file path within the container.
+
+```yaml showLineNumbers=false
+services:
+  portainer:
+    volumes:
+      - <path on host machine>:<path inside container>
+      - ./data:/data # 1
+      - portainer-data:/data # 2
+
+volumes:
+  portainer-data: # 3
+```
+
+1. Maps a folder named `data` in the current directory (same folder this docker-compose.yml is located in) to the directory `/data` inside the container. The internal path is typically defined by the container author and is found in the documentation for running the container.
+2. Maps a Docker Volume named `portainer-data` to the `/data` directory inside the container. This volume is defined in the same Compose file at the bottom (`# 3`).
 
 ## Final Thoughts
 
