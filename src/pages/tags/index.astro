@@ -1,10 +1,10 @@
 ---
 import Tag from "../../components/Tag.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { enabledPosts } from "../../utilities/getPosts.astro";
+import { publishedPosts } from "../../utilities/getPosts.astro";
 
 const tags = [
-  ...new Set(enabledPosts.map((post) => post.frontmatter.tags).flat()),
+  ...new Set(publishedPosts.map((post) => post.frontmatter.tags).flat()),
 ];
 
 const pageTitle = "Tag Index";

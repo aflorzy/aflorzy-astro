@@ -1,4 +1,5 @@
 language: en
+autoFix: false
 checkComments: true
 checkIdentifiers: true
 checkJSXText: false
@@ -26,7 +27,9 @@ words:
   - NGRX
   - partytown
   - SLES
-files:
-  - "**/*.{md,mdx}"
 ignoreRegExpList:
   - /^\s*```[\s\S]*?^\s*```/gm
+files:
+  - "**/*.{md,mdx}"
+enableFiletypes:
+  - mdx

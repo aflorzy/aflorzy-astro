@@ -1,5 +1,7 @@
 ---
-export const allPosts = await Astro.glob("../pages/posts/*.{md,mdx}");
-
-export const enabledPosts = allPosts.filter((post) => post.frontmatter.enabled);
+export const allPosts = await Astro.glob("../pages/posts/**/*.{md,mdx}");
+export const publishedPosts = await Astro.glob(
+  "../pages/posts/published/*.{md,mdx}"
+);
+export const draftPosts = await Astro.glob("../pages/posts/draft/*.{md,mdx}");
 ---

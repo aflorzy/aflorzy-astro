@@ -1,5 +1,5 @@
 /* eslint-disable @cspell/spellchecker */
-import cspellConfigs from "@cspell/eslint-plugin/recommended";
+import cspellPlugin from "@cspell/eslint-plugin";
 import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
 import tsParser from "@typescript-eslint/parser";
@@ -19,7 +19,6 @@ const compat = new FlatCompat({
 export default [
   ...compat.extends("plugin:astro/recommended"),
   ...tseslint.configs.recommended,
-  cspellConfigs,
   {
     languageOptions: {
       parser: tsParser,
@@ -32,6 +31,7 @@ export default [
     },
   },
   {
+    plugins: { "@cspell": cspellPlugin },
     rules: {
       "@cspell/spellchecker": [
         "error",
@@ -46,7 +46,6 @@ export default [
   },
   {
     files: ["**/*.astro"],
-
     languageOptions: {
       parser: parser,
       ecmaVersion: 5,
@@ -73,9 +72,6 @@ export default [
     },
     plugins: {
       "@typescript-eslint": tseslint.plugin,
-    },
-    rules: {
-      // Add any rules specific to these files here
     },
   },
   {

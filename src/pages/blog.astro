@@ -1,9 +1,9 @@
 ---
 import BlogPost from "../components/BlogPost.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { enabledPosts } from "../utilities/getPosts.astro";
+import { publishedPosts } from "../utilities/getPosts.astro";
 
-let posts = enabledPosts.sort(
+let posts = publishedPosts.sort(
   (a, b) =>
     new Date(b.frontmatter.pubDate).getTime() -
     new Date(a.frontmatter.pubDate).getTime()

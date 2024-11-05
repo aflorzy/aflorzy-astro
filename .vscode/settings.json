@@ -4,7 +4,7 @@
       "javascriptreact",
       "astro", // Enable .astro
       "typescript", // Enable .ts
-      "typescriptreact" // Enable .tsx
+      "typescriptreact", // Enable .tsx,
     ],
     "prettier.documentSelectors": ["**/*.astro"],
     "editor.codeActionsOnSave": {
@@ -33,7 +33,4 @@
     "[mdx]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "cSpell.enableFiletypes": [
-      "md", "mdx"
-    ],
   }
