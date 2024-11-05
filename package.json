@@ -8,7 +8,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lint": "prettier --write  \"**/*.{js,jsx,ts,tsx,md,mdx,astro}\" && eslint --fix \"src/**/*.{js,ts,jsx,tsx,astro}\""
+    "lint": "prettier --write  \"**/*.{js,jsx,ts,tsx,md,mdx,astro}\" && eslint --fix \"src/**/*.{js,ts,jsx,tsx,astro}\" && cspell --no-progress",
+    "lint:ci": "prettier --check  \"**/*.{js,jsx,ts,tsx,md,mdx,astro}\" && eslint \"src/**/*.{js,ts,jsx,tsx,astro}\" && cspell --no-progress --show-context"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.3",
