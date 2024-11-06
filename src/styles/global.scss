@@ -15,6 +15,10 @@ body {
   margin: auto;
 }
 
+.content {
+  min-height: calc(100vh - 20rem);
+}
+
 /* Typography */
 h1,
 h2,

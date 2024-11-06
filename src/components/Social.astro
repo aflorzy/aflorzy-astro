@@ -1,5 +1,71 @@
 ---
+import { Icon } from "astro-icon/components";
+import * as use from "./switch-case";
+
+export enum Socials {
+  GitHub = "GitHub",
+  LinkedIn = "LinkedIn",
+  YouTube = "YouTube",
+  RSS = "RSS",
+  Twitter = "Twitter",
+  X = "X",
+  Instagram = "Instagram",
+  Facebook = "Facebook",
+  Snapchat = "Snapchat",
+}
+
 const { platform, url } = Astro.props;
 ---
 
-<a href={`https://${url}`} target="_blank">{platform}</a>
+<a href={`https://${url}`} target="_blank" title={platform}>
+  <use.switch value={platform}>
+    <use.case slot={Socials.GitHub}>
+      <Icon name="mdi:github" />
+    </use.case>
+
+    <use.case slot={Socials.LinkedIn}>
+      <Icon name="mdi:linkedin" />
+    </use.case>
+
+    <use.case slot={Socials.YouTube}>
+      <Icon name="mdi:youtube" />
+    </use.case>
+
+    <use.case slot={Socials.RSS}>
+      <Icon name="mdi:rss" />
+    </use.case>
+
+    <use.case slot={Socials.Twitter}>
+      <Icon name="mdi:twitter" />
+    </use.case>
+
+    <use.case slot={Socials.X}>
+      <Icon name="mdi:twitter" />
+    </use.case>
+
+    <use.case slot={Socials.Instagram}>
+      <Icon name="mdi:instagram" />
+    </use.case>
+
+    <use.case slot={Socials.Facebook}>
+      <Icon name="mdi:facebook" />
+    </use.case>
+
+    <use.case slot={Socials.Snapchat}>
+      <Icon name="mdi:snapchat" />
+    </use.case>
+
+    <use.default />
+  </use.switch>
+
+  <!-- {platform} -->
+</a>
+
+<style>
+  a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+</style>
