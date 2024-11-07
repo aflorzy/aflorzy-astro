@@ -1,7 +1,15 @@
 ---
-export const allPosts = await Astro.glob("../pages/posts/**/*.{md,mdx}");
-export const publishedPosts = await Astro.glob(
-  "../pages/posts/published/*.{md,mdx}"
+import { CollectionEntry, getCollection } from "astro:content";
+
+export const allPosts = await getCollection("blog").then((entries) =>
+  entries.map((entry) => ({ ...entry, slug: `/posts/${entry.slug}` }))
 );
-export const draftPosts = await Astro.glob("../pages/posts/draft/*.{md,mdx}");
+
+export const publishedPosts = allPosts.filter(
+  ({ data }: CollectionEntry<"blog">) => !data.draft
+);
+
+export const draftPosts = allPosts.filter(
+  ({ data }: CollectionEntry<"blog">) => !!data.draft
+);
 ---

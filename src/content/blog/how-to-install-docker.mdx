@@ -1,14 +1,13 @@
 ---
-layout: ../../../layouts/MarkdownPostLayout.astro
-title: "Install Docker on any Operating System"
-pubDate: 2024-11-2
-description: "Learn how to get Docker running on your system so you can start working with containers!"
-authors: ["Andrew Flores"]
-# image:
-#     url: 'https://docs.astro.build/assets/rose.webp'
-#     alt: 'The Astro logo on a dark background with a pink glow.'
-tags: ["docker", "tutorial"]
-enabled: true
+title: Install Docker on any Operating System
+pubDate: 2024-11-02
+description: Learn how to get Docker running on your system so you can start working with containers!
+authors:
+  - Andrew Flores
+tags:
+  - docker
+  - tutorial
+draft: false
 ---
 
 ## Docker Desktop (Windows/Mac)
@@ -94,8 +93,30 @@ sudo docker run hello-world
 - [CentOS Reference](https://docs.docker.com/engine/install/centos/)
 - [SUSE (SLES s390x) Reference](https://docs.docker.com/engine/install/sles/)
 
+### Post Install Steps
+
+There are just a couple more steps to take before you Docker installation is working hassle-free! These are based on the steps outlined in the [official docs](https://docs.docker.com/engine/install/linux-postinstall/).
+
+#### Run Docker Commands as a Non-Root User
+
+It will be tiring needing to type `sudo` each time you need to execute a `docker` command, but that step can be removed with a couple simple commands.
+
+- Create a new user group: `sudo groupadd docker`
+- Add your user to the group: `sudo usermod -aG docker $USER`
+- Refresh the group permissions: `newgrp docker`
+- Test that it's working: `docker run hello-world`
+
+#### Automatically Start Docker on Boot
+
+Finally, Docker may not start up automatically when your OS boots so you can run these commands to ensure the dependent services are enabled.
+
+- `sudo systemctl enable docker.service`
+- `sudo systemctl enable containerd.service`
+
 ## What now?
 
 Congratulations! The world of Docker is now available at your fingertips. Time to start finding some containers to run!
 
-Check out [this post](./first-docker-containers) for tips on how to spin-up your first useful container.
+Check out the next post in this collection, [Getting Started with Docker](./first-docker-containers), for tips on how to spin-up your first useful container.
+
+Thanks for reading!

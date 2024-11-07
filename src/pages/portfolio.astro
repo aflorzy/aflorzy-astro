@@ -1,11 +1,8 @@
 ---
+import { CollectionEntry } from "astro:content";
 import PortfolioProject from "../components/PortfolioProject.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getAllProjects } from "../utilities/getProjects.astro";
-
-const allProjects = await getAllProjects().then((allPosts) =>
-  allPosts.filter((post) => post.frontmatter.enabled)
-);
+import { publishedProjects } from "../utilities/getProjects.astro";
 
 const pageTitle = "My Projects";
 ---
@@ -13,12 +10,12 @@ const pageTitle = "My Projects";
 <BaseLayout pageTitle={pageTitle}>
   <ul class="link-card-grid">
     {
-      allProjects.map((project) => (
+      publishedProjects.map(({ data, slug }: CollectionEntry<"project">) => (
         <PortfolioProject
-          url={project.url}
-          title={project.frontmatter.title}
-          description={project.frontmatter.description}
-          image={project.frontmatter.image}
+          url={slug}
+          title={data.title}
+          description={data.description}
+          image={data.image}
         />
       ))
     }

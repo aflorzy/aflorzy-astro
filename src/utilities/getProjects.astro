@@ -1,4 +1,15 @@
 ---
-export const getAllProjects = async () =>
-  Astro.glob("../pages/projects/*.{md,mdx}");
+import { CollectionEntry, getCollection } from "astro:content";
+
+export const allProjects = await getCollection("project").then((entries) =>
+  entries.map((entry) => ({ ...entry, slug: `/projects/${entry.slug}` }))
+);
+
+export const publishedProjects = allProjects.filter(
+  ({ data }: CollectionEntry<"project">) => !data.draft
+);
+
+export const draftProjects = allProjects.filter(
+  ({ data }: CollectionEntry<"project">) => !!data.draft
+);
 ---

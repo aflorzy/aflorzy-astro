@@ -14,6 +14,7 @@ words:
   - andrewflorzy
   - andrewtflores
   - astro
+  - containerd
   - daytrackr
   - distros
   - Dockge
@@ -24,9 +25,11 @@ words:
   - homelabbers
   - homelabbing
   - Macbook
+  - newgrp
   - NGRX
   - partytown
   - SLES
+  - usermod
 ignoreRegExpList:
   - /^\s*```[\s\S]*?^\s*```/gm
 files:

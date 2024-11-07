@@ -1,4 +1,5 @@
 ---
+import { CollectionEntry } from "astro:content";
 import BlogPost from "../../components/BlogPost.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { publishedPosts } from "../../utilities/getPosts.astro";
@@ -7,12 +8,16 @@ export const prerender = true;
 
 export async function getStaticPaths() {
   const uniqueTags = [
-    ...new Set(publishedPosts.map((post) => post.frontmatter.tags).flat()),
+    ...new Set(
+      publishedPosts
+        .map(({ data }: CollectionEntry<"project">) => data.tags)
+        .flat()
+    ),
   ];
 
   return uniqueTags.map((tag) => {
-    const filteredPosts = publishedPosts.filter((post) =>
-      post.frontmatter.tags.includes(tag)
+    const filteredPosts = publishedPosts.filter(
+      ({ data }: CollectionEntry<"project">) => data.tags.includes(tag)
     );
 
     return {
@@ -31,12 +36,12 @@ const { posts } = Astro.props;
 
   <ul class="link-card-grid">
     {
-      posts?.map((post) => (
+      posts?.map(({ data, slug }: CollectionEntry<"project">) => (
         <BlogPost
-          url={post.url}
-          title={post.frontmatter.title}
-          description={post.frontmatter.description}
-          pubDate={post.frontmatter.pubDate}
+          url={slug}
+          title={data.title}
+          description={data.description}
+          pubDate={data.pubDate}
         />
       ))
     }
