@@ -1,16 +1,9 @@
 ---
-import { CollectionEntry } from "astro:content";
 import Tag from "../../components/Tag.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { publishedPosts } from "../../utilities/getPosts.astro";
 
-const tags = [
-  ...new Set(
-    publishedPosts
-      .map(({ data }: CollectionEntry<"project">) => data.tags)
-      .flat()
-  ),
-];
+const tags = [...new Set(publishedPosts.map(({ data }) => data.tags).flat())];
 
 const pageTitle = "Tag Index";
 ---

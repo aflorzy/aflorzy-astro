@@ -1,6 +1,6 @@
-import { defineCollection, z } from "astro:content";
+import { CollectionEntry, defineCollection, z } from "astro:content";
 
-const blogCollection = defineCollection({
+const blogCollection: CollectionEntry<"blog"> = defineCollection({
   type: "content", // v2.5.0 and later
   schema: z.object({
     title: z.string(),

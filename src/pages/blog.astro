@@ -1,14 +1,11 @@
 ---
-import { CollectionEntry } from "astro:content";
 import BlogPost from "../components/BlogPost.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { publishedPosts } from "../utilities/getPosts.astro";
 
 let posts = publishedPosts.sort(
-  (
-    { data: a }: CollectionEntry<"blog">,
-    { data: b }: CollectionEntry<"blog">
-  ) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
+  ({ data: a }, { data: b }) =>
+    new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
 );
 
 const pageTitle = "Blog";
@@ -19,7 +16,7 @@ const pageTitle = "Blog";
 
   <ul class="link-card-grid">
     {
-      posts.map(({ data, slug }: CollectionEntry<"blog">) => (
+      posts.map(({ data, slug }) => (
         <BlogPost
           url={slug}
           title={data.title}

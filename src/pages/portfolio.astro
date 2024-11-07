@@ -1,5 +1,4 @@
 ---
-import { CollectionEntry } from "astro:content";
 import PortfolioProject from "../components/PortfolioProject.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { publishedProjects } from "../utilities/getProjects.astro";
@@ -10,7 +9,7 @@ const pageTitle = "My Projects";
 <BaseLayout pageTitle={pageTitle}>
   <ul class="link-card-grid">
     {
-      publishedProjects.map(({ data, slug }: CollectionEntry<"project">) => (
+      publishedProjects.map(({ data, slug }) => (
         <PortfolioProject
           url={slug}
           title={data.title}
