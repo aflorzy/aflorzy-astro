@@ -1,0 +1,20 @@
+@use "colors";
+
+a.btn-link {
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  background-color: colors.$color-accent;
+  color: colors.$color-primary;
+  font-weight: bold;
+  transition: 0.3s ease-in-out;
+
+  &[aria-disabled="true"] {
+    filter: grayscale(100%) invert(100%);
+    pointer-events: none;
+  }
+
+  &:hover {
+    text-decoration: none;
+    filter: brightness(108%);
+  }
+}

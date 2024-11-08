@@ -10,10 +10,12 @@ ignoreImports: true
 numSuggestions: 4
 useGitignore: true
 words:
+  - Adguard
   - aflorzy
   - andrewflorzy
   - andrewtflores
   - astro
+  - Bazarr
   - containerd
   - daytrackr
   - distros
@@ -21,14 +23,25 @@ words:
   - Florzy
   - flotrade
   - frontmatter
+  - Gitea
   - homelab
   - homelabbers
   - homelabbing
+  - Immich
+  - Kuma
   - Macbook
   - newgrp
   - NGRX
+  - Notifiarr
+  - Overseerr
   - partytown
+  - Prowlarr
+  - Radarr
+  - Requestrr
   - SLES
+  - Sonarr
+  - Tailscale
+  - Truenas
   - usermod
 ignoreRegExpList:
   - /^\s*```[\s\S]*?^\s*```/gm

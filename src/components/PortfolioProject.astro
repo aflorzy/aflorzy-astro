@@ -1,10 +1,16 @@
 ---
 import Card from "./Card.astro";
 
-const { url, title, description, image } = Astro.props;
+const { url, title, description, image, attributes } = Astro.props;
 ---
 
-<Card href={url} title={title} body={description} image={image} />
+<Card
+  href={url}
+  title={title}
+  body={description}
+  image={image}
+  attributes={attributes}
+/>
 
 <style>
   li {

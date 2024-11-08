@@ -1,7 +1,12 @@
 ---
+import { Image } from "astro:assets";
+import daytrackr from "../assets/daytrackr.png";
+import flotrade from "../assets/flotrade.png";
+import * as use from "../components/switch-case";
 import Tag from "../components/Tag.astro";
 import { formatDate } from "../scripts/formatDate";
 import BaseLayout from "./BaseLayout.astro";
+
 const { frontmatter } = Astro.props;
 ---
 
@@ -22,15 +27,27 @@ const { frontmatter } = Astro.props;
     )
   }
 
-  {
-    frontmatter.image && (
-      <img
-        src={frontmatter.image.url}
-        width="300"
-        alt={frontmatter.image.alt}
+  <use.switch value={frontmatter.title}>
+    <use.case slot="FloTrade">
+      <Image
+        src={flotrade}
+        alt="FloTrade logo"
+        format="webp"
+        height="300"
+        quality="mid"
       />
-    )
-  }
+    </use.case>
+
+    <use.case slot="DayTrackr">
+      <Image
+        src={daytrackr}
+        alt="DayTrackr logo"
+        format="webp"
+        height="300"
+        quality="mid"
+      />
+    </use.case>
+  </use.switch>
 
   {
     frontmatter.tags?.length && (

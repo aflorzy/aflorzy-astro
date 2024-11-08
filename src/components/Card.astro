@@ -7,10 +7,11 @@ interface Props {
   href: string;
   date?: string;
   tags?: string[];
+  attributes?: string[];
   image?: { url: string; alt: string };
 }
 
-const { href, title, body, date, tags, image }: Props = Astro.props;
+const { href, title, body, date, tags, attributes, image }: Props = Astro.props;
 ---
 
 <li class="link-card">
@@ -34,6 +35,16 @@ const { href, title, body, date, tags, image }: Props = Astro.props;
             <div class="tags">
               {tags.slice(0, 3).map((tag) => (
                 <span class="tag">{tag}</span>
+              ))}
+            </div>
+          )
+        }
+
+        {
+          attributes?.length && (
+            <div class="attributes">
+              {attributes.slice(0, 3).map((attribute) => (
+                <span class="attribute">{attribute}</span>
               ))}
             </div>
           )

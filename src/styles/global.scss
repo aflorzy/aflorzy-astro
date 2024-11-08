@@ -1,6 +1,7 @@
 @use "sass:color";
 @use "colors";
 @use "cards";
+@use "buttons";
 
 /* Color Variables */
 
@@ -164,6 +165,11 @@ th {
   background-color: color.adjust(colors.$color-dark, $lightness: -2%);
 }
 
+.centered {
+  width: 100%;
+  text-align: center;
+}
+
 /* Gradient Background Examples */
 .gradient-primary {
   background: linear-gradient(
@@ -246,6 +252,23 @@ header {
   gap: 1rem;
 
   .tag {
+    padding: 0 0.5em;
+    background-color: colors.$color-primary;
+    border-radius: 0.5rem;
+    transition: 0.3s ease-in-out;
+
+    &:hover {
+      filter: brightness(1.4);
+    }
+  }
+}
+
+.attributes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .attribute {
     padding: 0 0.5em;
     background-color: colors.$color-primary;
     border-radius: 0.5rem;
