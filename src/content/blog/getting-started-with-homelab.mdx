@@ -22,6 +22,14 @@ Docker is a must. Very easy to learn! See [this post](./first-docker-containers)
 Excellent place to learn and test new things. Easily transferrable to your IT job, or can even help you get a new job.
 Have extra hardware laying around? Virtually all computers can be used as servers!
 
+## But I Have to Use a Command Line!
+
+It's not as bad as you think! Most services that you will be running in your homelab will have web interfaces that you will use after the initial installation. These are essentially websites that are running on some port on your machine and can be accessed at `http://<ip-of-your-server>:<port-the-service-runs-on>`.
+
+Many people start their homelabbing journey to get more familiar with Linux and that can be done in a variety of ways. First, Docker containers are almost always built on a tiny Linux image called Alpine, and if you ever need to poke around inside of the container (`docker exec -it <container-name> /bin/bash`), you will encounter a Linux filesystem.
+
+The next scenario revolves around Virtual Machines (VMs). You can create VMs through some sort of <abbr title="Virtualization platform">hypervisor</abbr> and use a remote-desktop client to interact with it (if you configured a desktop environment such as [Gnome](https://www.gnome.org/) or [KDE](https://kde.org/)) or login to the machine with <abbr title="Secure SHell protocol">SSH</abbr> to access the command-line interface. See my other post on [Introduction to Hypervisors](./intro-to-hypervisors) to learn more.
+
 ## Portainer
 
 The first service I suggest installing in your homelab is Portainer. It helps you spin up containers quickly with an intuitive <abbr title="Graphical User Interface">GUI</abbr>.

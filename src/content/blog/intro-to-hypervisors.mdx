@@ -1,0 +1,49 @@
+---
+title: Introduction to Hypervisors in the Homelab
+pubDate: 2024-11-02
+description: Add Virtual Machines to your homelab! Compare your options and learn the benefits of each.
+authors:
+  - Andrew Flores
+tags:
+  - homelab
+  - virtual machines
+draft: true
+---
+
+## What is a Hypervisor?
+
+The first time I heard the word, I thought was some sort of futuristic helmet from a Sci-Fi movie! Hypervisors allow you to run operating systems within an operating system. They allow you to _virtualize_ computers and save on physical space since more "computers" can be fit into a single machine.
+
+Hypervisors have two types: Type 1 and Type 2 (creative names, I know).
+
+## Type 1 Hypervisors
+
+This type of hypervisor is installed directly on a hard drive as the primary operating system. This method of installation can also be referred to as "bare-metal" and offers performance benefits over Type 2 hypervisors since the OS code is "closer" to the hardware and can interact more directly with the CPU, cache, memory, and storage.
+
+When it comes to choosing which flavor to install on a server in your homelab, there are a couple favorites within the community.
+
+- [Proxmox](https://www.proxmox.com/en/)
+- [Unraid](https://unraid.net/)\*
+- VMware [ESXi](https://www.vmware.com/products/cloud-infrastructure/esxi-and-esx)
+- [XCP-ng](https://xcp-ng.org/)
+- Microsoft [Hyper-V](https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/about/)
+- Linux [KVM](https://linux-kvm.org/page/Main_Page)
+
+\* Unraid is technically a <abbr title="Network Attached Storage">NAS</abbr> OS but offers virtualization support and can be a great option to research for your
+
+My personal experience with Type 1's is limited to Proxmox at this point and it has served me wonderfully for years. I do hope to try out others at some point and compare the user experience and features to what I'm familiar with.
+
+## Type 2 Hypervisors
+
+This type of hypervisor is installed as an application within an existing OS (Windows/Mac OS/Linux). These can be very helpful for quickly spinning up another OS without needing to dedicate a physical server in your office. I have used these on my Macbook to create a Windows VM so I can run a `.exe` application. It's also a great option to test out software before installing it on your own machine since the VM can simply be deleted afterwards.
+
+There are only two real competitors in the Type 2 space.
+
+- VMware [Fusion/Workstation](https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion)
+- Oracle [Virtualbox](https://www.virtualbox.org/)
+
+I have used both of these products in the past and they have served my needs perfectly well. If you need to run a full-fledged operating system within your own, give either of these a shot!
+
+## Conclusion
+
+Looking for a more lightweight solution? Containers may be right for you! Check out my post on [Introduction to Docker](./first-docker-containers) to get started.
