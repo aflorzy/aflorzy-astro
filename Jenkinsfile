@@ -7,7 +7,7 @@ pipeline {
 
     parameters {
         choice(name: 'ENV', choices: ['dev', 'prod'], description: 'Select the deployment environment')
-        
+
         string(name: 'MAJOR_MINOR', defaultValue: '1.0', description: 'Major and minor version of build. Patch number set after build.')
     }
 
@@ -15,7 +15,7 @@ pipeline {
         VERSION_IMAGE_LABEL = "${MAJOR_MINOR}.${BUILD_NUMBER}-${ENV}"
         REGISTRY_URL="gitea.local.aflorzy.com"
         REGISTRY_CREDENTIALS = credentials('gitea')
-        IMAGE_NAME="aflorzy/aflorzy-astro"
+        IMAGE_NAME="florzytech/aflorzy-astro"
         ENV = "${ENV}"
         BRANCH_NAME="${BRANCH_NAME}"
     }
@@ -23,7 +23,7 @@ pipeline {
     stages {
         stage ('Checkout SCM') {
             steps {
-                git branch: "${BRANCH_NAME}", credentialsId: 'gitea', url: 'git@192.168.1.205:aflorzy/aflorzy-astro.git'
+                git branch: "${BRANCH_NAME}", credentialsId: 'gitea', url: 'git@192.168.1.205:florzytech/aflorzy-astro.git'
             }
         }
         stage ('Setup') {
