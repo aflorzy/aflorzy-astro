@@ -1,12 +1,4 @@
 language: en
-autoFix: false
-checkComments: true
-checkIdentifiers: true
-checkJSXText: false
-checkStrings: true
-checkStringTemplates: true
-ignoreImportProperties: true
-ignoreImports: true
 numSuggestions: 4
 useGitignore: true
 words:
