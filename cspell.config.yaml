@@ -42,6 +42,7 @@ words:
   - Sonarr
   - Tailscale
   - Truenas
+  - Unraid
   - usermod
 ignoreRegExpList:
   - /^\s*```[\s\S]*?^\s*```/gm
