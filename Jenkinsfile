@@ -21,11 +21,11 @@ pipeline {
     }
 
     stages {
-        stage ('Checkout SCM') {
-            steps {
-                git branch: "${BRANCH_NAME}", credentialsId: 'gitea', url: 'git@192.168.1.205:florzytech/aflorzy-astro.git'
-            }
-        }
+        // stage ('Checkout SCM') {
+        //     steps {
+        //         git branch: "${BRANCH_NAME}", credentialsId: 'gitea', url: 'git@192.168.1.205:florzytech/aflorzy-astro.git'
+        //     }
+        // }
         stage ('Setup') {
             steps {
                 sh "docker build -f runner.dockerfile -t runner:latest ."
