@@ -12,7 +12,8 @@ pipeline {
     }
 
     environment {
-        VERSION_IMAGE_LABEL = "${MAJOR_MINOR}.${BUILD_NUMBER}-${ENV}"
+        // VERSION_IMAGE_LABEL = "${MAJOR_MINOR}.${BUILD_NUMBER}-${ENV}"
+        VERSION_IMAGE_LABEL = "${MAJOR_MINOR}.${BUILD_NUMBER}"
         REGISTRY_URL="gitea.local.aflorzy.com"
         REGISTRY_CREDENTIALS = credentials('gitea')
         IMAGE_NAME="florzytech/aflorzy-astro"
@@ -51,12 +52,16 @@ pipeline {
             }
         }
         stage ('Build Docker Image') {
+            when { equals expected: true, actual: BRANCH_NAME == 'main' }
+
             steps {
                 // Tag with version and with latest
                 sh "docker build -t ${REGISTRY_URL}/${IMAGE_NAME}:${VERSION_IMAGE_LABEL} -t ${REGISTRY_URL}/${IMAGE_NAME}:latest ."
             }
         }
         stage ('Push Docker Image to Registry') {
+            when { equals expected: true, actual: BRANCH_NAME == 'main' }
+
             steps {
                 script {
                     // Log in to the Docker registry
