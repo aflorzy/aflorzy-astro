@@ -17,22 +17,18 @@ pipeline {
         REGISTRY_URL="gitea.local.aflorzy.com"
         REGISTRY_CREDENTIALS = credentials('gitea')
         IMAGE_NAME="florzytech/aflorzy-astro"
+        RUNNER_IMAGE_NAME="florzytech/runner:latest"
         // ENV = "${ENV}"
         BRANCH_NAME="${BRANCH_NAME}"
     }
 
     stages {
-        stage ('Setup') {
-            steps {
-                sh "docker build -f runner.dockerfile -t runner:latest ."
-            }
-        }
         stage ('Install Dependencies') {
             environment {
                 workspace = pwd()
             }
             steps {
-                sh "docker run --rm -v ${workspace}:/workspace runner:latest npm install --prefix /workspace"
+                sh "docker run --rm -v ${workspace}:/workspace ${REGISTRY_URL}/${RUNNER_IMAGE_NAME} npm install --prefix /workspace"
             }
         }
         stage ('Lint') {
@@ -40,7 +36,7 @@ pipeline {
                 workspace = pwd()
             }
             steps {
-                sh "docker run --rm -v ${workspace}:/workspace runner:latest npm run lint:ci --prefix /workspace"
+                sh "docker run --rm -v ${workspace}:/workspace ${REGISTRY_URL}/${RUNNER_IMAGE_NAME} npm run lint:ci --prefix /workspace"
             }
         }
         stage ('Compile') {
@@ -48,7 +44,7 @@ pipeline {
                 workspace = pwd()
             }
             steps {
-                sh "docker run --rm -v ${workspace}:/workspace runner:latest npm run build --prefix /workspace"
+                sh "docker run --rm -v ${workspace}:/workspace ${REGISTRY_URL}/${RUNNER_IMAGE_NAME} npm run build --prefix /workspace"
             }
         }
         stage ('Build Docker Image') {
@@ -76,16 +72,12 @@ pipeline {
                     // Remove image to save disk space
                     sh "docker image rm -f ${VERSIONED_TAG}"
 
-                    // Conditionally push the latest tag based on the environment
-                    // if (ENV == 'prod') {
-                    if (BRANCH_NAME == 'main') {
-                        def LATEST_TAG = "${REGISTRY_URL}/${IMAGE_NAME}:latest"
+                    def LATEST_TAG = "${REGISTRY_URL}/${IMAGE_NAME}:latest"
 
-                        sh "docker push ${LATEST_TAG}"
+                    sh "docker push ${LATEST_TAG}"
 
-                        // Remove image to save disk space
-                        sh "docker image rm -f ${LATEST_TAG}"
-                    }
+                    // Remove image to save disk space
+                    sh "docker image rm -f ${LATEST_TAG}"
                 }
             }
         }
