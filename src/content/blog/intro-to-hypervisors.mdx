@@ -1,18 +1,21 @@
 ---
 title: Introduction to Hypervisors in the Homelab
-pubDate: 2024-11-02
+pubDate: 2024-11-15
 description: Add Virtual Machines to your homelab! Compare your options and learn the benefits of each.
 authors:
   - Andrew Flores
 tags:
   - homelab
   - virtual machines
-draft: true
+  - proxmox
+draft: false
 ---
 
 ## What is a Hypervisor?
 
 The first time I heard the word, I thought was some sort of futuristic helmet from a Sci-Fi movie! Hypervisors allow you to run operating systems within an operating system. They allow you to _virtualize_ computers and save on physical space since more "computers" can be fit into a single machine.
+
+Hypervisors generally support any <abbr title="Virtual Machine running on the hypervisor">guest</abbr> OS you could possibly need! Have old software that only runs on Windows XP? Want to try out Ubuntu Linux without committing to it as your primary OS? Download a suspicious `.exe` file but don't want to risk corrupting your Windows installation? Virtual Machines to the rescue!
 
 Hypervisors have two types: Type 1 and Type 2 (creative names, I know).
 
@@ -20,7 +23,7 @@ Hypervisors have two types: Type 1 and Type 2 (creative names, I know).
 
 This type of hypervisor is installed directly on a hard drive as the primary operating system. This method of installation can also be referred to as "bare-metal" and offers performance benefits over Type 2 hypervisors since the OS code is "closer" to the hardware and can interact more directly with the CPU, cache, memory, and storage.
 
-When it comes to choosing which flavor to install on a server in your homelab, there are a couple favorites within the community.
+When it comes to choosing which Type 1 hypervisor to install on a server in your homelab, there are a couple favorites within the community.
 
 - [Proxmox](https://www.proxmox.com/en/)
 - [Unraid](https://unraid.net/)\*
@@ -29,7 +32,7 @@ When it comes to choosing which flavor to install on a server in your homelab, t
 - Microsoft [Hyper-V](https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/about/)
 - Linux [KVM](https://linux-kvm.org/page/Main_Page)
 
-\* Unraid is technically a <abbr title="Network Attached Storage">NAS</abbr> OS but offers virtualization support and can be a great option to research for your
+\* Unraid is marketed as a <abbr title="Network Attached Storage">NAS</abbr> OS solution but offers virtualization support and can be a great option to research for your homelab
 
 My personal experience with Type 1's is limited to Proxmox at this point and it has served me wonderfully for years. I do hope to try out others at some point and compare the user experience and features to what I'm familiar with.
 
@@ -44,6 +47,22 @@ There are only two real competitors in the Type 2 space.
 
 I have used both of these products in the past and they have served my needs perfectly well. If you need to run a full-fledged operating system within your own, give either of these a shot!
 
+## In the Homelab
+
+A great place to start with hypervisors in the homelab is to install a Type 1 OS on any old computer you already have or are able relieve a family member of. You might be surprised to learn that the hardware requirements for hypervisor platforms are quite basic!
+
+> Hint: You can "over-provision" CPU and RAM to your VMs to stretch your resources farther! For example, if your server has 2GB of RAM and want to create four VMs, you can allocate 1GB of RAM to each VM and Proxmox will handle it without a hitch!
+>
+> See [VirtualizationHowTo's experiment](https://www.youtube.com/watch?v=2gCr4VvbL_4) of creating 250 VMs on a single mini PC!
+
+Once you have a hypervisor installed on a server, it's time to spin up some VMs! In my homelab, I have a few Ubuntu Server VMs running. One VM is dedicated to running a Plex media server. Another is dedicated to hosting some web apps that I've been developing. Yet another is used as a test machine that I try out new Docker containers on!
+
+I typically choose a Debian-based Linux distribution when creating a new VM because they are what you'll likely encounter in the wild due to their popularity. Ubuntu is my Debian flavor of choice, and I go with the [server ISO download](https://ubuntu.com/download/server) since I will only need to interact with the machine using the command line and not with the GUI.
+
+If you're on the fence between choosing your server's hypervisor OS, choose Proxmox! There are so many features included for free and it will take you years to outgrow everything it offers. If you're at any point curious of how other hypervisor platforms compare, simply spin up a new VM from withing Proxmox! Many people have experimented with nested hypervisors like this.
+
 ## Conclusion
+
+I hope it's clear how hypervisors can help lay a strong foundation for your homelab! There is a time and place for Type 2 hypervisors, but any computer you plan to use as a server will serve its best purpose with a hypervisor OS installed on its boot drive.
 
 Looking for a more lightweight solution? Containers may be right for you! Check out my post on [Introduction to Docker](./first-docker-containers) to get started.
