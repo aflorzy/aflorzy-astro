@@ -14,16 +14,21 @@ pipeline {
     environment {
         // VERSION_IMAGE_LABEL = "${MAJOR_MINOR}.${BUILD_NUMBER}-${ENV}"
         VERSION_IMAGE_LABEL = "${MAJOR_MINOR}.${BUILD_NUMBER}"
-        REGISTRY_URL="gitea.local.aflorzy.com"
+        REGISTRY_URL = 'gitea.local.aflorzy.com'
         REGISTRY_CREDENTIALS = credentials('gitea')
-        IMAGE_NAME="florzytech/aflorzy-astro"
-        RUNNER_IMAGE_NAME="florzytech/runner:latest"
+        IMAGE_NAME = 'florzytech/aflorzy-astro'
+        RUNNER_IMAGE_NAME = 'florzytech/runner:latest'
         // ENV = "${ENV}"
-        BRANCH_NAME="${BRANCH_NAME}"
+        BRANCH_NAME = "${BRANCH_NAME}"
     }
 
     stages {
-        stage ('Install Dependencies') {
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Install Dependencies') {
             environment {
                 workspace = pwd()
             }
@@ -31,7 +36,7 @@ pipeline {
                 sh "docker run --rm -v ${workspace}:/workspace ${REGISTRY_URL}/${RUNNER_IMAGE_NAME} npm install --prefix /workspace"
             }
         }
-        stage ('Lint') {
+        stage('Lint') {
             environment {
                 workspace = pwd()
             }
@@ -39,7 +44,7 @@ pipeline {
                 sh "docker run --rm -v ${workspace}:/workspace ${REGISTRY_URL}/${RUNNER_IMAGE_NAME} npm run lint:ci --prefix /workspace"
             }
         }
-        stage ('Compile') {
+        stage('Compile') {
             environment {
                 workspace = pwd()
             }
@@ -47,7 +52,7 @@ pipeline {
                 sh "docker run --rm -v ${workspace}:/workspace ${REGISTRY_URL}/${RUNNER_IMAGE_NAME} npm run build --prefix /workspace"
             }
         }
-        stage ('Build Docker Image') {
+        stage('Build Docker Image') {
             when { equals expected: true, actual: BRANCH_NAME == 'main' }
 
             steps {
@@ -55,7 +60,7 @@ pipeline {
                 sh "docker build -t ${REGISTRY_URL}/${IMAGE_NAME}:${VERSION_IMAGE_LABEL} -t ${REGISTRY_URL}/${IMAGE_NAME}:latest ."
             }
         }
-        stage ('Push Docker Image to Registry') {
+        stage('Push Docker Image to Registry') {
             when { equals expected: true, actual: BRANCH_NAME == 'main' }
 
             steps {
@@ -65,7 +70,7 @@ pipeline {
                         echo ${REGISTRY_CREDENTIALS_PSW} | docker login ${REGISTRY_URL} -u ${REGISTRY_CREDENTIALS_USR} --password-stdin
                     """
 
-                    def VERSIONED_TAG = "${REGISTRY_URL}/${IMAGE_NAME}:${VERSION_IMAGE_LABEL}";
+                    def VERSIONED_TAG = "${REGISTRY_URL}/${IMAGE_NAME}:${VERSION_IMAGE_LABEL}"
 
                     sh "docker push ${VERSIONED_TAG}"
 
@@ -88,7 +93,7 @@ pipeline {
             sh "docker logout ${REGISTRY_URL}"
 
             echo 'Prune Docker Images'
-            sh "docker system prune -af"
+            sh 'docker system prune -af'
         }
     }
 }
