@@ -39,6 +39,15 @@ const DateFormat: Record<Formats, Intl.DateTimeFormatOptions> = {
 const formatDate = (
   date: string | number | Date,
   dateFormat: Intl.DateTimeFormatOptions = DateFormat.mediumDate
-) => new Date(date.toString()).toLocaleString("en-US", dateFormat);
+) => {
+  if (typeof date === "string" && /^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
+    const [month, day, year] = date.split("/").map(Number);
+    const parsedDate = new Date(year, month - 1, day);
+
+    return parsedDate.toLocaleString("en-US", dateFormat);
+  }
+
+  return new Date(date.toString()).toLocaleString("en-US", dateFormat);
+};
 
 export { DateFormat, formatDate };

@@ -43,13 +43,14 @@ There are several accepted ways to install docker on Linux and the methods can v
 
 ```bash
 sudo apt install docker.io
+sudo apt install docker-compose
 ```
 
-I have had used this command on all major versions of Ubuntu in recent years and it has worked flawlessly. It comes with command-line support for both `docker` and `docker-compose` commands out of the box.
+These packages will get you up and running with Docker as quickly as possible! After installing them, you'll be able to run both `docker` and `docker-compose` commands from your terminal. Although they work quickly, Docker's official website recommends a more thorough approach that is outlined in the next section.
 
 #### apt
 
-Disclaimer: This section is copied verbatim from the [official Docker Ubuntu guide](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository).
+Disclaimer: This section is copied verbatim from the [official Docker Ubuntu guide](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). You can copy and paste the entire block of commands directly into your terminal or run each line individually.
 
 1. Set up Docker's `apt` repository
 
@@ -66,6 +67,7 @@ echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
 sudo apt-get update
 ```
 
@@ -81,7 +83,7 @@ sudo apt-get update
 sudo docker run hello-world
 ```
 
-- This command downloads a test image and runs it in a container. When the container runs, it prints a confirmation message and exits.
+This command downloads a test image and runs it in a container. When the container runs, it prints a confirmation message and exits.
 
 - [Ubuntu Reference](https://docs.docker.com/desktop/install/linux/ubuntu/)
 
@@ -99,24 +101,28 @@ There are just a couple more steps to take before you Docker installation is wor
 
 #### Run Docker Commands as a Non-Root User
 
-It will be tiring needing to type `sudo` each time you need to execute a `docker` command, but that step can be removed with a couple simple commands.
+By default, your user will not have permission to run `docker` commands. You can temporarily solve this by prefixing the commands with `sudo`. However, this can be tedious so it is a common practice to add your user to the `docker` permissions group. The commands below will handle this.
 
-- Create a new user group: `sudo groupadd docker`
-- Add your user to the group: `sudo usermod -aG docker $USER`
-- Refresh the group permissions: `newgrp docker`
-- Test that it's working: `docker run hello-world`
+```bash
+sudo groupadd docker # Create the docker user group if it doesn't exist
+sudo usermod -aG docker $USER # Add your user to the group. Note that $USER is referencing a built-in variable and you can leave it as-is
+newgrp docker # Refresh the group permissions
+
+# Test that it's working!
+docker run hello-world
+```
 
 #### Automatically Start Docker on Boot
 
 Finally, Docker may not start up automatically when your OS boots so you can run these commands to ensure the dependent services are enabled.
 
-- `sudo systemctl enable docker.service`
-- `sudo systemctl enable containerd.service`
+```bash
+sudo systemctl enable docker.service
+sudo systemctl enable containerd.service
+```
 
 ## What now?
 
-Congratulations! The world of Docker is now available at your fingertips. Time to start finding some containers to run!
-
-Check out the next post in this collection, [Getting Started with Docker](./first-docker-containers), for tips on how to spin-up your first useful container.
+Congratulations! The world of Docker is now available at your fingertips. Time to start finding some containers to run! Check out the next post in this collection, [Getting Started with Docker](./first-docker-containers), for tips on how to spin-up your first useful container.
 
 Thanks for reading!
