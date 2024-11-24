@@ -1,0 +1,32 @@
+---
+title: Introduction to Usenet in 2025
+pubDate: 2024-11-20
+description: Learn how Usenet works and how you can start "use"ing it in your homelab today!
+authors:
+  - Andrew Flores
+tags:
+  - usenet
+  - homelab
+draft: true
+---
+
+Usenet has been around for decades and many people (who even know what it is) assume it has fallen out of popularity. In many ways, it has lost its mojo, at least in the traditional sense of sharing text-based messages with people around the world. These days, however, Usenet is a prominent as ever in sharing _binary_\* messages around the globe.
+
+You may have stumbled upon the topic of Usenet in the same way I did -- as an alternative to torrents for downloading binary files (TV shows, movies, applications, etc.).
+
+\* "Binaries", or "binary files" refer to all non-text media. These include files with extensions such as `.exe`, `.pdf`, `.mp3`, `.mov` and many, many more.
+
+## Three Components
+
+Provider - server that actually stores the files to download
+Indexer - service that locates all parts of a file across different servers so a download can be completed
+
+TODO: Do indexers identify the locations of the parts, or do they just identify which parts would be needed, and the providers find the locations? Are provider servers distributed?
+
+Indexers are arguably the most important aspect of a Usenet setup. They act as a search engine for binary files and are responsible for aggregating the locations of each file's many parts that are distributed across multiple servers. This method of using multi-part files is core how Usenet functions and provides security since a file's identity cannot be determined by examining any single part.
+
+Once a file is indexed and a download request is received, your download client will search _providers_ you have configured to actually fetch all of the file's parts.
+
+## Usenet vs. Torrents
+
+As with torrents, paying for access to high-quality media indexers will enable you to have a much smoother experience. Free options do exist, but for a few bucks per month you can sleep better knowing that your media is virus-free and its download will complete successfully.
