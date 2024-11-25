@@ -18,6 +18,7 @@
     "@astrojs/partytown": "^2.1.2",
     "@astrojs/preact": "^3.5.3",
     "@astrojs/rss": "^4.0.7",
+    "@expressive-code/plugin-collapsible-sections": "^0.38.3",
     "@expressive-code/plugin-line-numbers": "^0.38.1",
     "astro": "^4.15.8",
     "astro-expressive-code": "^0.38.1",
