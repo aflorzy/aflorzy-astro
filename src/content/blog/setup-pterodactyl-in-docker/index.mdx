@@ -13,6 +13,10 @@ tags:
 draft: false
 ---
 
+import { Image } from "astro:assets";
+import npmProxyHost from "./npm-proxy-host.png";
+import npmProxyHost2 from "./npm-proxy-host2.png";
+
 ## Background
 
 If your experience with [Pterodactyl](https://pterodactyl.io/) is anything like mine, you've already run into seemingly every possible issue that could arise. I'm relieved to report that I've successfully been able to get it running and even spin up some Minecraft servers!
@@ -153,6 +157,13 @@ docker compose run --rm panel php artisan p:user:make \
 ```
 
 After the command completes, try accessing the Pterodactyl panel at the IP address of your server. Mine is at http://192.168.1.32:8080. The site should load and you should be able to log in, but you will notice that none of the "admin" pages like Locations, Nodes, and Servers will load when clicked. This is because you are not accessing the panel at the FQDN (APP_URL) that was defined in the `docker-compose.yml` file.
+
+{/* style="display: flex; gap: 0.5rem" */}
+
+<section class="img-row">
+  <Image src={npmProxyHost} alt="NPM proxy host configuration" />
+  <Image src={npmProxyHost2} alt="NPM proxy host configuration SSL tab" />
+</section>
 
 To remedy this, go to Nginx Proxy Manager and add a new Proxy Host with the FQDN you set pointing at the IP of your server with port 8080. I created a Proxy Host with the Domain Name `pterodactyl.local.aflorzy.com` and used `http` Scheme, `192.168.1.32` Forward Hostname/IP, and `8080` Forward Port. I did not check any boxes on the Details tab, but selected my `*.local.aflorzy.com` certificate on the SSL tab and checked "Force SSL" and "HTTP/2 Support".
 

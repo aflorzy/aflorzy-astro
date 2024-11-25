@@ -147,6 +147,12 @@ img {
   // margin: 1rem 0;
 }
 
+.img-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 /* Tables */
 table {
   width: 100%;
@@ -302,5 +308,9 @@ header {
 
   .hamburger {
     display: none;
+  }
+
+  .img-row {
+    flex-direction: row;
   }
 }
