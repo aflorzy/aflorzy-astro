@@ -1,0 +1,275 @@
+---
+title: Easily Install Pterodactyl Game Panel Using Docker
+pubDate: 2024-11-25
+description: Fast-track your Pterodactyl setup by using the power of Docker and Nginx Proxy Manager!
+authors:
+  - Andrew Flores
+tags:
+  - pterodactyl
+  - docker
+  - tutorial
+  - nginx proxy manager
+  - minecraft
+draft: false
+---
+
+## Background
+
+If your experience with [Pterodactyl](https://pterodactyl.io/) is anything like mine, you've already run into seemingly every possible issue that could arise. I'm relieved to report that I've successfully been able to get it running and even spin up some Minecraft servers!
+
+Most tutorials that I've seen either ignore <abbr title="Secure Sockets Layer (HTTPS)">SSL</abbr> and <abbr title="Fully-Qualified Domain Name">FQDN</abbr> or use Traefik in order to secure access to the Pterodactyl Panel and corresponding Wings nodes. In my homelab, however, I am currently using <abbr title="Pronounced 'engine-ex'">Nginx</abbr> Proxy Manager (NPM) as a reverse-proxy and to apply SSL certificates to my routes.
+
+After following this tutorial, you will be able to access your game servers by using a custom domain name like `minecraft.example.com` and `minecraft.example.com:25565`.
+
+This tutorial is an adaptation of what was covered in [this video](https://www.youtube.com/watch?v=-9qVssXzgWM) by Jim's Garage. You may wish to watch that or check out his [GitHub repo](https://github.com/JamesTurland/JimsGarage/tree/main/Pterodactyl) for additional references.
+
+## Assumptions
+
+In order to avoid excess verbosity, I am going to assume a couple things about your current knowledge and homelab setup.
+
+1. Debian-based Linux distro (Ubuntu) with [Docker installed](./how-to-install-docker)
+2. [Familiarity with Docker](./first-docker-containers) and Docker Compose
+3. Domain name
+4. Nginx Proxy Manager installed on another machine and wildcard SSL certificate for your domain configured within it. I will be covering NPM in this tutorial, but feel free to apply similar concepts to another reverse-proxy setup that you may have.
+
+## Getting Started
+
+At the time of publishing this post, the [Pterodactyl documentation](https://pterodactyl.io/panel/1.0/webserver_configuration.html) has absolutely no information about using Docker to simplify the setup of the Panel and Wings. However, the [project's GitHub](https://github.com/pterodactyl/panel) has two files that suggest that it is possible to use Docker to set everything up (`docker-compose.example.yml` and `Dockerfile`). Additionally, Docker images are kept up-to-date on the project's [container registry](https://github.com/pterodactyl/panel/pkgs/container/panel).
+
+Perhaps there are tutorials on the internet for using a Dockerized approach to Pterodactyl, but I have not stumbled across any until the YouTube tutorial by Jim's Garage. Consuming that video inspired me to revisit Pterodactyl after attempting its installation on multiple occasions. The tutorial got me nearly to the solution, but his setup relied on the Traefik reverse-proxy while mine was NPM. Note: Traefik is high on my priority list of technologies to learn and implement in my homelab, but my experience with it to this point has not convinced me that I'm ready to make the switch.
+
+The first step is to create a project directory where all relevant config and data files will live. I created one in my home directory `/home/aflorzy/pterodactyl`. In that new folder, paste the below YAML into a file named `docker-compose.yml`. You will need to edit a few lines to personalize with your own information. See the comments in the collapsed sections for which variables may need tweaking. Everything else should work without modification.
+
+```yaml collapse={4-16, 19-23, 26-56, 59-82, 88-93}
+services:
+  db:
+    image: "mariadb:latest"
+    container_name: pterodactyl_mariadb
+    restart: unless-stopped
+    command: "--default-authentication-plugin=mysql_native_password"
+    volumes:
+      - "./panel/db:/var/lib/mysql"
+    environment:
+      MYSQL_DATABASE: panel
+      MYSQL_USER: pterodactyl # Change if you want (also change DB_USERNAME in panel section)
+      MYSQL_PASSWORD: pterodactyl! # Change if you want (also change DB_PASSWORD in panel section)
+      MYSQL_ROOT_PASSWORD: pterodactyl!! # Change if you want
+    networks:
+      - pterodactyl
+
+  cache:
+    image: "redis:alpine"
+    container_name: pterodactyl_redis
+    restart: unless-stopped
+    networks:
+      - pterodactyl
+
+  panel:
+    image: "ghcr.io/pterodactyl/panel:latest"
+    container_name: pterodactyl_panel
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    ports:
+      - "8080:80"
+    volumes:
+      - "./panel/var/:/app/var/"
+      - "./panel/logs/:/app/storage/logs"
+      - "./panel/nginx/:/etc/nginx/conf.d/"
+    environment:
+      RECAPTCHA_ENABLED: false
+      TZ: America/Chicago # Replace with your time zone
+      APP_TIMEZONE: America/Chicago # Replace with your time zone
+      APP_ENV: production
+      APP_ENVIRONMENT_ONLY: false
+      APP_URL: "https://pterodactyl.example.com" # Replace with the FQDN you want to access the panel at
+      APP_SERVICE_AUTHOR: example@gmail.com # Replace with your email
+      TRUSTED_PROXIES: "*"
+      PTERODACTYL_TELEMETRY_ENABLED: false
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: pterodactyl # Replace with what you set for MYSQL_USER in db section
+      DB_PASSWORD: pterodactyl! # Replace with what you set for MYSQL_PASSWORD in db section
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      QUEUE_DRIVER: redis
+      REDIS_HOST: cache
+    networks:
+      - pterodactyl
+
+  wings:
+    image: "ghcr.io/pterodactyl/wings:latest"
+    container_name: pterodactyl_wings
+    restart: unless-stopped
+    ports:
+      - "2022:2022"
+      - "8443:443"
+    stdin_open: true
+    tty: true
+    environment:
+      TZ: America/Chicago # Replace with your time zone
+      APP_TIMEZONE: America/Chicago # Replace with your time zone
+      WINGS_UID: 1000
+      WINGS_GID: 1000
+      WINGS_USERNAME: pterodactyl
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/lib/docker/containers/:/var/lib/docker/containers/"
+      - "/etc/pterodactyl/:/etc/pterodactyl/"
+      - "/var/lib/pterodactyl/:/var/lib/pterodactyl/"
+      - "/var/log/pterodactyl/:/var/log/pterodactyl/"
+      - "/tmp/pterodactyl/:/tmp/pterodactyl/"
+      - "/etc/ssl/certs:/etc/ssl/certs:ro"
+    networks:
+      - wings0
+
+networks:
+  pterodactyl:
+    name: pterodactyl
+  wings0:
+    name: wings0
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.50.0.0/16
+    driver_opts:
+      com.docker.network.bridge.name: wings0
+```
+
+## Setting up the Panel
+
+You should now be able to start the Docker Compose stack! Run `docker compose up -d` and wait for the images to finish pulling from the registry and for the containers to finish starting. The panel container takes a minute or two to complete its database initialization. You can monitor its status by running `docker logs -f pterodactyl_panel`.
+
+Now you need to create an admin user to log in to the panel with. Edit the command below with your names, username, email, and password, then run it. It works by running a `php artisan` command inside of the panel container.
+
+```bash
+docker compose run --rm panel php artisan p:user:make \
+  --email=example@gmail.com \
+  --username=admin \
+  --name-first=First \
+  --name-last=Last \
+  --password=changeme \
+  --admin=1 --no-password
+```
+
+After the command completes, try accessing the Pterodactyl panel at the IP address of your server. Mine is at http://192.168.1.32:8080. The site should load and you should be able to log in, but you will notice that none of the "admin" pages like Locations, Nodes, and Servers will load when clicked. This is because you are not accessing the panel at the FQDN (APP_URL) that was defined in the `docker-compose.yml` file.
+
+To remedy this, go to Nginx Proxy Manager and add a new Proxy Host with the FQDN you set pointing at the IP of your server with port 8080. I created a Proxy Host with the Domain Name `pterodactyl.local.aflorzy.com` and used `http` Scheme, `192.168.1.32` Forward Hostname/IP, and `8080` Forward Port. I did not check any boxes on the Details tab, but selected my `*.local.aflorzy.com` certificate on the SSL tab and checked "Force SSL" and "HTTP/2 Support".
+
+![NPM proxy host entry for Panel]()
+
+After saving the Proxy Host, you can navigate to `https://pterodactyl.local.aflorzy.com` and log in! Verify that you can access the Locations tab and create a location while you are here. I named my location "home". At least one location is necessary in order to start setting up Nodes.
+
+## Setting up a Node (Wings)
+
+This is the part of the installation when things start to get funky. You may be tempted to ditch using FQDN's and SSL and revert back to using HTTP and IP addresses, but stick with me for a few minutes and we will make it through!
+
+Navigate to the Nodes tab and click "Create New" in the top-right. Fill out some information about the node. Note that we are indicating a new FQDN for wings0 here and it will need to be configured in NPM. I will go through this in the next step. Also note that the Daemon Port is 443, but the `ports` section in `docker-compose.yml` defines that we are mapping the internal port 443 maps to the external port 8443. These are the values I set:
+
+| Field                  | Value                      |
+| ---------------------- | -------------------------- |
+| Name                   | wings0                     |
+| Description            |                            |
+| Location               | (home)                     |
+| Node Visibility        | Public                     |
+| FQDN                   | wings0.local.aflorzy.com   |
+| Communicate Over SSL   | Use SSL Connection         |
+| Behind Proxy           | Behind Proxy               |
+| Total Memory           | (depends on your hardware) |
+| Memory Over-Allocation | 0                          |
+| Total Disk Space       | (depends on your hardware) |
+| Disk Over-Allocation   | 0                          |
+| Daemon Port            | 443                        |
+| Daemon SFTP Port       | 2022                       |
+
+Click "Create Node" to save your changes! At this point you will get the "red heart of death" if you go back to the main Nodes tab, meaning that the panel is not able to communicate with the wings API. Two steps are necessary to solve this.
+
+1. Create a Proxy Host entry in NPM for `wings0.local.aflorzy.com`. Use `http` scheme, `192.168.1.32` Forward Hostname/IP, and `8443` Forward Port. Make sure to check "Websockets Support" so you can monitor the server logs in real-time after creating a server. Finally, select your wildcard certificate in the SSL tab and check "Force SSL" and "HTTP/2 Support".
+2. Click on the name of your node (wings0) and go to the Configuration tab. The YAML in the Configuration File section needs to be copied and pasted into a new file on your server. Create a file named `config.yml` in the directory `/etc/pterodactyl` and paste the YAML contents in it. Next, copy the YAML below and paste it after the configuration code you just pasted.
+
+```yaml
+docker:
+  network:
+    interface: 172.50.0.1
+    dns:
+      - 192.168.1.1 # Replace with your default gateway if different
+      - 1.0.0.1
+    name: wings0
+    ispn: false
+    driver: bridge
+    network_mode: wings0
+    is_internal: false
+    enable_icc: true
+    network_mtu: 1500
+    interfaces:
+      v4:
+        subnet: 172.50.0.0/16
+        gateway: 172.50.0.1
+      v6:
+        subnet: fdba:17c8:6c94::/64
+        gateway: fdba:17c8:6c94::1011
+allowed_mounts: []
+allowed_origins: []
+allow_cors_private_network: false
+ignore_panel_config_updates: false
+```
+
+Restart the Docker containers by running `docker compose down` and `docker compose up -d`. Monitor the wings container logs this time using `docker logs -f pterodactyl_wings` to verify there are no errors.
+
+If all looks good, go back to your browser and refresh the Nodes tab. You should now see a green heart icon! If for some reason you don't, open your browser's developer tools and go to the Network tab to gather more information about why the panel cannot reach the wings URL. It is critical that you see a green heart at this stage, so be sure to continue troubleshooting until you've solved the problem. Viewing the Docker container logs can be very useful in this scenario.
+
+## Setting up a Minecraft Server
+
+Time to create a server! The first step for doing this is to create port allocations on your node. Navigate to the Nodes tab and click on your node. Go to the Allocation tab and fill out the fields under Assign New Allocations. I recommend using IP address `0.0.0.0` as this IP is internal to the docker container. Assign an alias to the allocations if needed, and assign the port range 25560-25570 for Ports.
+
+Now Navigate to the Servers tab and click "Create New". I will be creating a Minecraft server in this case, but the process for other games should be similar.
+
+Give your server a name (e.g. Minecraft) and search for your Pterodactyl Panel user's name under Server Owner.
+
+Under Allocation Management, choose wings0 for your node, then select an allocation in the dropdown. I chose 25560 and left Additional Allocations blank.
+
+Set Application Feature Limits if desired, then set values for Memory and Disk Space under Resource Management. Checking the box for Enable OOM Killer is recommended so the entire node doesn't crash in the event that one server's memory consumes too many resources.
+
+Choose the Minecraft nest, and Vanilla Minecraft egg. Then choose Java 21 Docker image and click "Create Server"! You can click the "pop-out" button in the tab list and you will be taken to the server management dashboard. Click the Start button to begin world generation!
+
+At this point, you will be able to connect to your Minecraft server using its LAN IP address (`192.168.1.32:25560`), but not by a FQDN yet. We will take care of this final step in the next section.
+
+## Connecting to the Server using a FQDN
+
+In order to connect to your servers using a domain name, you need to configure a couple of things that regard Nginx Proxy Manager. First, if you are running NPM as a Docker container, you need to edit your compose stack or `docker run` command to expose the ports that your game servers will be running on. In the previous step, I allocated ports 25560-25570 to my node so I will need to add the same port range inside of my NPM Docker Compose stack under `ports`.
+
+```yaml
+ports:
+  - 80:80
+  - 81:81
+  - 443:443
+  - 25560-25570:25560-25570 # Game server port ranges
+```
+
+Next, you need to create a "Stream" in the NPM UI. Click the Hosts tab and select Streams in the list. Click "Add Stream" and fill in the information for one of the ports.
+
+| Field          | Value                        |
+| -------------- | ---------------------------- |
+| Incoming Port  | 25560                        |
+| Forward Host   | 192.168.1.32                 |
+| Forward Port   | 25560                        |
+| TCP Forwarding | Yes                          |
+| UDP Forwarding | Yes (used for MC voice chat) |
+
+Finally, decide which FQDN you want to access your servers at and create a DNS/CNAME record for it on your network using PiHole or AdGuard Home. I chose `minecraft.local.aflorzy.com` and pointed it at my NPM server's IP.
+
+It is possible to create a wildcard DNS matcher for your domain in PiHole or AdGuard Home so that all matching request are directed at your NPM instance. However, the downside of this is that the connection URL to Minecraft will not be limited to `minecraft.local.aflorzy.com:25560`. For example, I can connect to the same server using `scoobydoo.local.aflorzy.com:25560`. This can be fixed by creating a single DNS CNAME entry for each subdomain that NPM should handle.
+
+Now it's time to open up Minecraft and connect to your server! I am able to connect to my server at `minecraft.local.aflorzy.com:25560`.
+
+## Exposing Servers to the WAN
+
+If you've gotten to this point, the only remaining step is to forward ports 80, 443, and 25560-25570 on your firewall and edit your DNS provider's settings to point an A or CNAME record at your public IP address.
+
+## Final Thoughts
+
+Pterodactyl Panel's installation is exhausting enough with all of the DNS configuration needed. Why further complicate the process by running all of the installation commands manually? Use the official Docker containers to start with pre-built images that already have the tedious bits taken care of.
+
+I will be experimenting with the successor to Pterodactyl, Pelican, in a future post. Stay tuned to see how that process differs!
+
+Thank you for joining me in this journey of hosting Minecraft servers at home. The process has been long and arduous but is worth it in the end. Have a great day!

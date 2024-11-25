@@ -11,6 +11,7 @@ import mdx from "@astrojs/mdx";
 
 import partytown from "@astrojs/partytown";
 
+import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import expressiveCode from "astro-expressive-code";
 
@@ -27,7 +28,7 @@ export default defineConfig({
     preact(),
     icon(),
     expressiveCode({
-      plugins: [pluginLineNumbers()],
+      plugins: [pluginLineNumbers(), pluginCollapsibleSections()],
     }),
     mdx(),
     partytown({
