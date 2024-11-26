@@ -13,6 +13,24 @@ tags:
 draft: false
 ---
 
+import { Image } from "astro:assets";
+import minecraftAdGuardDnsRewrite from "./minecraft-adguard-dns-rewrite.png";
+import npmPanelProxyHost from "./npm-panel-proxy-host.png";
+import npmPanelProxyHost2 from "./npm-panel-proxy-host2.png";
+import npmStreamDropdown from "./npm-stream-dropdown.png";
+import npmStream from "./npm-stream.png";
+import npmWingsProxyHost from "./npm-wings0-proxy-host.png";
+import npmWingsProxyHost2 from "./npm-wings0-proxy-host2.png";
+import minecraftConfig1 from "./pterodactyl-mc-server1.png";
+import minecraftConfig2 from "./pterodactyl-mc-server2.png";
+import minecraftConfig3 from "./pterodactyl-mc-server3.png";
+import minecraftConfig4 from "./pterodactyl-mc-server4.png";
+import pterodactylNodeCreation from "./pterodactyl-node-creation.png";
+import pterodactylNodeAllocations from "./pterodactyl-wings0-allocations.png";
+import wildcardAdGuardDnsRewrite from "./wildcard-adguard-dns-rewrite.png";
+
+export const contentWidth = 800;
+
 ## Background
 
 If your experience with [Pterodactyl](https://pterodactyl.io/) is anything like mine, you've already run into seemingly every possible issue that could arise. I'm relieved to report that I've successfully been able to get it running and even spin up some Minecraft servers!
@@ -156,7 +174,13 @@ After the command completes, try accessing the Pterodactyl panel at the IP addre
 
 To remedy this, go to Nginx Proxy Manager and add a new Proxy Host with the FQDN you set pointing at the IP of your server with port 8080. I created a Proxy Host with the Domain Name `pterodactyl.local.aflorzy.com` and used `http` Scheme, `192.168.1.32` Forward Hostname/IP, and `8080` Forward Port. I did not check any boxes on the Details tab, but selected my `*.local.aflorzy.com` certificate on the SSL tab and checked "Force SSL" and "HTTP/2 Support".
 
-![NPM proxy host entry for Panel]()
+<section class="img-row">
+  <Image src={npmPanelProxyHost} alt="NPM panel proxy host configuration" />
+  <Image
+    src={npmPanelProxyHost2}
+    alt="NPM panel proxy host configuration SSL tab"
+  />
+</section>
 
 After saving the Proxy Host, you can navigate to `https://pterodactyl.local.aflorzy.com` and log in! Verify that you can access the Locations tab and create a location while you are here. I named my location "home". At least one location is necessary in order to start setting up Nodes.
 
@@ -166,11 +190,18 @@ This is the part of the installation when things start to get funky. You may be 
 
 Navigate to the Nodes tab and click "Create New" in the top-right. Fill out some information about the node. Note that we are indicating a new FQDN for wings0 here and it will need to be configured in NPM. I will go through this in the next step. Also note that the Daemon Port is 443, but the `ports` section in `docker-compose.yml` defines that we are mapping the internal port 443 maps to the external port 8443. These are the values I set:
 
+<Image
+  src={pterodactylNodeCreation}
+  width={contentWidth}
+  quality="max"
+  alt="Pterodactyl Node creation screen with details filled in"
+/>
+
 | Field                  | Value                      |
 | ---------------------- | -------------------------- |
 | Name                   | wings0                     |
 | Description            |                            |
-| Location               | (home)                     |
+| Location               | home                       |
 | Node Visibility        | Public                     |
 | FQDN                   | wings0.local.aflorzy.com   |
 | Communicate Over SSL   | Use SSL Connection         |
@@ -183,6 +214,14 @@ Navigate to the Nodes tab and click "Create New" in the top-right. Fill out some
 | Daemon SFTP Port       | 2022                       |
 
 Click "Create Node" to save your changes! At this point you will get the "red heart of death" if you go back to the main Nodes tab, meaning that the panel is not able to communicate with the wings API. Two steps are necessary to solve this.
+
+<section class="img-row">
+  <Image src={npmWingsProxyHost} alt="NPM wings proxy host configuration" />
+  <Image
+    src={npmWingsProxyHost2}
+    alt="NPM wings proxy host configuration SSL tab"
+  />
+</section>
 
 1. Create a Proxy Host entry in NPM for `wings0.local.aflorzy.com`. Use `http` scheme, `192.168.1.32` Forward Hostname/IP, and `8443` Forward Port. Make sure to check "Websockets Support" so you can monitor the server logs in real-time after creating a server. Finally, select your wildcard certificate in the SSL tab and check "Force SSL" and "HTTP/2 Support".
 2. Click on the name of your node (wings0) and go to the Configuration tab. The YAML in the Configuration File section needs to be copied and pasted into a new file on your server. Create a file named `config.yml` in the directory `/etc/pterodactyl` and paste the YAML contents in it. Next, copy the YAML below and paste it after the configuration code you just pasted.
@@ -220,17 +259,41 @@ If all looks good, go back to your browser and refresh the Nodes tab. You should
 
 ## Setting up a Minecraft Server
 
-Time to create a server! The first step for doing this is to create port allocations on your node. Navigate to the Nodes tab and click on your node. Go to the Allocation tab and fill out the fields under Assign New Allocations. I recommend using IP address `0.0.0.0` as this IP is internal to the docker container. Assign an alias to the allocations if needed, and assign the port range 25560-25570 for Ports.
+Time to create a server! The first step for doing this is to create port allocations on your node. Navigate to the Nodes tab and click on your node. Go to the Allocation tab and fill out the fields under Assign New Allocations.
+
+<Image
+  src={pterodactylNodeAllocations}
+  alt="Allocating ports 25560-25570 for Node Wings0"
+/>
+
+I recommend using IP address `0.0.0.0` as this IP is internal to the docker container. Assign an alias to the allocations if needed, and assign the port range 25560-25570 for Ports.
 
 Now Navigate to the Servers tab and click "Create New". I will be creating a Minecraft server in this case, but the process for other games should be similar.
+
+<Image src={minecraftConfig1} alt="Minecraft server name and node selection" />
 
 Give your server a name (e.g. Minecraft) and search for your Pterodactyl Panel user's name under Server Owner.
 
 Under Allocation Management, choose wings0 for your node, then select an allocation in the dropdown. I chose 25560 and left Additional Allocations blank.
 
+<Image
+  src={minecraftConfig2}
+  alt="Minecraft server application feature limits configuration"
+/>
+
+<Image
+  src={minecraftConfig3}
+  alt="Minecraft server memory and disk space configuration"
+/>
+
 Set Application Feature Limits if desired, then set values for Memory and Disk Space under Resource Management. Checking the box for Enable OOM Killer is recommended so the entire node doesn't crash in the event that one server's memory consumes too many resources.
 
-Choose the Minecraft nest, and Vanilla Minecraft egg. Then choose Java 21 Docker image and click "Create Server"! You can click the "pop-out" button in the tab list and you will be taken to the server management dashboard. Click the Start button to begin world generation!
+<Image
+  src={minecraftConfig4}
+  alt="Minecraft Server egg and startup command configuration"
+/>
+
+Choose the Minecraft nest, and Vanilla Minecraft egg. Then choose Java 21 Docker image. Finally, edit the minecraft "Server Version" if you'd like and click "Create Server"! You can click the "pop-out" button in the tab list and you will be taken to the server management dashboard. Click the Start button to begin world generation!
 
 At this point, you will be able to connect to your Minecraft server using its LAN IP address (`192.168.1.32:25560`), but not by a FQDN yet. We will take care of this final step in the next section.
 
@@ -248,6 +311,14 @@ ports:
 
 Next, you need to create a "Stream" in the NPM UI. Click the Hosts tab and select Streams in the list. Click "Add Stream" and fill in the information for one of the ports.
 
+<section class="img-row">
+  <Image
+    src={npmStreamDropdown}
+    alt="NPM hosts dropdown with stream selected"
+  />
+  <Image src={npmStream} alt="NPM stream configuration" />
+</section>
+
 | Field          | Value                        |
 | -------------- | ---------------------------- |
 | Incoming Port  | 25560                        |
@@ -256,7 +327,17 @@ Next, you need to create a "Stream" in the NPM UI. Click the Hosts tab and selec
 | TCP Forwarding | Yes                          |
 | UDP Forwarding | Yes (used for MC voice chat) |
 
+<Image
+  src={minecraftAdGuardDnsRewrite}
+  alt="Minecraft DNS rewrite in AdGuard Home"
+/>
+
 Finally, decide which FQDN you want to access your servers at and create a DNS/CNAME record for it on your network using PiHole or AdGuard Home. I chose `minecraft.local.aflorzy.com` and pointed it at my NPM server's IP.
+
+<Image
+  src={wildcardAdGuardDnsRewrite}
+  alt="Wildcard DNS rewrite in AdGuard Home"
+/>
 
 It is possible to create a wildcard DNS matcher for your domain in PiHole or AdGuard Home so that all matching request are directed at your NPM instance. However, the downside of this is that the connection URL to Minecraft will not be limited to `minecraft.local.aflorzy.com:25560`. For example, I can connect to the same server using `scoobydoo.local.aflorzy.com:25560`. This can be fixed by creating a single DNS CNAME entry for each subdomain that NPM should handle.
 

@@ -144,7 +144,23 @@ pre {
 img {
   max-width: 100%;
   display: block;
-  // margin: 1rem 0;
+  height: auto;
+}
+
+.img-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  max-width: 100%;
+
+  
+  img {
+    width: auto; /* Let the image width scale based on content */
+    max-width: 100%;
+    flex: 1 1 50%; /* Share container space while maintaining ratio */
+    object-fit: contain; /* Ensures no squishing */
+  }
 }
 
 /* Tables */
@@ -302,5 +318,13 @@ header {
 
   .hamburger {
     display: none;
+  }
+
+  .img-row {
+    flex-direction: row;
+
+    img {
+      max-width: 50%; /* Constrain width so two images fit side by side */
+    }
   }
 }
