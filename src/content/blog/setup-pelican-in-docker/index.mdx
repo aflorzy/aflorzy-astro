@@ -1,0 +1,123 @@
+---
+title: Easily Install Pelican Game Panel Using Docker
+pubDate: 2024-11-27
+description: Fast-track your Pelican setup by using the power of Docker and Nginx Proxy Manager!
+authors:
+  - Andrew Flores
+tags:
+  - pelican
+  - docker
+  - tutorial
+  - nginx proxy manager
+  - minecraft
+draft: true
+---
+
+import { Image } from "astro:assets";
+import nodeConfigurationFile from "./node-configuration-file.png";
+import pelicanCaddyDiscord from "./pelican-caddy-discord.png";
+
+Pelican is the successor to [Pterodactyl](https://pterodactyl.io/) and is intended to improve on aspects of game server management where Pterodactyl fell short. Pelican is currently in Beta and this guide is currently up-to-date with Panel [v1.0.0-beta13](https://github.com/pelican-dev/panel/releases/tag/v1.0.0-beta13) and Wings [v1.0.0-beta7](https://github.com/pelican-dev/wings/releases/tag/v1.0.0-beta7).
+
+The installation process for Pelican is quite intense and the networking configuration for the Panel and Wings and your actual game servers adds another layer of complexity. Docker is an excellent tool for wrapping up all the installation complexity into an image, and all you need to do is run the container with a couple environment variable tweaks.
+
+The Pelican maintainers plan on using Docker as the preferred installation method once the project is out of Beta, and therefore have not published official images for the Panel or Wings. However, they have provided us with the tools to build the image (Dockerfile) and even examples for running the containers with Docker Compose.
+
+If you're interested, I made another post on easily setting up [Pterodactyl in Docker](../../posts/setup-pterodactyl-in-docker), and this tutorial uses many of the same practices.
+
+<Image src={pelicanCaddyDiscord} alt="Discord user's Caddyfile solution" />
+
+It is necessary to create a `Caddyfile` that allows the web server to be exposed from inside the Panel container, per suggestions from a user on the [Pelican Discord](https://discord.com/channels/1218730176297439332/1304953032982790242/1305864079885467649)
+
+1. Create a Proxy Host entry in NPM for `wings1.local.aflorzy.com`. Use `http` scheme, `192.168.1.32` Forward Hostname/IP, and `8443` Forward Port. Make sure to check "Websockets Support" so you can monitor the server logs in real-time after creating a server. Finally, select your wildcard certificate in the SSL tab and check "Force SSL" and "HTTP/2 Support".
+
+<Image
+  src={nodeConfigurationFile}
+  alt="Generated node config under Fonfiguration File tab"
+/>
+
+2. Click on your node (wings1) and go to the Configuration File tab. The YAML content displayed here needs to be copied and pasted into a new file on your server. Create a file named `config.yml` in the directory `/etc/pterodactyl` and paste the YAML contents in it. Next, copy the YAML below and paste it after the configuration code you just pasted.
+
+<mark>IMPORTANT</mark> Make sure to **DISABLE** ssl by setting `ssl.enabled:
+false`
+
+Keeping `enabled: true` will try to use the `ssl.cert` and `ssl.key` paths that are mentioned in that section, but these do not exist since we are using
+certificates generated with Nginx Proxy Manager. No certificate configuration is
+needed for this whole process except for adding individual certificates
+(`pelican.domain.com`, `wings1.domain.com`, `minecraft.domain.com`) or a
+wildcard certificate (`*.domain.com`) inside of NPM.
+
+```yaml
+docker:
+  network:
+    interface: 172.50.0.1
+    dns:
+      - 192.168.1.1 # Replace with your default gateway if different
+      - 1.0.0.1
+    name: wings1
+    ispn: false
+    driver: bridge
+    network_mode: wings1
+    is_internal: false
+    enable_icc: true
+    network_mtu: 1500
+    interfaces:
+      v4:
+        subnet: 172.50.0.0/16
+        gateway: 172.50.0.1
+      v6:
+        subnet: fdba:17c8:6c94::/64
+        gateway: fdba:17c8:6c94::1011
+allowed_mounts: []
+allowed_origins: []
+allow_cors_private_network: false
+ignore_panel_config_updates: false
+```
+
+The final contents of `/etc/pelican/config.yml` should look similar to the following:
+
+```yaml title="/etc/pelican/config.yml" collapse={19-100}
+debug: false
+uuid: 6e6104e1-2022-4ed2-8dcc-2b45af4cfae5
+token_id: xKdo7ktpJqY5w4RN
+token: qh2zP4AsMy5whnS0TBAeZATJKrAyjUJkP8NtZwcKzZhAcgYPXnWej012TDzrkAs9
+api:
+  host: 0.0.0.0
+  port: 443
+  ssl:
+    enabled: false
+    cert: /etc/letsencrypt/live/wings1.local.aflorzy.com/fullchain.pem
+    key: /etc/letsencrypt/live/wings1.local.aflorzy.com/privkey.pem
+  upload_limit: 1000
+system:
+  data: /var/lib/pelican/volumes
+  sftp:
+    bind_port: 2022
+allowed_mounts: []
+remote: 'https://pelican.local.aflorzy.com'
+
+docker:
+  network:
+    interface: 172.50.0.1
+    dns:
+    - 192.168.1.1
+    - 1.0.0.1
+    name: wings1
+    ispn: false
+    driver: bridge
+    network_mode: wings1
+    is_internal: false
+    enable_icc: true
+    network_mtu: 1500
+    interfaces:
+      v4:
+        subnet: 172.50.0.0/16
+        gateway: 172.50.0.1
+      v6:
+        subnet: fdba:17c8:6c94::/64
+        gateway: fdba:17c8:6c94::1011
+allowed_mounts: []
+allowed_origins: []
+allow_cors_private_network: false
+ignore_panel_config_updates: false
+```
