@@ -9,9 +9,11 @@ let posts = publishedPosts.sort(
 );
 
 const pageTitle = "Blog";
+const pageDescription =
+  "Simplify learning in the homelab with Docker, Linux, and much more!";
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
   <ul class="link-card-grid">
     {
       posts.map(({ data, slug }) => (
