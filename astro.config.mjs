@@ -8,9 +8,8 @@ import preact from "@astrojs/preact";
 import icon from "astro-icon";
 
 import mdx from "@astrojs/mdx";
-
 import partytown from "@astrojs/partytown";
-
+import sitemap from "@astrojs/sitemap";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import expressiveCode from "astro-expressive-code";
@@ -36,5 +35,6 @@ export default defineConfig({
         forward: ["dataLayer.push"],
       },
     }),
+    sitemap(),
   ],
 });

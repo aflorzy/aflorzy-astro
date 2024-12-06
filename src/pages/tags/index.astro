@@ -6,9 +6,10 @@ import { publishedPosts } from "../../utilities/getPosts.astro";
 const tags = [...new Set(publishedPosts.map(({ data }) => data.tags).flat())];
 
 const pageTitle = "Tag Index";
+const pageDescription = "Explore any topic that posts have been tagged with.";
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
   {
     tags?.length && (
       <div class="tags">

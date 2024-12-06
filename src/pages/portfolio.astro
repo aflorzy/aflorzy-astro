@@ -4,9 +4,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { publishedProjects } from "../utilities/getProjects.astro";
 
 const pageTitle = "My Projects";
+const pageDescription = "Check out the projects I've been working on!";
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
   <ul class="link-card-grid">
     {
       publishedProjects.map(({ data, slug }) => (

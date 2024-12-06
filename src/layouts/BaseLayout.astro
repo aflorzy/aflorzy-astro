@@ -3,7 +3,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.scss";
 
-const { pageTitle } = Astro.props;
+const { pageTitle, pageDescription } = Astro.props;
 ---
 
 <html lang="en">
@@ -18,7 +18,30 @@ const { pageTitle } = Astro.props;
     />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+
     <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="https://blog.aflorzy.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Andrew Flores" />
+    <meta property="og:description" content={pageDescription} />
+    <meta
+      property="og:image"
+      content="https://opengraph.b-cdn.net/production/images/e3b6b7b7-1189-4fe5-a291-88ccbd789ddb.png?token=l4j0yTS_Px1cxLBuGGXrkFoyrQiqsRloQax2Df77w5w&height=1200&width=1200&expires=33269071171"
+    />
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content="blog.aflorzy.com" />
+    <meta property="twitter:url" content="https://blog.aflorzy.com" />
+    <meta name="twitter:title" content="Andrew Flores" />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta
+      name="twitter:image"
+      content="https://opengraph.b-cdn.net/production/images/e3b6b7b7-1189-4fe5-a291-88ccbd789ddb.png?token=l4j0yTS_Px1cxLBuGGXrkFoyrQiqsRloQax2Df77w5w&height=1200&width=1200&expires=33269071171"
+    />
 
     <!-- Google Tag Manager -->
     <script>
