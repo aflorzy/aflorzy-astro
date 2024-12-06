@@ -50,7 +50,8 @@ words:
   - Unraid
   - usermod
 ignoreRegExpList:
-  - /^\s*```[\s\S]*?^\s*```/gm
+  # - /^\s*```[\s\S]*?^\s*```/gm
+  - /```[\s\S]*?```/
 files:
   - "**/*.{md,mdx}"
 enableFiletypes:
