@@ -15,19 +15,24 @@ words:
   - Dockerized
   - Dockge
   - Emby
+  - fastcgi
+  - fdba
   - Florzy
   - flotrade
   - FOSS
   - frontmatter
+  - fullchain
   - Gitea
   - homelab
   - homelabbers
   - homelabbing
   - Homelabs
   - Immich
+  - ispn
   - Jellyfin
   - Klipper
   - Kuma
+  - letsencrypt
   - Macbook
   - newgrp
   - Nextcloud
@@ -37,6 +42,7 @@ words:
   - Overallocate
   - Overseerr
   - partytown
+  - privkey
   - Prowlarr
   - Radarr
   - Requestrr
@@ -50,7 +56,6 @@ words:
   - Unraid
   - usermod
 ignoreRegExpList:
-  # - /^\s*```[\s\S]*?^\s*```/gm
   - /```[\s\S]*?```/
 files:
   - "**/*.{md,mdx}"
