@@ -1,0 +1,159 @@
+---
+title: Create a Modded Minecraft Server in Pelican Game Panel
+pubDate: 2024-12-07
+description: Follow along to learn the easiest way to import Custom Eggs for game servers.
+authors:
+  - Andrew Flores
+tags:
+  - game server
+  - tutorial
+  - minecraft
+draft: false
+---
+
+import { Image } from "astro:assets";
+import eggsDefault from "./eggs-default.png";
+import pelicanEggAdded from "./pelican-egg-added.png";
+import pelicanEggImportButton from "./pelican-egg-import-button.png";
+import pelicanEggImportScreen from "./pelican-egg-import-screen.png";
+import pelicanServerCreated from "./pelican-server-created.png";
+import pelicanServerCreation1 from "./pelican-server-creation1.png";
+import pelicanServerCreation2 from "./pelican-server-creation2.png";
+import pelicanServerCreation3 from "./pelican-server-creation3.png";
+import repoMinecraftFabric from "./repo-minecraft-fabric.png";
+import repoMinecraftRawButton from "./repo-minecraft-raw-button.png";
+import repoMinecraft from "./repo-minecraft.png";
+import serverFiles from "./server-files.png";
+import serverModUploaded from "./server-mod-uploaded.png";
+import serverStarted from "./server-started.png";
+import serverUploadMod from "./server-upload-mod.png";
+
+Looking to create a modded Minecraft server but can't find your server version in Pelican's list of Eggs? Look no further than _custom eggs_. Pelican provides many options to choose from and we will go through the process of adding the Eggs to your own installation of the Panel.
+
+You'll also see how you can directly add mods to your server without ever needing to download the mod files to your computer!
+
+## Getting Started
+
+Pelican panel comes with built-in support for creating servers for several different games including Minecraft, CS:GO, TF2, Gary's Mod, and Rust. Each of these games have default configuration templates that allow a servers to be created. These configuration files are known as _Eggs_ in Pelican.
+
+<Image src={eggsDefault} alt="Default list of Pelican Eggs" />
+
+After your initial [installation of Pelican](setup-pelican-in-docker), you will see all of the included Eggs under the Eggs tab in the Admin area.
+
+While other games only come with a single Egg, Minecraft already has a few including Vanilla Minecraft, Paper, Bungeecord, and Sponge (SpongeVanilla). If the Minecraft server you are adding is in this list, great! Head down to the section where we will [create the server](#creating-the-server).
+
+However, if you'd like to create a server that is not yet in this list, we will need to add a new Egg.
+
+## Adding Custom Eggs
+
+Eggs can be custom-made to provide you with new game server templates. I will not be covering how to create custom Eggs from scratch here, but rather using ones that folks in the community have already made and tested.
+
+Pelican has an official [GitHub repository](https://github.com/pelican-eggs/eggs) dedicated to housing configuration files for many different Eggs.
+
+Start by browsing the files in the repository and clicking on the `game_eggs` folder. In here you will find a folder that contains custom eggs for each game that is supported.
+
+<Image src={repoMinecraft} alt="Browsing the Minecraft eggs folder in GitHub" />
+
+I am interested in creating a modded Fabric Minecraft server, so I will go into the [Minecraft folder](https://github.com/pelican-eggs/eggs/tree/master/game_eggs/minecraft).
+
+Click the folder for either Java or Bedrock edition.
+
+<Image
+  src={repoMinecraftFabric}
+  alt="Browsing the Minecraft Fabric egg folder in GitHub"
+/>
+
+Finally, open the `fabric` folder. It will contain the configuration file we will need to import into Pelican.
+
+Click on `egg-fabric.json`.
+
+<Image
+  src={repoMinecraftRawButton}
+  alt="Raw code button for JSON file in GitHub"
+/>
+
+Look on the top-right-hand side of the file editor and click the "Raw" button to view only the file contents.
+
+[https://raw.githubusercontent.com/pelican-eggs/eggs/refs/heads/master/game_eggs/minecraft/java/fabric/egg-fabric.json](https://raw.githubusercontent.com/pelican-eggs/eggs/refs/heads/master/game_eggs/minecraft/java/fabric/egg-fabric.json)
+
+Copy the URL from the address bar. Above is the URL that I copied and will use to import the egg into Pelican.
+
+Note that Pelican supports this method of importing Eggs via a URL of the JSON file as well as uploading a JSON file that's stored on your computer.
+
+<Image src={pelicanEggImportButton} alt="Pelican Egg Import button" />
+
+Navigate back to your Pelican Panel and head to the Eggs tab. Click the "Import" button in the top-right.
+
+<Image src={pelicanEggImportScreen} alt="Pelican Egg Import screen" />
+
+Click the "From URL" tab and paste in the URL you copied from GitHub.
+
+<Image src={pelicanEggAdded} alt="Pelican Egg added to list" />
+
+Scroll to the bottom of the list and verify that your new Egg was added successfully!
+
+## Creating the Server
+
+Head to the Servers tab of Pelican and click Create New
+
+<Image src={pelicanServerCreation1} alt="Server creation Information step" />
+
+First, give your server a name. I am creating a Fabric server with the latest version of Minecraft, so I named it "Minecraft Fabric Latest".
+
+Ensure Owner and Node are populated correctly, then select a port for the server to run on in the "Primary Allocation" dropdown. Port allocations can be viewed and edited in the Nodes section of the Pelican Admin panel under the node you created. See [this section](setup-pelican-in-docker/#setting-up-a-minecraft-server) of my Pelican installation guide for more details.
+
+<Image
+  src={pelicanServerCreation2}
+  alt="Server creation Egg Configuration step"
+/>
+
+Choose your newly added Egg from the "Egg" dropdown and update your Minecraft Version if desired. Fabric Version and Fabric Loader Version can remain at "latest" even if you choose to use an older Minecraft version.
+
+Click "Next Step" when everything looks good.
+
+<Image
+  src={pelicanServerCreation3}
+  alt="Server creation Environment Configuration step"
+/>
+
+Finally, set your server's resource limits and optionally enable "OOM Killer" to prevent one server from crashing the others if its memory usage gets out of control.
+
+<mark>Important</mark>: You need to use Java 20 or later to use this Egg. Choose
+"Custom Image" in the "Image Name" dropdown and paste
+`ghcr.io/pterodactyl/yolks:java_21` into the "Image" box. These Java images are
+known as "Yolks" and Pelican is currently using the same ones that Pterodactyl
+Panel maintains. You can find a list of them
+[here](https://github.com/pterodactyl/yolks#available-images).
+
+Click "Create Server" when complete!
+
+## Installing Mods
+
+<Image src={pelicanServerCreated} alt="Server successfully created screen" />
+
+Now that your server is created, you can start the server and add any server-side mods that you want.
+
+Click the "Console" button to enter the server management screen, also known as the "Client Area".
+
+<Image src={serverFiles} alt="List of all the server files" />
+
+Here you can click the Files tab on the left-hand side to view all of the files included in the server installation.
+
+The `mods` folder will be created automatically the first time the server starts, but if you don't see it yet, click "New Folder" and create it. Then go into the folder and upload your server-side mods!
+
+<Image src={serverUploadMod} alt="Uploading the Sodium mod from a URL" />
+<Image src={serverModUploaded} alt="Sodium mod file showing in the list" />
+
+You can even upload mod files from an external download URL! Here I am uploading [Sodium](https://modrinth.com/mod/sodium/versions). Note that you may need to refresh the page after clicking "Submit".
+
+<Image src={serverStarted} alt="Server console with started logs and graphs" />
+
+Finally go back to the Console tab and click "Start" to spin up your server.
+
+Make sure you accept the EULA!
+
+## Wrapping It Up
+
+If you've followed along to this point, you should have your modded Minecraft server up and running! Time to go and play.
+
+Thanks for reading! I hope you have a great day.
