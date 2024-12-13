@@ -13,6 +13,7 @@ import sitemap from "@astrojs/sitemap";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import expressiveCode from "astro-expressive-code";
+import { remarkModifiedTime } from "./src/scripts/remark/remark-modified-time.mjs";
 
 // https://astro.build/config
 export default defineConfig({
@@ -29,7 +30,7 @@ export default defineConfig({
     expressiveCode({
       plugins: [pluginLineNumbers(), pluginCollapsibleSections()],
     }),
-    mdx(),
+    mdx({}),
     partytown({
       config: {
         forward: ["dataLayer.push"],
@@ -37,4 +38,8 @@ export default defineConfig({
     }),
     sitemap(),
   ],
+
+  markdown: {
+    remarkPlugins: [remarkModifiedTime],
+  },
 });
