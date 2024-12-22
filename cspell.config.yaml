@@ -15,7 +15,9 @@ words:
   - distros
   - Dockerized
   - Dockge
+  - Downloaders
   - Emby
+  - Eweka
   - fastcgi
   - fdba
   - Florzy
@@ -24,6 +26,8 @@ words:
   - frontmatter
   - fullchain
   - Gitea
+  - Gluetun
+  - Gnutella
   - homelab
   - homelabbers
   - homelabbing
@@ -47,7 +51,9 @@ words:
   - Prowlarr
   - Radarr
   - Requestrr
+  - SABnzbd
   - scoobydoo
+  - Servarr
   - shoutout
   - SLES
   - Sonarr

@@ -1,32 +1,51 @@
 ---
 title: Introduction to Usenet in 2025
-pubDate: 2024-11-20
-description: Learn how Usenet works and how you can start "use"ing it in your homelab today!
+pubDate: 2024-12-21
+description: Learn the basics of Usenet and understand why it's an invaluable addition to your homelab!
 authors:
   - Andrew Flores
 tags:
   - usenet
   - homelab
-draft: true
+draft: false
 ---
 
-Usenet has been around for decades and many people (who even know what it is) assume it has fallen out of popularity. In many ways, it has lost its mojo, at least in the traditional sense of sharing text-based messages with people around the world. These days, however, Usenet is a prominent as ever in sharing _binary_\* messages around the globe.
+Usenet has been around for decades and many people (who have ever heard of it) assume it has fallen out of popularity. In many ways, it has [lost its mojo](https://youtu.be/gEuw2mgLRuQ?si=BeaYvSy-fYWP11zy), at least in the traditional sense of sharing text-based messages with people around the world. These days, however, Usenet is prominent as ever in the realm of sharing _binary_\* messages to users securely and quickly.
 
 You may have stumbled upon the topic of Usenet in the same way I did -- as an alternative to torrents for downloading binary files (TV shows, movies, applications, etc.).
 
-\* "Binaries", or "binary files" refer to all non-text media. These include files with extensions such as `.exe`, `.pdf`, `.mp3`, `.mov` and many, many more.
+\* "Binaries", or "binary files" refer to all non-text media. These include media and application files with extensions such as `.exe`, `.iso`, `.mp3`, `.mov` and many, many more.
 
-## Three Components
+## How Usenet Works
 
-Provider - server that actually stores the files to download
-Indexer - service that locates all parts of a file across different servers so a download can be completed
+According to an [article by Privacy Affairs](https://www.privacyaffairs.com/usenet-guide/), Usenet is one of the oldest forms of information sharing across the internet. It was created by students at Duke University and UNC in 1980, and was a platform for people to share information with people over certain topic channels. Some of these channels started being used for sharing binary files.
 
-TODO: Do indexers identify the locations of the parts, or do they just identify which parts would be needed, and the providers find the locations? Are provider servers distributed?
+Usenet works by utilizing a distributed network of news servers that each store the same content. When a file is uploaded to one server on the usenet, it is then mirrored to all other participating servers. This method of persisting data across multiple locations is critical for ensuring data redundancy and even reducing latency for users since they are more likely to connect to servers geographically near their location.
 
-Indexers are arguably the most important aspect of a Usenet setup. They act as a search engine for binary files and are responsible for aggregating the locations of each file's many parts that are distributed across multiple servers. This method of using multi-part files is core how Usenet functions and provides security since a file's identity cannot be determined by examining any single part.
+One key difference that sets Usenet apart from other file-sharing schemes like Bittorrent and Gnutella is the fact that the servers are unable to store large files due to issues when encoding them. Instead, each file is split up into multiple "parts" and each part is given hashed name. The locations and names of these parts are stored in a `.nzb` file that acts as an index similar to a `.torrent` file. When you need to download a file on the usenet, you first download the NZB file and import it to your Usenet download client such as NZBGet or SABnzbd. Multipart files allow large binaries like movies or TV episodes to be downloaded securely since your ISP cannot identify the file by examining any single part without the others. In fact, many people consider downloading usenet files behind a VPN is overkill because of how secure the multipart nature of Usenet is. Some people still use a VPN (see [Gluetun](https://github.com/qdm12/gluetun)), however, since their "media acquisition" setups also support torrents which most definitely require a VPN to download.
 
-Once a file is indexed and a download request is received, your download client will search _providers_ you have configured to actually fetch all of the file's parts.
+## Providers, Indexers, Downloaders
 
-## Usenet vs. Torrents
+Providers are distributed servers that store the files you wish to download. It is standard for providers to charge by the amount of data you download. "Block" plans are fixed data amounts that only expire when you reach the limit. Typical block plans are on the order of 250GB, 500GB, 1TB etc. Most providers also offer some sort of "unlimited" plan that has no data cap for the duration of your subscription. See more information on the [r/usenet providers wiki](https://www.reddit.com/r/usenet/wiki/providers/).
 
-As with torrents, paying for access to high-quality media indexers will enable you to have a much smoother experience. Free options do exist, but for a few bucks per month you can sleep better knowing that your media is virus-free and its download will complete successfully.
+Indexers are services that act as a search engine for NZB files. You can directly visit your Indexer's website and search for NZB files to download for your desired media, but you will often find that your download client will not be able to find all of the parts for the file and the download will fail. It can be a huge pain to keep trying different NZB's and hope that one will succeed. _Fortunately_, there is a way to fully automate this search and have a service find quality NZB files to download. Keep reading to learn more about these automation services that you can host yourself! [DrunkenSlug](https://drunkenslug.com/) and [NZBGeek](https://nzbgeek.info/) are popular and reliable paid indexers. See more information on the [r/usenet indexers wiki](https://www.reddit.com/r/usenet/wiki/indexers/).
+
+Downloaders are self-hosted services that handle downloading multipart files and converting them to the final media file. Downloaders connect to your provider(s) with an API key and download each of the file parts that an NZB file says are required to assemble the desired file. Once all the parts are downloaded and processed, the downloader stores the file in a specified folder on your system.
+
+## Getting the Best Experience
+
+As with torrents, paying for access to high-quality media indexers will enable you to have a much smoother experience. Free options do exist, but for a few bucks per month you can sleep better knowing that your media is virus-free and its download will complete successfully. Paid providers, for example, typically have requirements around uploading files that make it significantly more difficult for bad actors to upload malicious files.
+
+When researching providers, you will find that many of the options will share the same "backbone" which means they all use the same distributed network of servers. The implication of this is that each provider will have identical content libraries available. It is a common practice to purchase access to multiple providers that use **different** backbones to ensure your content is available in the case that one provider is missing it. The [r/usenet providers wiki](https://www.reddit.com/r/usenet/wiki/providers/) enumerates many options for providers and makes it easy to see which providers share a backbone. I have had luck with [NewsDemon](https://www.newsdemon.com/), [Frugal Usenet](https://frugalusenet.com/), [ViperNews](https://www.vipernews.com/), and [Eweka Usenet](https://www.eweka.nl/).
+
+Sonarr and Radarr will be your best friends after you quickly get tired of manually searching for NZBs on your indexer sites. These self-hosted services are <abbr title="Personal Video Recorders">PVRs</abbr> that connect to your indexer(s) and download client to automatically search for quality\* NZB files to download. They provide a simple interface to search for TV Shows (Sonarr) and Movies (Radarr) and will automatically retry downloads if they fail. I recommend running all of your media applications as docker containers as it simplifies the initial setup and makes updating painless. See my [introduction to Docker](./first-docker-containers.mdx) for learning how you can get started with this!
+
+\* There are many ways that you can specify quality preferences in your PVRs to ensure only media matching certain criteria are downloaded. For digital media, a developer named TRaSH has devoted a ton of effort into optimizing quality preferences in his [TRaSH Guides](https://trash-guides.info/) wiki.
+
+## Final Thoughts
+
+Ever since learning about Usenet and adopting the services in my homelab, I have felt confident that the media I'm looking for will be available from my providers and that the files will be downloaded in a secure manner. Personally, I no longer rely on torrents for acquiring media but I do still have a bittorrent download client connected to my Sonarr and Radarr instances in the rare cases where media is missing from my Usenet providers.
+
+As for next steps, I recommend that you go and read up on the r/usenet wiki pages that I mentioned earlier and find some suitable providers and indexers to start playing with in your homelab. Also take a stab at spinning up Sonarr, Radarr, and NZBGet or Sabnzbd in some Docker containers! [Servarr Wiki](https://wiki.servarr.com/) has some excellent in-depth guides on how to configure these services to have the best experience.
+
+Thanks for reading!
