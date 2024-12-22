@@ -4,16 +4,16 @@ import daytrackr from "../assets/daytrackr.png";
 import flotrade from "../assets/flotrade.png";
 import * as use from "../components/switch-case";
 import Tag from "../components/Tag.astro";
-import { formatDate } from "../scripts/formatDate";
 import BaseLayout from "./BaseLayout.astro";
 
-const { frontmatter } = Astro.props;
+const { frontmatter, created, updated } = Astro.props;
 ---
 
 <BaseLayout
   pageTitle={frontmatter.title}
   pageDescription={frontmatter.description}>
-  {frontmatter.pubDate && <p>Published on {formatDate(frontmatter.pubDate)}</p>}
+  {created && <p>Published {created}</p>}
+  {updated && updated !== created && <p>Updated {updated}</p>}
 
   {
     frontmatter.description && (

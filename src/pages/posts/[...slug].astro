@@ -1,6 +1,11 @@
 ---
 import { getEntry } from "astro:content";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+
 import MarkdownPostLayout from "../../layouts/MarkdownPostLayout.astro";
+
+dayjs.extend(localizedFormat);
 
 // 1. Get the slug from the incoming server request
 const { slug } = Astro.params;
@@ -19,8 +24,14 @@ if (entry === undefined) {
 
 // 4. (Optional) Render the entry to HTML in the template
 const { Content } = await entry.render();
+
+const created = dayjs(entry.data.pubDate).format("ll");
+const updated = dayjs(entry.data.lastModified).format("ll");
 ---
 
-<MarkdownPostLayout frontmatter={entry.data}>
+<MarkdownPostLayout
+  frontmatter={entry.data}
+  created={created}
+  updated={updated}>
   <Content />
 </MarkdownPostLayout>
