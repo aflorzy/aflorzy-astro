@@ -2,16 +2,15 @@
 @use "colors";
 @use "cards";
 @use "buttons";
+@use "banners";
 
-/* Color Variables */
-
-/* Global Styles */
+/* Color Variables */ /* Global Styles */
 body {
   background-color: colors.$color-dark;
   color: colors.$color-light;
   font-family: Arial, sans-serif;
   line-height: 1.6;
-  padding: 1rem;
+  padding: 0.5rem;
   max-width: 800px;
   margin: auto;
 }
@@ -154,7 +153,6 @@ img {
   gap: 0.5rem;
   max-width: 100%;
 
-  
   img {
     width: auto; /* Let the image width scale based on content */
     max-width: 100%;
@@ -264,10 +262,12 @@ header {
 
 .tags {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.5rem;
 
   .tag {
+    text-wrap: nowrap;
     padding: 0 0.5em;
     background-color: colors.$color-primary;
     border-radius: 0.5rem;
@@ -297,6 +297,10 @@ header {
 }
 
 @media screen and (min-width: 636px) {
+  body {
+    padding: 1rem;
+  }
+
   .nav-links {
     margin-left: 5em;
     display: block;
@@ -326,5 +330,9 @@ header {
     img {
       max-width: 50%; /* Constrain width so two images fit side by side */
     }
+  }
+
+  .tags {
+    gap: 1rem;
   }
 }
