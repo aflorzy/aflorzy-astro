@@ -45,19 +45,3 @@ const { href, title, body, date, tags, attributes, image } = Astro.props;
     <div class="right" style={`background-image: url(${image?.url})`}></div>
   </a>
 </li>
-
-<style>
-  .date {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .footer {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-</style>

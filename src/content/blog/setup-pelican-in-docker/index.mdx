@@ -14,6 +14,7 @@ draft: false
 ---
 
 import { Image } from "astro:assets";
+import Banner, { BannerType } from "../../../components/Banner";
 import minecraftAdGuardDnsRewrite from "./minecraft-adguard-dns-rewrite.png";
 import minecraftDirectConnect from "./minecraft-direct-connect.png";
 import minecraftLoading from "./minecraft-loading.png";
@@ -47,7 +48,16 @@ import wildcardAdGuardDnsRewrite from "./wildcard-adguard-dns-rewrite.png";
 import wingsLogsError from "./wings-logs-error.png";
 import wingsLogsSuccess from "./wings-logs-success.png";
 
-Pelican is the successor to [Pterodactyl](https://pterodactyl.io/) and is intended to improve on aspects of game server management where Pterodactyl fell short. Pelican is currently in Beta and this guide is currently up-to-date with Panel [v1.0.0-beta16](https://github.com/pelican-dev/panel/releases/tag/v1.0.0-beta16) and Wings [v1.0.0-beta8](https://github.com/pelican-dev/wings/releases/tag/v1.0.0-beta8).
+Pelican is the successor to [Pterodactyl](https://pterodactyl.io/) and is intended to improve on aspects of game server management where Pterodactyl fell short. Pelican is currently in Beta and this guide is currently up-to-date with Panel [v1.0.0-beta16](https://github.com/pelican-dev/panel/releases/tag/v1.0.0-beta16) and Wings [v1.0.0-beta9](https://github.com/pelican-dev/wings/releases/tag/v1.0.0-beta9).
+
+<Banner type={BannerType.Info}>
+  Note that Pelican Panel
+  [v1.0.0-beta17](https://github.com/pelican-dev/panel/releases/tag/v1.0.0-beta17)
+  is the latest version at this time, but there is a bug that causes the web
+  interface to time out after a few minutes. It seems the issue will be
+  addressed in PR [#894](https://github.com/pelican-dev/panel/pull/894). I
+  recommend using Panel v1.0.0-beta16 at this time.
+</Banner>
 
 The installation process for Pelican is quite intense and the networking configuration for the Panel and Wings and your actual game servers adds another layer of complexity. Docker is an excellent tool for wrapping up all the installation complexity into an image, and all you need to do is run the container with a couple environment variable tweaks.
 
@@ -83,7 +93,7 @@ cd ~/panel
 git switch release/v1.0.0-beta16
 
 cd ~/wings
-git switch release/v1.0.0-beta8
+git switch release/v1.0.0-beta9
 ---
 
 Next, build the Docker images for both repositories and tag them with a useful name. These image names must be reflected in the `docker-compose.yml` that we will create. Each build takes a few minutes to complete.

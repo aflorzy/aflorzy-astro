@@ -1,0 +1,44 @@
+/* Base Styles for Banners */
+.banner {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Success Banner */
+.banner-success {
+  background-color: #223e33; /* Dark green */
+  color: #4caf50; /* Vibrant green */
+  border: 1px solid #4caf50;
+}
+
+/* Warning Banner */
+.banner-warning {
+  background-color: #3e3222; /* Dark amber */
+  color: #ffb74d; /* Vibrant amber */
+  border: 1px solid #ffb74d;
+}
+
+/* Info Banner */
+.banner-info {
+  background-color: #22293e; /* Dark blue */
+  color: #64b5f6; /* Vibrant blue */
+  border: 1px solid #64b5f6;
+}
+
+/* Error Banner */
+.banner-error {
+  background-color: #3e2222; /* Dark red */
+  color: #ef5350; /* Vibrant red */
+  border: 1px solid #ef5350;
+}
+
+/* Icon Styling (Optional) */
+.banner-icon {
+  font-size: 1.5rem;
+}
