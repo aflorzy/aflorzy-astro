@@ -1,0 +1,108 @@
+---
+title: How to Update Pelican Game Panel in Docker
+pubDate: 2025-03-19
+description: Stay up-to-date on Beta releases of Pelican Panel and Wings.
+authors:
+  - Andrew Flores
+tags:
+  - game server
+  - docker
+  - tutorial
+  - minecraft
+draft: false
+---
+
+import { Image } from "astro:assets";
+import panelDockerBuildError1 from "./panel-docker-build-error1.png";
+import panelDockerBuildError2 from "./panel-docker-build-error2.png";
+
+Congratulations! You now [have Pelican running](./setup-pelican-in-docker) and hosting all your game servers. But what happens when a new Beta release is published?
+
+Wings and Panel releases have historically been published around the same time, and the latest version of each is recommended for the most stable experience. The available releases can be viewed here: [panel](https://github.com/pelican-dev/panel/releases), [wings](https://github.com/pelican-dev/wings/releases).
+
+## Getting Started
+
+First, SSH into your server and locate the `panel` and `wings` directories that you cloned from GitHub during installation. Mine are in my home directory (`~` or `/home/aflorzy`).
+
+```bash
+ls ~
+
+# wings
+# panel
+# pelican
+```
+
+## Building the Updated Panel and Wings Images
+
+The update process for Panel and Wings is identical. Switch both cloned repositories to the desired release branch.
+
+```bash
+cd ~/panel
+git fetch # Ensure the list of available branches is fetched from GitHub
+git switch release/v1.0.0-beta18
+git pull # Ensure latest code is pulled down from GitHub
+
+cd ~/wings
+git fetch
+git switch release/v1.0.0-beta10
+git pull
+```
+
+Build the docker image for both repositories. Feel free to change the name that you tag the image with if you want to maintain versioned images instead of overwriting the `latest` image during each build. If you change the image tag, remember to update your `~/pelican/docker-compose.yml` to use the service images that you intend.
+
+I always tag my images with `:latest` so that I don't need to update my `docker-compose.yml` after each update.
+
+```bash
+cd ~/panel
+docker build -t pelican-dev/panel:latest .
+
+cd ~/wings
+docker build -t pelican-dev/wings:latest .
+
+# Verify that images are present
+docker images
+```
+
+## Deploying the Updated Docker Images
+
+Redeploy the Docker Compose stack to create containers that use the new images that were built.
+
+```bash
+cd ~/pelican
+docker compose down
+docker compose up -d
+```
+
+## Troubleshooting
+
+Some releases may introduce "breaking changes" which cause this straightforward update process to not immediately work. These releases will typically specify what configuration changes are required in the release notes on GitHub.
+
+### Breaking Changes for Panel v1.0.0-beta17 -> v1.0.0-beta18
+
+After attempting to build the Beta 18 release of Panel, I ran into some errors on the command line.
+
+<Image src={panelDockerBuildError1} alt="First Docker Build error" />
+
+Since the `docker build` command executes the code in the `Dockerfile`, I examined the file's contents to see if there were any new instructions that a user should follow.
+
+I found this line and made the changes it mentioned.
+
+```Dockerfile
+# For those who want to build this Dockerfile themselves, uncomment lines 6-12 and replace "localhost:5000/base-php:$TARGETARCH" on lines 17 and 67 with "base".
+```
+
+After fixing that, I was encountering a new issue where the variables `TARGETOS` and `TARGETARCH` were not defined.
+
+<Image src={panelDockerBuildError2} alt="Second Docker Build error" />
+
+Pull Request [#993](https://github.com/pelican-dev/panel/pull/993) by user [QuentinQVD0](https://github.com/QuintenQVD0) shined some light on what these variables are for and what the possible values for them could be.
+
+- `TARGETOS` = `linux`
+- `TARGETARCH` = `amd64` or `arm64`
+
+Declaring these variables at the top of my Dockerfile solved the issue and the build was able to complete
+
+```Dockerfile title="/home/aflorzy/panel/Dockerfile"
+ARG TARGETOS=linux
+ARG TARGETARCH=amd64
+```
