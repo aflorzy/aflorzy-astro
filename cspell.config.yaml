@@ -58,6 +58,8 @@ words:
   - SLES
   - Sonarr
   - Tailscale
+  - TARGETARCH
+  - TARGETOS
   - Traefik
   - Truenas
   - Unraid
