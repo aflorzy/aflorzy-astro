@@ -87,7 +87,7 @@ Since the `docker build` command executes the code in the `Dockerfile`, I examin
 
 I found this line and made the changes it mentioned.
 
-```Dockerfile
+```docker
 # For those who want to build this Dockerfile themselves, uncomment lines 6-12 and replace "localhost:5000/base-php:$TARGETARCH" on lines 17 and 67 with "base".
 ```
 
@@ -102,7 +102,7 @@ Pull Request [#993](https://github.com/pelican-dev/panel/pull/993) by user [Quen
 
 Declaring these variables at the top of my Dockerfile solved the issue and the build was able to complete
 
-```Dockerfile title="/home/aflorzy/panel/Dockerfile"
+```docker title="/home/aflorzy/panel/Dockerfile"
 ARG TARGETOS=linux
 ARG TARGETARCH=amd64
 ```
