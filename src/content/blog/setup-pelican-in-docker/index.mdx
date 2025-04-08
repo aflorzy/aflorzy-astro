@@ -1,6 +1,7 @@
 ---
 title: Easily Install Pelican Game Panel Using Docker
 pubDate: 2024-11-27
+lastModified: 2025-04-07
 description: Fast-track your Pelican setup by using the power of Docker and Nginx Proxy Manager!
 authors:
   - Andrew Flores
@@ -50,7 +51,7 @@ import wildcardAdGuardDnsRewrite from "./wildcard-adguard-dns-rewrite.png";
 import wingsLogsError from "./wings-logs-error.png";
 import wingsLogsSuccess from "./wings-logs-success.png";
 
-Pelican is the successor to [Pterodactyl](https://pterodactyl.io/) and is intended to improve on aspects of game server management where Pterodactyl fell short. Pelican is currently in Beta and this guide is currently up-to-date with Panel [v1.0.0-beta18](https://github.com/pelican-dev/panel/releases/tag/v1.0.0-beta18) and Wings [v1.0.0-beta10](https://github.com/pelican-dev/wings/releases/tag/v1.0.0-beta10).
+Pelican is the successor to [Pterodactyl](https://pterodactyl.io/) and is intended to improve on aspects of game server management where Pterodactyl fell short. Pelican is currently in Beta and this guide is currently up-to-date with Panel [v1.0.0-beta19](https://github.com/pelican-dev/panel/releases/tag/v1.0.0-beta19) and Wings [v1.0.0-beta11](https://github.com/pelican-dev/wings/releases/tag/v1.0.0-beta11).
 
 The installation process for Pelican is quite intense and the networking configuration for the Panel and Wings and your actual game servers adds another layer of complexity. Docker is an excellent tool for wrapping up all the installation complexity into an image, and all you need to do is run the container with a couple environment variable tweaks.
 
@@ -88,10 +89,10 @@ Switch Git branches to the latest release to ensure stable features.
 
 ```bash
 cd ~/panel
-git switch release/v1.0.0-beta18
+git switch release/v1.0.0-beta19
 
 cd ~/wings
-git switch release/v1.0.0-beta10
+git switch release/v1.0.0-beta11
 ```
 
 ---
@@ -100,7 +101,7 @@ Edit `~/panel/Dockerfile` to add the required `ARG` variables and make the chang
 
 Declare and assign OS and Arch variables. See screenshot below for placement.
 
-```Dockerfile title="/home/aflorzy/panel/Dockerfile"
+```docker title="/home/aflorzy/panel/Dockerfile"
 ARG TARGETOS=linux
 ARG TARGETARCH=amd64
 ```
@@ -114,7 +115,7 @@ ARG TARGETARCH=amd64
 
 Uncomment the suggested lines.
 
-```Dockerfile title="/home/aflorzy/panel/Dockerfile"
+```docker title="/home/aflorzy/panel/Dockerfile"
 FROM --platform=$TARGETOS/$TARGETARCH php:8.3-fpm-alpine as base
 
 ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
@@ -126,7 +127,7 @@ RUN rm /usr/local/bin/install-php-extensions
 
 Replace both instances of `localhost:5000/base-php:$TARGETARCH` in the file with `base`. You will get an error while running `docker build` in a future step if you miss this.
 
-```Dockerfile title="/home/aflorzy/panel/Dockerfile"
+```docker title="/home/aflorzy/panel/Dockerfile"
 # ================================
 # Stage 1-1: Composer Install
 # ================================
@@ -143,7 +144,7 @@ FROM --platform=$TARGETOS/$TARGETARCH base AS composer
   alt="Dockerfile arg declarations and uncommented lines"
 />
 
-```Dockerfile
+```docker
 # ================================
 # Stage 5: Build Final Application Image
 # ================================
