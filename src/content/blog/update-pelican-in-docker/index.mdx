@@ -54,7 +54,7 @@ I always tag my images with `:latest` so that I don't need to update my `docker-
 
 ```bash
 cd ~/panel
-docker build -t pelican-dev/panel:latest .
+docker build -f Dockerfile.dev -t pelican-dev/panel:latest .
 
 cd ~/wings
 docker build -t pelican-dev/wings:latest .
@@ -106,3 +106,17 @@ Declaring these variables at the top of my Dockerfile solved the issue and the b
 ARG TARGETOS=linux
 ARG TARGETARCH=amd64
 ```
+
+### Breaking Changes for Panel v1.0.0-beta19 -> v1.0.0-beta21
+
+The environment variables `TARGETOS` and `TARGETARCH` no longer need to be manually specified. Instead, there is a new `Dockerfile.dev` file that we use to build the Docker image locally.
+
+If you made edits to the `Dockerfile` in a previous version, you may discard them with `git restore Dockerfile`.
+
+To build the new image using the `Dockerfile.dev`, run the below command:
+
+```bash
+docker build -f Dockerfile.dev -t pelican-dev/panel:latest .
+```
+
+This will still output a built image with the same tag name as previous versions so your `docker-compose.yml` will still function as normal.

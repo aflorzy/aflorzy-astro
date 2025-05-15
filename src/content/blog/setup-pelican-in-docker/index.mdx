@@ -16,8 +16,6 @@ draft: false
 
 import { Image } from "astro:assets";
 import Banner, { BannerType } from "../../../components/Banner";
-import dockerfileChanges1 from "./dockerfile-changes1.png";
-import dockerfileChanges2 from "./dockerfile-changes2.png";
 import minecraftAdGuardDnsRewrite from "./minecraft-adguard-dns-rewrite.png";
 import minecraftDirectConnect from "./minecraft-direct-connect.png";
 import minecraftLoading from "./minecraft-loading.png";
@@ -51,7 +49,7 @@ import wildcardAdGuardDnsRewrite from "./wildcard-adguard-dns-rewrite.png";
 import wingsLogsError from "./wings-logs-error.png";
 import wingsLogsSuccess from "./wings-logs-success.png";
 
-Pelican is the successor to [Pterodactyl](https://pterodactyl.io/) and is intended to improve on aspects of game server management where Pterodactyl fell short. Pelican is currently in Beta and this guide is currently up-to-date with Panel [v1.0.0-beta19](https://github.com/pelican-dev/panel/releases/tag/v1.0.0-beta19) and Wings [v1.0.0-beta11](https://github.com/pelican-dev/wings/releases/tag/v1.0.0-beta11).
+Pelican is the successor to [Pterodactyl](https://pterodactyl.io/) and is intended to improve on aspects of game server management where Pterodactyl fell short. Pelican is currently in Beta and this guide is currently up-to-date with Panel [v1.0.0-beta21](https://github.com/pelican-dev/panel/releases/tag/v1.0.0-beta21) and Wings [v1.0.0-beta13](https://github.com/pelican-dev/wings/releases/tag/v1.0.0-beta13).
 
 The installation process for Pelican is quite intense and the networking configuration for the Panel and Wings and your actual game servers adds another layer of complexity. Docker is an excellent tool for wrapping up all the installation complexity into an image, and all you need to do is run the container with a couple environment variable tweaks.
 
@@ -89,74 +87,11 @@ Switch Git branches to the latest release to ensure stable features.
 
 ```bash
 cd ~/panel
-git switch release/v1.0.0-beta19
+git switch release/v1.0.0-beta21
 
 cd ~/wings
-git switch release/v1.0.0-beta11
+git switch release/v1.0.0-beta13
 ```
-
----
-
-Edit `~/panel/Dockerfile` to add the required `ARG` variables and make the changes that are suggested in one of the comments at the top of the file.
-
-Declare and assign OS and Arch variables. See screenshot below for placement.
-
-```docker title="/home/aflorzy/panel/Dockerfile"
-ARG TARGETOS=linux
-ARG TARGETARCH=amd64
-```
-
-<Banner type={BannerType.Info}>
-  Note that you can alternatively pass these args into the `docker build`
-  command. I am choosing to add them here since we are already editing the
-  Dockerfile. Example: `docker build --build-arg TARGETOS=linux --build-arg
-  TARGETARCH=amd64 -t pelican-dev/panel:latest .`
-</Banner>
-
-Uncomment the suggested lines.
-
-```docker title="/home/aflorzy/panel/Dockerfile"
-FROM --platform=$TARGETOS/$TARGETARCH php:8.3-fpm-alpine as base
-
-ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
-RUN install-php-extensions bcmath gd intl zip opcache pcntl posix pdo_mysql
-
-RUN rm /usr/local/bin/install-php-extensions
-```
-
-Replace both instances of `localhost:5000/base-php:$TARGETARCH` in the file with `base`. You will get an error while running `docker build` in a future step if you miss this.
-
-```docker title="/home/aflorzy/panel/Dockerfile"
-# ================================
-# Stage 1-1: Composer Install
-# ================================
-
-# Before
-FROM --platform=$TARGETOS/$TARGETARCH localhost:5000/base-php:$TARGETARCH AS composer # BEFORE
-
-# After
-FROM --platform=$TARGETOS/$TARGETARCH base AS composer
-```
-
-<Image
-  src={dockerfileChanges1}
-  alt="Dockerfile arg declarations and uncommented lines"
-/>
-
-```docker
-# ================================
-# Stage 5: Build Final Application Image
-# ================================
-
-# Before
-FROM --platform=$TARGETOS/$TARGETARCH localhost:5000/base-php:$TARGETARCH AS final
-
-# After
-FROM --platform=$TARGETOS/$TARGETARCH base AS final
-```
-
-<Image src={dockerfileChanges2} alt="Dockerfile suggested text replacement" />
 
 ---
 
@@ -164,7 +99,7 @@ Next, build the Docker images for both repositories and tag them with a useful n
 
 ```bash
 cd ~/panel
-docker build -t pelican-dev/panel:latest .
+docker build -f Dockerfile.dev -t pelican-dev/panel:latest .
 
 cd ~/wings
 docker build -t pelican-dev/wings:latest .

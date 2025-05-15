@@ -14,6 +14,83 @@ draft: true
 
 ## How It All Started
 
+- Finding cheap used hardware from a university surplus store.
+- Serving a few TV shows and movies on a Plex server.
+- Learning Docker -- and subsequently becoming addicted to trying every container under the sun.
+
+## What am I Running?
+
+### Hardware
+
+{/* Insert diagram */}
+
+Switch: HP Procurve 1810G-24
+Router: PC Engines APU2D4
+Server:
+
+#### The Main Server
+
+My main server is built in a Fractal Node 304 case that features 6x 3.5" drive bays.
+The motherboard is a ASRock Z690M ITX that has a two ethernet jacks (2.5Gb and 1Gb), two M.2 PCIe ports, and 4x SATA ports.
+The two DIMM slots are occupied by a total of 64GB DDR4-3200 Corsair Vengeance memory modules.
+The processor is an i5-12600k and is cooled by a Noctua NH-L9i low-profile air cooler.
+The boot drive is a 256GB NVMe drive I had laying around, and the other M.2 slot is occupied by a 6x SATA expansion card to accommodate all of the hard drives.
+
+There are two data pools set up in the TrueNAS Scale VM: 6TB backup (2x 6TB drives mirrored), and 24TB media (3x 12TB drives in RAIDZ1).
+All hard drives are passed into the TrueNAS VM and the shares can be created.
+The Proxmox host is then able to mount the shares to be used as any other storage would be - store ISOs, VM backups, etc.
+
+This server has many VMs and performs great in all the areas I need. The only bottleneck is the amount of memory available.
+
+- TrueNAS Scale
+- Plex
+- Gitea
+- Jenkins
+- Windows 11
+- MacOS
+- Docker (all kinds of self-hosted services)
+
+#### Other Servers
+
+I have three other computers functioning as servers in my homelab.
+
+- Intel NUC DCCP847DYE Celeron 847
+  - Runs monitoring tools and services like UptimeKuma, Grafana + InfluxDB, Nginx Proxy Manager, Homepage, and PiHole.
+  - Draws low power and runs 24/7. Stays up when other machines go down and is able to notify me when their ping is lost.
+- Intel NUC5i5RYB i5-5250U 16GB
+  - Currently running 6x VMs for a K3S cluster so I have a playground to learn the basics of Kubernetes
+- HP Z220 SFF i7-3770 24GB (Clustered with the NUC above)
+  - Hosts a Pelican Game Panel for Minecraft servers
+  - Used to spin up ad-hoc VMs for testing and learning technologies like Terraform and Ansible
+- Raspberry Pi 2b
+  - Connected to my Ender 3 printer to provide it with Klipper firmware and serve a Mainsail web interface
+
+#### Main PC
+
+Don't laugh... Most of the hardware is from my first PC build in 2015! It is a great machine for everything I need -- coding, managing the homelab, and playing Minecraft.
+
+CPU: i5-7600k
+GPU: GTX 1070
+RAM: 32GB Corsair Vengeance
+PSU: 650W EVGA 80+ Bronze
+MOBO: Asus Prime Z270-A
+
+#### Switch
+
+I only have a basic HP Procurve 1810G-24 gigabit non-POE L2 switch. I am learning about configuring VLANs in my network and have used this switch's management UI a bit to tag ports. The interface is not very friendly and is quite slow.
+
+#### Router
+
+I was gifted a PC Engines APU2D4 by a friend and installed OPNSense on it. This is my router and firewall and I have learned many networking concepts from using it.
+There is a serial port (for initial OS installation and future debugging) and 4x 2.5Gb network ports.
+I experimented with a multi-WAN failover/load-balancing setup early on while I had an overlap in ISP coverage from two providers, but ultimately decided that my requirements would not benefit enough from this setup to justify the cost of both connections.
+
+#### UPS
+
+I have a basic Cyber Power 1500VA UPS that has saved me many headaches. It's not common for my area to have long blackouts, but brief (few seconds) blips do occur. The circuit breaker has tripped several times, however, and the UPS has kicked in and kept all of my servers and network devices running just fine. A UPS is an amazing investment!
+
+### Software & Services
+
 ...
 
 ## Checklist
