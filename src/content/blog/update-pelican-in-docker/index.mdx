@@ -15,6 +15,9 @@ draft: false
 import { Image } from "astro:assets";
 import panelDockerBuildError1 from "./panel-docker-build-error1.png";
 import panelDockerBuildError2 from "./panel-docker-build-error2.png";
+import nodeOffline from "./node-offline.png";
+import nodeOfflineDiscordAnnouncement from "./node-offline-discord-announcement.png";
+import updateNodePort from "./update-node-port.png";
 
 Congratulations! You now [have Pelican running](./setup-pelican-in-docker) and hosting all your game servers. But what happens when a new Beta release is published?
 
@@ -120,3 +123,23 @@ docker build -f Dockerfile.dev -t pelican-dev/panel:latest .
 ```
 
 This will still output a built image with the same tag name as previous versions so your `docker-compose.yml` will still function as normal.
+
+### Breaking Changes for Panel v1.0.0-beta21 -> v1.0.0-beta22
+
+There is a known issue where node ports may get reset back to 8080 after updating between these versions.
+
+<Image src={nodeOffline} alt="Offline node with red heart" />
+
+This is the [announcement](https://discordapp.com/channels/1218730176297439332/1218753783786639380/1391554826403446979) made in the [Discord server](https://pelican.dev/discord):
+
+<Image
+  src={nodeOfflineDiscordAnnouncement}
+  alt="Discord announcement about offline node"
+/>
+
+To fix this problem, navigate to Nodes -> wings1 (or your Node node name) -> Basic Settings -> update the port from 8080 to 443, or whatever port you set during installation.
+
+<Image
+  src={updateNodePort}
+  alt="Update node port in Advanced Settings to 443"
+/>
