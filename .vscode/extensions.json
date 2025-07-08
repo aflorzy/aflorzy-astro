@@ -2,7 +2,9 @@
   "recommendations": [
     "astro-build.astro-vscode",
     "streetsidesoftware.code-spell-checker",
-    "rvest.vs-code-prettier-eslint"
+    "dbaeumer.vscode-eslint",
+    "rvest.vs-code-prettier-eslint",
+    "unifiedjs.vscode-mdx"
   ],
   "unwantedRecommendations": []
 }
