@@ -7,11 +7,19 @@ import Tag from "../components/Tag.astro";
 import BaseLayout from "./BaseLayout.astro";
 
 const { frontmatter, created, updated } = Astro.props;
+
+const ogType = frontmatter.pubDate ? "article" : "website";
+type FrontImage = string | { url?: string } | undefined;
+const fmImage: FrontImage = (frontmatter as Record<string, unknown> | undefined)?.image as FrontImage;
+const ogImageUrl = typeof fmImage === "string" ? fmImage : fmImage?.url;
+const tags: string[] = (frontmatter.tags ?? []) as string[];
 ---
 
 <BaseLayout
   pageTitle={frontmatter.title}
-  pageDescription={frontmatter.description}>
+  pageDescription={frontmatter.description}
+  ogType={ogType}
+  ogImageUrl={ogImageUrl}>
   {created && <p>Published {created}</p>}
   {updated && updated !== created && <p>Updated {updated}</p>}
 
@@ -51,15 +59,13 @@ const { frontmatter, created, updated } = Astro.props;
     </use.case>
   </use.switch>
 
-  {
-    frontmatter.tags?.length && (
-      <div class="tags">
-        {frontmatter.tags.map((tag) => (
-          <Tag tag={tag} />
-        ))}
-      </div>
-    )
-  }
+  {tags.length > 0 && (
+    <div class="tags">
+      {tags.map((tag: string) => (
+        <Tag tag={tag} />
+      ))}
+    </div>
+  )}
 
   <slot />
 </BaseLayout>

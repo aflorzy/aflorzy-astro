@@ -2,6 +2,7 @@
 import BlogPost from "../components/BlogPost.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { publishedPosts } from "../utilities/getPosts.astro";
+import Search from "../components/Search";
 
 let posts = publishedPosts.sort(
   ({ data: a }, { data: b }) =>
@@ -14,7 +15,8 @@ const pageDescription =
 ---
 
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
-  <ul class="link-card-grid">
+  <Search client:idle />
+  <ul class="link-card-grid" id="post-list">
     {
       posts.map(({ data, slug }) => (
         <BlogPost

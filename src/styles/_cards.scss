@@ -37,16 +37,18 @@
     padding-top: 0;
   }
 
-  // .right {
-  //   width: 30%;
-  //   background-size: cover;
-  //   background-position: center;
-  // }
+  .right {
+    width: 30%;
+    background-size: cover;
+    background-position: center;
+    border-top-right-radius: 1.6rem;
+    border-bottom-right-radius: 1.6rem;
+  }
 }
 
 .link-card-grid {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1rem;
   padding: 0;
 }
