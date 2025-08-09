@@ -12,7 +12,7 @@ const pageDescription = "Check out the projects I've been working on!";
     {
       publishedProjects.map(({ data, slug }) => (
         <PortfolioProject
-          url={slug}
+          url={`/projects/${slug}`}
           title={data.title}
           description={data.description}
           image={data.image}

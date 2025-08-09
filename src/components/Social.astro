@@ -17,7 +17,12 @@ export enum Socials {
 const { platform, url } = Astro.props;
 ---
 
-<a href={`https://${url}`} target="_blank" title={platform}>
+<a
+  href={`https://${url}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  title={platform}
+  aria-label={platform}>
   <use.switch value={platform}>
     <use.case slot={Socials.GitHub}>
       <Icon name="mdi:github" />

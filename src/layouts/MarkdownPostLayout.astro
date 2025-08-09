@@ -7,11 +7,54 @@ import Tag from "../components/Tag.astro";
 import BaseLayout from "./BaseLayout.astro";
 
 const { frontmatter, created, updated } = Astro.props;
+
+type BlogFM = {
+  title: string;
+  description: string;
+  pubDate?: Date;
+  lastModified?: Date;
+  authors?: string[];
+  image?: { url?: string } | string;
+  tags?: string[];
+};
+
+const fm = frontmatter as BlogFM;
+const ogType = fm.pubDate ? "article" : "website";
+const ogImageUrl = typeof fm.image === "string" ? fm.image : fm.image?.url;
+const tags: string[] = (fm.tags ?? []) as string[];
+
+// JSON-LD (schema.org) for blog posts
+const origin = Astro.site ?? Astro.url.origin;
+const canonical = new URL(Astro.url.pathname, origin).toString();
+const authors: string[] = (fm.authors ?? []) as string[];
+const datePublishedIso = fm.pubDate
+  ? new Date(fm.pubDate).toISOString()
+  : undefined;
+const dateModifiedIso = fm.lastModified
+  ? new Date(fm.lastModified).toISOString()
+  : undefined;
+
+const jsonData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: fm.title,
+  description: fm.description,
+  url: canonical,
+  datePublished: datePublishedIso,
+  dateModified: dateModifiedIso,
+  author: authors.map((name) => ({ "@type": "Person", name })),
+  image: ogImageUrl ? [ogImageUrl] : undefined,
+};
 ---
 
 <BaseLayout
   pageTitle={frontmatter.title}
-  pageDescription={frontmatter.description}>
+  pageDescription={frontmatter.description}
+  ogType={ogType}
+  ogImageUrl={ogImageUrl}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonData)} />
+  </Fragment>
   {created && <p>Published {created}</p>}
   {updated && updated !== created && <p>Updated {updated}</p>}
 
@@ -52,9 +95,9 @@ const { frontmatter, created, updated } = Astro.props;
   </use.switch>
 
   {
-    frontmatter.tags?.length && (
+    tags.length > 0 && (
       <div class="tags">
-        {frontmatter.tags.map((tag) => (
+        {tags.map((tag: string) => (
           <Tag tag={tag} />
         ))}
       </div>
