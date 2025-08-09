@@ -6,7 +6,7 @@ import "../styles/global.scss";
 const { pageTitle, pageDescription, ogImageUrl, ogType } = Astro.props;
 
 // Derive a stable origin even if Astro.site is not configured
-const origin = (Astro.site ?? Astro.url.origin);
+const origin = Astro.site ?? Astro.url.origin;
 const canonical = new URL(Astro.url.pathname, origin);
 const resolvedOgType = ogType ?? "website";
 const resolvedOgImage = new URL(ogImageUrl ?? "/images/favicon.png", origin);
@@ -43,6 +43,9 @@ const resolvedOgImage = new URL(ogImageUrl ?? "/images/favicon.png", origin);
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={resolvedOgImage} />
+
+    <!-- Page-specific head slot (e.g., JSON-LD) -->
+    <slot name="head" />
 
     <!-- Google Tag Manager -->
     <script>

@@ -1,17 +1,16 @@
 ---
-import { CollectionEntry, getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 
-export interface BlogEntry {
-  data: CollectionEntry<"blog">;
-  slug: string;
-}
+export type BlogEntry = CollectionEntry<"blog">;
 
-export const allPosts: BlogEntry[] = await getCollection("blog").then(
-  (entries: BlogEntry[]) =>
-    entries.map((entry) => ({ ...entry, slug: `/posts/${entry.slug}` }))
+export const allPosts: BlogEntry[] = await getCollection("blog");
+
+export const publishedPosts: BlogEntry[] = allPosts.filter(
+  ({ data }) => !data.draft
 );
 
-export const publishedPosts = allPosts.filter(({ data }) => !data.draft);
-
-export const draftPosts = allPosts.filter(({ data }) => !!data.draft);
+export const draftPosts: BlogEntry[] = allPosts.filter(
+  ({ data }) => !!data.draft
+);
 ---

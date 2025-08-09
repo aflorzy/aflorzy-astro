@@ -1,7 +1,9 @@
 import React from "preact/compat";
 import { useState } from "preact/hooks";
 
-export default function Greeting({ messages }) {
+type Props = { messages: string[] };
+
+export default function Greeting({ messages }: Props) {
   const randomMessage = () =>
     messages[Math.floor(Math.random() * messages.length)];
 
