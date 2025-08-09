@@ -1,0 +1,65 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+// Props: frontmatter for a project content entry and optional created/updated strings
+const { frontmatter, created, updated } = Astro.props;
+
+// Types reflecting `project` collection in `src/content/config.ts`
+type ProjectFM = {
+  title: string;
+  description: string;
+  authors: string[];
+  contributors: string[];
+  attributes?: string[];
+  image?: { url: string; alt: string } | undefined;
+};
+
+const fm = frontmatter as ProjectFM;
+
+// Open Graph basics
+const ogType = "website";
+const ogImageUrl = fm.image?.url;
+
+// Canonical URL
+const origin = Astro.site ?? Astro.url.origin;
+const canonical = new URL(Astro.url.pathname, origin).toString();
+
+// JSON-LD for a Project page using schema.org CreativeWork
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  name: fm.title,
+  description: fm.description,
+  url: canonical,
+  author: fm.authors?.map((name) => ({ "@type": "Person", name })) ?? [],
+  contributor:
+    fm.contributors?.map((name) => ({ "@type": "Person", name })) ?? [],
+  image: ogImageUrl ? [ogImageUrl] : undefined,
+};
+---
+
+<BaseLayout
+  pageTitle={fm.title}
+  pageDescription={fm.description}
+  ogType={ogType}
+  ogImageUrl={ogImageUrl}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </Fragment>
+
+  {created && <p>Published {created}</p>}
+  {updated && updated !== created && <p>Updated {updated}</p>}
+
+  {
+    fm.description && (
+      <p>
+        <em>{fm.description}</em>
+      </p>
+    )
+  }
+
+  {fm.authors?.length && <p>By {fm.authors.join(", ")}</p>}
+  {fm.contributors?.length && <p>Contributors: {fm.contributors.join(", ")}</p>}
+
+  <slot />
+</BaseLayout>

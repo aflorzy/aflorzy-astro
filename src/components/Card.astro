@@ -1,11 +1,27 @@
 ---
 import { Icon } from "astro-icon/components";
 
-const { href, title, body, date, tags, attributes, image } = Astro.props;
+interface ImageData {
+  url: string;
+  alt: string;
+}
+
+interface Props {
+  href: string;
+  title?: string;
+  body?: string;
+  date?: string;
+  tags?: string[];
+  attributes?: string[];
+  image?: ImageData;
+}
+
+const { href, title, body, date, tags, attributes, image } =
+  Astro.props as Props;
 ---
 
 <li class="link-card">
-  <a href={href}>
+  <a href={href} title={title} aria-label={title}>
     <div class="left">
       {title && <h3> {title} </h3>}
 
@@ -42,6 +58,15 @@ const { href, title, body, date, tags, attributes, image } = Astro.props;
       </div>
     </div>
 
-    <div class="right" style={`background-image: url(${image?.url})`}></div>
+    {
+      image?.url && (
+        <div
+          class="right"
+          style={`background-image: url(${image.url})`}
+          aria-hidden="true"
+          role="presentation"
+        />
+      )
+    }
   </a>
 </li>

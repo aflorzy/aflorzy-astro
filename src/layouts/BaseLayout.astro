@@ -3,7 +3,13 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.scss";
 
-const { pageTitle, pageDescription } = Astro.props;
+const { pageTitle, pageDescription, ogImageUrl, ogType } = Astro.props;
+
+// Derive a stable origin even if Astro.site is not configured
+const origin = Astro.site ?? Astro.url.origin;
+const canonical = new URL(Astro.url.pathname, origin);
+const resolvedOgType = ogType ?? "website";
+const resolvedOgImage = new URL(ogImageUrl ?? "/images/favicon.png", origin);
 ---
 
 <html lang="en">
@@ -13,47 +19,47 @@ const { pageTitle, pageDescription } = Astro.props;
     <link
       rel="alternate"
       type="application/rss+xml"
-      title="pageTitle"
-      href={new URL("rss.xml", Astro.site)}
+      title="Andrew Flores RSS"
+      href={new URL("rss.xml", origin)}
     />
-    <meta name="viewport" content="width=device-width" />
+    <link rel="canonical" href={canonical} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
 
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
 
     <!-- Facebook Meta Tags -->
-    <meta property="og:url" content="https://blog.aflorzy.com" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Andrew Flores" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content={resolvedOgType} />
+    <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
-    <meta
-      property="og:image"
-      content="https://opengraph.b-cdn.net/production/images/e3b6b7b7-1189-4fe5-a291-88ccbd789ddb.png?token=l4j0yTS_Px1cxLBuGGXrkFoyrQiqsRloQax2Df77w5w&height=1200&width=1200&expires=33269071171"
-    />
+    <meta property="og:image" content={resolvedOgImage} />
 
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta property="twitter:domain" content="blog.aflorzy.com" />
-    <meta property="twitter:url" content="https://blog.aflorzy.com" />
-    <meta name="twitter:title" content="Andrew Flores" />
+    <meta property="twitter:url" content={canonical} />
+    <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
-    <meta
-      name="twitter:image"
-      content="https://opengraph.b-cdn.net/production/images/e3b6b7b7-1189-4fe5-a291-88ccbd789ddb.png?token=l4j0yTS_Px1cxLBuGGXrkFoyrQiqsRloQax2Df77w5w&height=1200&width=1200&expires=33269071171"
-    />
+    <meta name="twitter:image" content={resolvedOgImage} />
+
+    <!-- Page-specific head slot (e.g., JSON-LD) -->
+    <slot name="head" />
 
     <!-- Google Tag Manager -->
     <script>
       (function (w, d, s, l, i) {
+        // @ts-expect-error dynamic dataLayer index
         w[l] = w[l] || [];
+        // @ts-expect-error dynamic dataLayer index
         w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
         var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
+          j = d.createElement(s) as HTMLScriptElement,
           dl = l != "dataLayer" ? "&l=" + l : "";
-        j["async"] = true;
-        j["src"] = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-        j["type"] = "text/partytown";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        j.type = "text/partytown";
         // @ts-expect-error Error comes from Google Tag Manager
         f.parentNode.insertBefore(j, f);
       })(window, document, "script", "dataLayer", "GTM-TBX4N52R");

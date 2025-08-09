@@ -1,6 +1,6 @@
 ---
 import { getEntry } from "astro:content";
-import MarkdownPostLayout from "../../layouts/MarkdownPostLayout.astro";
+import ProjectLayout from "../../layouts/ProjectLayout.astro";
 
 // 1. Get the slug from the incoming server request
 const { slug } = Astro.params;
@@ -21,6 +21,6 @@ if (entry === undefined) {
 const { Content } = await entry.render();
 ---
 
-<MarkdownPostLayout frontmatter={entry.data}>
+<ProjectLayout frontmatter={entry.data}>
   <Content />
-</MarkdownPostLayout>
+</ProjectLayout>
