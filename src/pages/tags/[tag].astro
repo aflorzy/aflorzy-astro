@@ -2,6 +2,7 @@
 import BlogPost from "../../components/BlogPost.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { publishedPosts } from "../../utilities/getPosts.astro";
+import { postHref } from "../../utilities/urls";
 
 export const prerender = true;
 
@@ -35,7 +36,7 @@ const { posts } = Astro.props;
     {
       posts?.map(({ data, slug }) => (
         <BlogPost
-          url={`/posts/${slug}`}
+          url={postHref(slug)}
           title={data.title}
           description={data.description}
           pubDate={data.pubDate}

@@ -2,6 +2,7 @@
 import PortfolioProject from "../components/PortfolioProject.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { publishedProjects } from "../utilities/getProjects.astro";
+import { projectHref } from "../utilities/urls";
 
 const pageTitle = "My Projects";
 const pageDescription = "Check out the projects I've been working on!";
@@ -12,7 +13,7 @@ const pageDescription = "Check out the projects I've been working on!";
     {
       publishedProjects.map(({ data, slug }) => (
         <PortfolioProject
-          url={`/projects/${slug}`}
+          url={projectHref(slug)}
           title={data.title}
           description={data.description}
           image={data.image}

@@ -2,6 +2,7 @@
 import BlogPost from "../components/BlogPost.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { publishedPosts } from "../utilities/getPosts.astro";
+import { postHref } from "../utilities/urls";
 import Search from "../components/Search";
 
 let posts = publishedPosts.sort(
@@ -20,7 +21,7 @@ const pageDescription =
     {
       posts.map(({ data, slug }) => (
         <BlogPost
-          url={`/posts/${slug}`}
+          url={postHref(slug)}
           title={data.title}
           description={data.description}
           pubDate={data.pubDate}

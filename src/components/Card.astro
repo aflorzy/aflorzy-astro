@@ -21,7 +21,7 @@ const { href, title, body, date, tags, attributes, image } =
 ---
 
 <li class="link-card">
-  <a href={href} title={title} aria-label={title}>
+  <a href={href}>
     <div class="left">
       {title && <h3> {title} </h3>}
 
@@ -70,3 +70,39 @@ const { href, title, body, date, tags, attributes, image } =
     }
   </a>
 </li>
+
+<script is:inline>
+  (() => {
+    if (typeof window === "undefined") return;
+    const root = document.documentElement;
+    if (root.dataset.cardTooltipInit === "1") return;
+    root.dataset.cardTooltipInit = "1";
+
+    const setTooltips = () => {
+      document.querySelectorAll("li.link-card").forEach((card) => {
+        const titleEl = card.querySelector(".left h3") as HTMLElement | null;
+        const anchor = card.querySelector("a") as HTMLAnchorElement | null;
+        if (!titleEl || !anchor) return;
+        const isClamped = titleEl.scrollHeight > titleEl.clientHeight + 1;
+        const full = (titleEl.textContent || "").trim();
+        if (isClamped && full) {
+          anchor.setAttribute("title", full);
+          anchor.setAttribute("aria-label", full);
+        } else {
+          anchor.removeAttribute("title");
+          anchor.removeAttribute("aria-label");
+        }
+      });
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", setTooltips, {
+        once: true,
+      });
+    } else {
+      setTooltips();
+    }
+
+    window.addEventListener("resize", setTooltips);
+  })();
+</script>
