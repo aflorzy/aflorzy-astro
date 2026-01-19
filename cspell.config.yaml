@@ -73,6 +73,7 @@ words:
   - Truenas
   - Unraid
   - usermod
+  - parkervcp
 ignoreRegExpList:
   - /```[\s\S]*?```/
 files:

@@ -1,7 +1,7 @@
 ---
 title: Easily Install Pelican Game Panel Using Docker
 pubDate: 2024-11-27
-lastModified: 2025-04-07
+lastModified: 2026-01-19
 description: Fast-track your Pelican setup by using the power of Docker and Nginx Proxy Manager!
 authors:
   - Andrew Flores
@@ -49,7 +49,7 @@ import wildcardAdGuardDnsRewrite from "./wildcard-adguard-dns-rewrite.png";
 import wingsLogsError from "./wings-logs-error.png";
 import wingsLogsSuccess from "./wings-logs-success.png";
 
-Pelican is the successor to [Pterodactyl](https://pterodactyl.io/) and is intended to improve on aspects of game server management where Pterodactyl fell short. Pelican is currently in Beta and this guide is currently up-to-date with Panel [v1.0.0-beta30](https://github.com/pelican-dev/panel/releases/tag/v1.0.0-beta30) and Wings [v1.0.0-beta21](https://github.com/pelican-dev/wings/releases/tag/v1.0.0-beta21).
+Pelican is the successor to [Pterodactyl](https://pterodactyl.io/) and is intended to improve on aspects of game server management where Pterodactyl fell short. Pelican is currently in Beta and this guide is currently up-to-date with Panel [v1.0.0-beta31](https://github.com/pelican-dev/panel/releases/tag/v1.0.0-beta31) and Wings [v1.0.0-beta22](https://github.com/pelican-dev/wings/releases/tag/v1.0.0-beta22).
 
 The installation process for Pelican is quite intense and the networking configuration for the Panel and Wings and your actual game servers adds another layer of complexity. Docker is an excellent tool for wrapping up all the installation complexity into an image, and all you need to do is run the container with a couple environment variable tweaks.
 
@@ -87,15 +87,15 @@ Switch Git branches to the latest release to ensure stable features.
 
 ```bash
 cd ~/panel
-git switch release/v1.0.0-beta30
+git switch release/v1.0.0-beta31
 
 cd ~/wings
-git switch release/v1.0.0-beta21
+git switch release/v1.0.0-beta22
 ```
 
 ---
 
-Next, build the Docker images for both repositories and tag them with a useful name. These image names must be reflected in the `docker-compose.yml` that we will create. Each build takes a few minutes to complete.
+Next, build the Docker images for both repositories and tag them with a useful name. These image names must be reflected in the `docker-compose.yml` that we will create. Each build takes a few minutes to complete. Note that `panel` has a special `Dockerfile.dev` that is used for building the image locally.
 
 ```bash
 cd ~/panel

@@ -1,6 +1,7 @@
 ---
 title: How to Update Pelican Game Panel in Docker
 pubDate: 2025-03-19
+lastModified: 2026-01-19
 description: Stay up-to-date on Beta releases of Pelican Panel and Wings.
 authors:
   - Andrew Flores
@@ -13,8 +14,10 @@ draft: false
 ---
 
 import { Image } from "astro:assets";
+import Banner, { BannerType } from "../../../components/Banner";
 import panelDockerBuildError1 from "./panel-docker-build-error1.png";
 import panelDockerBuildError2 from "./panel-docker-build-error2.png";
+import panelDockerBuildError3 from "./panel-docker-build-error3.png";
 import nodeOffline from "./node-offline.png";
 import nodeOfflineDiscordAnnouncement from "./node-offline-discord-announcement.png";
 import updateNodePort from "./update-node-port.png";
@@ -47,13 +50,13 @@ git pull # Ensure latest code is pulled down from GitHub
 
 cd ~/wings
 git fetch
-git switch release/v1.0.0-beta21
+git switch release/v1.0.0-beta22
 git pull
 ```
 
 Build the docker image for both repositories. Feel free to change the name that you tag the image with if you want to maintain versioned images instead of overwriting the `latest` image during each build. If you change the image tag, remember to update your `~/pelican/docker-compose.yml` to use the service images that you intend.
 
-I always tag my images with `:latest` so that I don't need to update my `docker-compose.yml` after each update.
+I always tag my images with `:latest` so that I don't need to update my `docker-compose.yml` to use the new image version after each update.
 
 ```bash
 cd ~/panel
@@ -143,3 +146,28 @@ To fix this problem, navigate to Nodes -> wings1 (or your Node node name) -> Bas
   src={updateNodePort}
   alt="Update node port in Advanced Settings to 443"
 />
+
+## Breaking Changes for Panel v1.0.0-beta30 -> v1.0.0-beta31
+
+This error is printed to the Panel logs when upgrading from a previous version to beta31.
+
+> The "/var/www/html/plugins/" directory does not exist.
+
+<Image
+  src={panelDockerBuildError3}
+  alt="Plugins directory does not exist error"
+/>
+
+There is currently no permanent fix (as of Jan 19, 2026), so you'll need to temporarily revert to using beta30.
+
+Maintainer parkervcp suggests creating the `/pelican-data/plugins` directory manually in the `pelican_panel` container in [this Discord thread](https://discordapp.com/channels/1218730176297439332/1462802273746026722). I tried this but get "Permission denied".
+
+```bash
+docker compose exec panel /bin/mkdir /pelican-data/plugins
+```
+
+parkervcp seemed to implement a fix in [pull request #2122](https://github.com/pelican-dev/panel/pull/2122), but the change does not resolve the error for me.
+
+<Banner type={BannerType.Warning}>
+  I suggest skipping Panel version beta31 and waiting for the next release.
+</Banner>
