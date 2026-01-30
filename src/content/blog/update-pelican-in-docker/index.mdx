@@ -76,6 +76,7 @@ Redeploy the Docker Compose stack to create containers that use the new images t
 ```bash
 cd ~/pelican
 docker compose down
+sudo chown -R 82:82 panel/* # Ensure all data files are owned by the proper user
 docker compose up -d
 ```
 
