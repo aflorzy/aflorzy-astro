@@ -34,7 +34,7 @@ authors:
 tags:
   - tag-one
   - tag-two
-draft: false   # set to true to hide from listings while writing
+draft: false # set to true to hide from listings while writing
 ---
 ```
 

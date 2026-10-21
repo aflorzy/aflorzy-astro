@@ -1,7 +1,7 @@
 ---
 title: Pelican Game Server Panel + Wings in Docker - 2026 Edition
 pubDate: 2026-03-28
-lastModified: 2026-03-28
+lastModified: 2026-10-21
 description: A step-by-step tutorial on how to set up the Pelican game server panel and Wings node in Docker, with Nginx Proxy Manager as a reverse proxy. This guide will walk you through the installation process and help you get your first Minecraft server up and running with Pelican.
 authors:
   - Andrew Flores
@@ -51,6 +51,14 @@ This is an updated version of my original [Pelican in Docker tutorial](setup-pel
 
 Over time, the [official documentation for running Pelican in Docker](https://docs.pelican.dev/panel/installation/docker/) has evolved and become simpler, and the maintainers always publish an official Docker image for each release that we can use instead of building the images ourselves.
 
+<Banner type={BannerType.Info}>
+  **Updated October 2026:** The official Pelican images have moved from
+  `ghcr.io/pelican-dev/*` to `ghcr.io/pelican/panel:latest` and
+  `ghcr.io/pelican/wings:latest`. The examples below use the new image names. If
+  you already followed this guide, update the `image:` lines in your
+  `docker-compose.yml`, then run `docker compose pull && docker compose up -d`.
+</Banner>
+
 ## Assumptions
 
 In order to keep this guide relatively concise, we need to assume a few things about your setup.
@@ -74,7 +82,7 @@ The first part of this guide will be setting up and configuring the Pelican Pane
 ```yaml title="~/pelican/docker-compose.yml"
 services:
   panel:
-    image: ghcr.io/pelican-dev/panel:latest
+    image: ghcr.io/pelican/panel:latest
     container_name: pelican_panel
     restart: always
     networks:
@@ -246,7 +254,7 @@ Update your `docker-compose.yml` file to look like this, replacing `<YOUR_EMAIL_
 ```yaml title="~/pelican/docker-compose.yml" ins={23-46,58-65}
 services:
   panel:
-    image: ghcr.io/pelican-dev/panel:latest
+    image: ghcr.io/pelican/panel:latest
     container_name: pelican_panel
     restart: always
     networks:
@@ -268,7 +276,7 @@ services:
       TRUSTED_PROXIES: "<YOUR_NPM_IP_ADDRESS>"
 
   wings:
-    image: ghcr.io/pelican-dev/wings:latest
+    image: ghcr.io/pelican/wings:latest
     container_name: pelican_wings
     restart: unless-stopped
     networks:
