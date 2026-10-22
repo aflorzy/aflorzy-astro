@@ -9,14 +9,14 @@ npm run dev          # start dev server (http://localhost:4321)
 npm run build        # astro check + build (required before Docker)
 npm run preview      # preview production build locally
 npm run lint         # auto-fix: prettier + eslint + cspell
-npm run lint:ci      # check-only (what Jenkins runs)
+npm run lint:ci      # check-only (what CI runs)
 ```
 
-There are no tests. The CI pipeline runs `lint:ci` then `build`.
+There are no tests. The CI pipeline (`.gitea/workflows/ci.yml`) runs `lint:ci` then `build`.
 
 ## Architecture
 
-Astro v4 SSR blog/portfolio site. `output: "server"` with the Node.js standalone adapter. Deployed as a Docker container via a self-hosted Jenkins → Gitea registry pipeline (only on `main`).
+Astro v4 SSR blog/portfolio site. `output: "server"` with the Node.js standalone adapter. Deployed as a Docker container via a Gitea Actions → Gitea registry pipeline (only on `main`).
 
 ### Content Collections
 
@@ -62,4 +62,4 @@ SCSS with partials in `src/styles/`. All partials are imported through `global.s
 
 ### Deployment
 
-The Dockerfile builds the site and runs `node ./dist/server/entry.mjs` on port 4321. The Jenkins pipeline builds/pushes to `gitea.local.aflorzy.com/florzytech/aflorzy-astro` only when on `main`.
+The Dockerfile builds the site and runs `node ./dist/server/entry.mjs` on port 4321. Gitea Actions (`.gitea/workflows/ci.yml`) runs lint and build on every PR and push to `main`, then on `main` only builds/pushes `${REGISTRY_URL}/florzytech/aflorzy-astro` tagged `latest` and `<sha>.<run>`. It needs the `REGISTRY_URL` variable and `REGISTRY_USERNAME`/`REGISTRY_PASSWORD` secrets. There is no deploy webhook; the server pulls `latest` via `app-deployments/apps/aflorzy-astro`.
