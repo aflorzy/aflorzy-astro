@@ -1,8 +1,8 @@
 ---
-title: Easily Install Pelican Game Panel Using Docker
-pubDate: 2024-11-27
-lastModified: 2026-01-19
-description: Fast-track your Pelican setup by using the power of Docker and Nginx Proxy Manager!
+title: How to Install Pelican Game Panel in Docker (2026)
+pubDate: 2026-03-28
+lastModified: 2026-10-30
+description: Install Pelican Panel and Wings with the official Docker images behind Nginx Proxy Manager, then launch and connect to your first Minecraft server.
 authors:
   - Andrew Flores
 tags:
@@ -14,142 +14,229 @@ tags:
 draft: false
 ---
 
-import { Image } from "astro:assets";
 import Banner, { BannerType } from "../../../components/Banner";
-import minecraftAdGuardDnsRewrite from "./minecraft-adguard-dns-rewrite.png";
-import minecraftDirectConnect from "./minecraft-direct-connect.png";
-import minecraftLoading from "./minecraft-loading.png";
-import nodeAllocation1 from "./node-allocation1.png";
-import nodeConfigurationFile from "./node-configuration-file.png";
-import nodeCreated from "./node-created.png";
-import nodeCreation1 from "./node-creation1.png";
-import nodeCreation2 from "./node-creation2.png";
-import nodesNoneCreated from "./nodes-none-created.png";
-import npmPanel1 from "./npm-panel1.png";
-import npmPanel2 from "./npm-panel2.png";
-import npmStreamDropdown from "./npm-stream-dropdown.png";
-import npmStream from "./npm-stream.png";
-import npmWings1 from "./npm-wings1.png";
-import npmWings2 from "./npm-wings2.png";
-import panelInstaller1 from "./panel-installer1.png";
-import panelInstaller2 from "./panel-installer2.png";
-import panelInstaller3 from "./panel-installer3.png";
-import panelInstaller4 from "./panel-installer4.png";
-import panelInstaller5 from "./panel-installer5.png";
-import panelInstaller6 from "./panel-installer6.png";
-import pelicanCaddyDiscord from "./pelican-caddy-discord.png";
-import serverCreated from "./server-created.png";
-import serverCreation1 from "./server-creation1.png";
-import serverCreation2 from "./server-creation2.png";
-import serverCreation3 from "./server-creation3.png";
-import serverCreation4 from "./server-creation4.png";
-import serverManagementDashboard from "./server-management-dashboard.png";
-import serversNoneCreated from "./servers-none-created.png";
-import wildcardAdGuardDnsRewrite from "./wildcard-adguard-dns-rewrite.png";
-import wingsLogsError from "./wings-logs-error.png";
-import wingsLogsSuccess from "./wings-logs-success.png";
+import Collapsible from "../../../components/Collapsible.astro";
+import { Image } from "astro:assets";
+import npm_details from "./npm_details.png";
+import npm_ssl from "./npm_ssl.png";
+import npm_stream from "./npm_stream.png";
+import pelican_installer_01 from "./pelican_installer_01.png";
+import pelican_installer_02 from "./pelican_installer_02.png";
+import pelican_installer_03 from "./pelican_installer_03.png";
+import pelican_installer_04 from "./pelican_installer_04.png";
+import pelican_installer_05 from "./pelican_installer_05.png";
+import pelican_installer_06 from "./pelican_installer_06.png";
+import pelican_installer_07 from "./pelican_installer_07.png";
+import pelican_dashboard from "./pelican_dashboard.png";
+import wings_config_not_found from "./wings_config_not_found.png";
+import npm_wings_details from "./npm_wings_details.png";
+import npm_wings_ssl from "./npm_wings_ssl.png";
+import pelican_nodes_empty from "./pelican_nodes_empty.png";
+import pelican_nodes_create from "./pelican_nodes_create.png";
+import pelican_nodes_create_advanced from "./pelican_nodes_create_advanced.png";
+import pelican_nodes_configuration_file from "./pelican_nodes_configuration_file.png";
+import wings_green_heart from "./wings_green_heart.png";
+import wings_red_heart from "./wings_red_heart.png";
+import node_empty_allocations from "./node_empty_allocations.png";
+import node_create_allocation_ip from "./node_create_allocation_ip.png";
+import pelican_empty_eggs from "./pelican_empty_eggs.png";
+import pelican_vanilla_egg from "./pelican_vanilla_egg.png";
+import pelican_egg_list from "./pelican_egg_list.png";
+import pelican_empty_servers from "./pelican_empty_servers.png";
+import pelican_server_create_information from "./pelican_server_create_information.png";
+import pelican_server_create_egg_configuration from "./pelican_server_create_egg_configuration.png";
+import pelican_server_create_environment_configuration from "./pelican_server_create_environment_configuration.png";
+import pelican_server_installing from "./pelican_server_installing.png";
+import pelican_server_start from "./pelican_server_start.png";
+import minecraft_eula from "./minecraft_eula.png";
+import minecraft_lan_ip_connection from "./minecraft_lan_ip_connection.png";
+import minecraft_lan_fqdn_connection from "./minecraft_lan_fqdn_connection.png";
 
-Pelican is the successor to [Pterodactyl](https://pterodactyl.io/) and is intended to improve on aspects of game server management where Pterodactyl fell short. Pelican is currently in Beta and this guide is currently up-to-date with Panel [v1.0.0-beta31](https://github.com/pelican-dev/panel/releases/tag/v1.0.0-beta31) and Wings [v1.0.0-beta22](https://github.com/pelican-dev/wings/releases/tag/v1.0.0-beta22).
+Over time, the [official documentation for running Pelican in Docker](https://docs.pelican.dev/panel/installation/docker/) has evolved and become simpler, and the maintainers always publish an official Docker image for each release that we can use instead of building the images ourselves.
 
-The installation process for Pelican is quite intense and the networking configuration for the Panel and Wings and your actual game servers adds another layer of complexity. Docker is an excellent tool for wrapping up all the installation complexity into an image, and all you need to do is run the container with a couple environment variable tweaks.
-
-The Pelican maintainers plan on using Docker as the preferred installation method once the project is out of Beta, and therefore have not published official images for the Panel or Wings. However, they have provided us with the tools to build the images (Dockerfile) and even examples for running the containers with Docker Compose.
-
-If you're interested, I made another post on easily setting up [Pterodactyl in Docker](setup-pterodactyl-in-docker), and this tutorial uses many of the same practices.
-
-Before we get started, I'd like to give a shoutout to [Jim's Garage](https://www.youtube.com/watch?v=-9qVssXzgWM) and [TechnoTim](https://www.youtube.com/watch?v=_ypAmCcIlBE) for their excellent Pterodactyl tutorials that finally helped me get to a working configuration for Pterodactyl and Pelican.
-
-<Banner type={BannerType.Success}>
-  Looking to _update_ your Pelican Panel and Wings installation to the latest
-  version? See my guide [here](./update-pelican-in-docker)!
+<Banner type={BannerType.Info}>
+  **Updated October 2026:** The official Pelican images have moved from
+  `ghcr.io/pelican-dev/*` to `ghcr.io/pelican/panel:latest` and
+  `ghcr.io/pelican/wings:latest`. The examples below use the new image names. If
+  you already followed this guide, update the `image:` lines in your
+  `docker-compose.yml`, then run `docker compose pull && docker compose up -d`.
 </Banner>
 
 ## Assumptions
 
-In order to avoid excess verbosity, I am going to assume a couple things about your current experience and homelab setup.
+In order to keep this guide relatively concise, we need to assume a few things about your setup.
 
-1. Debian-based Linux distro (Ubuntu) with [Docker installed](./how-to-install-docker)
-2. [Familiarity with Docker](./first-docker-containers) and Docker Compose
-3. Domain name
-4. Nginx Proxy Manager installed on another machine and SSL certificate (wildcard or individual ones) for your domain configured within it. I will be covering NPM in this tutorial, but feel free to apply similar concepts to another reverse-proxy setup that you may have.
+1. You're running a Debian-based Linux distro (Ubuntu) with [Docker installed](how-to-install-docker) and apt packages updated
+2. You have [familiarity with Docker](./first-docker-containers) and Docker Compose
+3. You own a Domain name and have your reverse proxy set up to hand out wildcard SSL certificates. We will use Nginx Proxy Manager (NPM) in this guide, but similar concepts apply to other reverse proxies. It is best if the reverse proxy is running on a different machine or VM on your network than where Pelican will be running.
 
 ## Getting Started
 
-First, SSH into your server and clone down both the Panel and Wings repositories into your user's home directory.
-
-```bash
-cd ~
-git clone https://github.com/pelican-dev/panel.git
-git clone https://github.com/pelican-dev/wings.git
-```
-
-Switch Git branches to the latest release to ensure stable features.
-
-```bash
-cd ~/panel
-git switch release/v1.0.0-beta31
-
-cd ~/wings
-git switch release/v1.0.0-beta22
-```
+The first part of this guide will be setting up and configuring the Pelican Panel web interface. The panel is where you will manage your game servers, and it also serves as the central hub for your Wings nodes to connect to. The panel will be running in a Docker container, and we will use Docker Compose to manage the stack. The second part of the guide will be setting up a Wings node, which is the service that actually runs your game servers. Wings will also be running in a Docker container on the same machine as the panel, but it could also be run on a different machine if you wanted to distribute your nodes across multiple servers.
 
 ---
 
-Next, build the Docker images for both repositories and tag them with a useful name. These image names must be reflected in the `docker-compose.yml` that we will create. Each build takes a few minutes to complete. Note that `panel` has a special `Dockerfile.dev` that is used for building the image locally.
+1. SSH into your debian-based linux machine on which to install Pelican
+2. Make a pelican directory in home folder with `mkdir ~/pelican && cd ~/pelican`
+3. Create a Docker Compose file in the pelican directory with `touch ~/pelican/docker-compose.yml` and paste the following contents, replacing `<YOUR_EMAIL_HERE>` with your email address, `<YOUR_NPM_IP_ADDRESS>` (e.g. 192.168.1.100) with the IP address of your reverse proxy, and `<YOUR_HTTPS_PANEL_URL_HERE>` with the HTTPS URL of your panel (e.g., https://pelican.local.example.com).
 
-```bash
-cd ~/panel
-docker build -f Dockerfile.dev -t pelican-dev/panel:latest .
-
-cd ~/wings
-docker build -t pelican-dev/wings:latest .
-
-# Verify that images are present
-docker images
-```
-
----
-
-Now that the images are built and stored locally, we can create a project directory where all relevant config and data files will live. I created one in my home directory `/home/aflorzy/pelican`. In that new folder, paste the below YAML into a file named `docker-compose.yml`. You will need to edit a few lines to personalize with your own information. See the comments in the collapsed sections for which variables may need tweaking. Everything else should work without modification.
-
-```yaml title="/home/aflorzy/pelican/docker-compose.yml" collapse={4-22, 25-48, 54-59}
+```yaml title="~/pelican/docker-compose.yml" {18-19,21}
 services:
   panel:
-    image: "pelican-dev/panel:latest"
+    image: ghcr.io/pelican/panel:latest
     container_name: pelican_panel
-    restart: unless-stopped
-    stdin_open: true
-    tty: true
+    restart: always
+    networks:
+      - default
     ports:
-      - "8080:80"
+      - "80:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
-      - ./panel/data:/pelican-data
-      - ./panel/logs:/var/www/html/storage/logs
+      - pelican-data:/pelican-data
+      - pelican-logs:/var/www/html/storage/logs
       - ./Caddyfile:/etc/caddy/Caddyfile
     environment:
-      TZ: America/Chicago # Replace with your time zone
-      APP_TIMEZONE: America/Chicago # Replace with your time zone
-      APP_ENV: production
-      APP_URL: "https://pelican.local.aflorzy.com" # Replace with the FQDN you want to access the panel at
-      ADMIN_EMAIL: andrewtflores@yahoo.com # Replace with your email
+      XDG_DATA_HOME: /pelican-data
+      APP_URL: "<YOUR_HTTPS_PANEL_URL_HERE>"
+      ADMIN_EMAIL: "<YOUR_EMAIL_HERE>"
+      BEHIND_PROXY: "true"
+      TRUSTED_PROXIES: "<YOUR_NPM_IP_ADDRESS>"
+
+volumes:
+  pelican-data:
+  pelican-logs:
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+```
+
+---
+
+Then create a Caddyfile in the same directory `~/pelican/Caddyfile` (no file extension) with the following contents, replacing `<YOUR_NPM_IP_ADDRESS>` with the IP address of your reverse proxy. The Caddyfile is used to configure the web server that serves the Pelican panel. We need to tell Caddy to trust our reverse proxy so that it can properly handle requests and forward them to the panel
+
+```caddyfile title="~/pelican/Caddyfile" {4}
+{
+  admin off
+  servers {
+    trusted_proxies static <YOUR_NPM_IP_ADDRESS>
+  }
+}
+
+:80 {
+  root * /var/www/html/public
+  encode gzip
+
+  php_fastcgi 127.0.0.1:9000 {
+    env PHP_VALUE "upload_max_filesize = 512M
+      post_max_size = 512M"
+  }
+  file_server
+}
+```
+
+---
+
+## Accessing the Panel
+
+Start the Docker Compose stack with `docker compose up -d`. Note: You may need to prefix your docker commands with `sudo` if your user is not in the docker group
+
+View the logs with `docker logs -f pelican_panel` to check for errors at any point if you're having trouble.
+
+Since we are using NPM as a reverse proxy to access our panel at a custom domain, we need to add a "Proxy Host" entry in NPM pointing at our server. As seen in the compose file, we are exposing ports 80 and 443 for HTTP and HTTPS traffic, respectively.
+
+In NPM, add a new Proxy Host with the following settings:
+
+- Domain Names: `<YOUR_HTTPS_PANEL_URL_HERE>` (same as the APP_URL in the compose file, without the https:// prefix. e.g. `pelican.local.example.com`)
+- Scheme: http
+- Forward Hostname/IP: 192.168.1.XXX (IP of your Pelican server)
+- Forward Port: 80
+- Websockets Support: Enabled
+- Block common exploits: Enabled
+- SSL Tab -> Select your certificate for the domain and check "Force SSL" and "HTTP/2 Support"
+
+<section class="img-row">
+  <Image src={npm_details} alt="NPM Proxy Host Details" />
+  <Image src={npm_ssl} alt="NPM Proxy Host SSL Settings" />
+</section>
+
+---
+
+## Setup Steps
+
+Then navigate your browser to the domain you set up in NPM with the path `/installer` appended and you should see the Pelican panel login page (e.g. https://pelican.local.example.com/installer).
+
+<Image src={pelican_installer_01} alt="Pelican Installer Server Requirements" />
+
+Click your way through all of the screens. Most should be self explanatory and not need changing, but I do have a couple notes.
+
+1. On the "Environment" step, be sure to enter the same email address you put for `ADMIN_EMAIL` in the compose file earlier
+2. On the "Eggs" step you choose the ones associated with the game [types] you are interested in creating servers for. For example, under the Minecraft tab I would choose "Fabric", "Vanilla Bedrock", and "Vanilla Minecraft"
+3. After clicking "Finish" on the last step, it will take a couple minutes to set everything up in the background. If you see an error message about creating the admin user, try restarting your Docker compose stack and visiting the panel URL again
+
+---
+
+Congratulations! You've successfully installed the Pelican panel in Docker. You can click through the tabs on the left and get familiar with the interface and settings. Next, we will set up a Wings node to run our first Minecraft server!
+
+(Note: If your Health tab has an error about the Database, Queue, or Schedule, don't worry - it should go away in a few minutes once the panel finishes setting up the database and runs the health checks again.)
+
+<Image src={pelican_dashboard} alt="Pelican Panel Dashboard" />
+
+---
+
+## Setting up a Wings Node
+
+The [official Pelican Wings documentation](https://pelican.dev/docs/wings/install) doesn't have instructions for running Wings in Docker, but it's actually very simple to set up. We will modify our Docker Compose file to add a new service for Wings.
+
+Update your `docker-compose.yml` file to look like this, replacing `<YOUR_EMAIL_HERE>` with the same email address from the Panel, `<YOUR_NPM_IP_ADDRESS>` with the IP address of your Reverse Proxy, and `<YOUR_HTTPS_PANEL_URL_HERE>` with the HTTPS URL of your panel (e.g., https://pelican.local.example.com).
+
+<Banner type={BannerType.Warning}>
+  **Remember!** _Indentation matters_ in YAML files, so make sure to copy and
+  paste the code correctly. The `panel` service should be unchanged, and the
+  `wings` service should be added below it. The `networks` section should also
+  be updated to include a new network for Wings.
+</Banner>
+
+```yaml title="~/pelican/docker-compose.yml" ins={23-46,58-65}
+services:
+  panel:
+    image: ghcr.io/pelican/panel:latest
+    container_name: pelican_panel
+    restart: always
     networks:
-      - pelican
+      - default
+    ports:
+      - "80:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - pelican-data:/pelican-data
+      - pelican-logs:/var/www/html/storage/logs
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    environment:
+      XDG_DATA_HOME: /pelican-data
+      APP_URL: "<YOUR_HTTPS_PANEL_URL_HERE>"
+      ADMIN_EMAIL: "<YOUR_EMAIL_HERE>"
+      BEHIND_PROXY: "true"
+      TRUSTED_PROXIES: "<YOUR_NPM_IP_ADDRESS>"
 
   wings:
-    image: "pelican-dev/wings:latest"
+    image: ghcr.io/pelican/wings:latest
     container_name: pelican_wings
     restart: unless-stopped
+    networks:
+      - wings0
     ports:
       - "2022:2022"
-      - "8443:443"
-    stdin_open: true
-    tty: true
+      - "8080:8080"
     environment:
-      TZ: America/Chicago # Replace with your time zone
-      APP_TIMEZONE: America/Chicago # Replace with your time zone
-      WINGS_UID: 1000
-      WINGS_GID: 1000
-      WINGS_USERNAME: pelican # Change if you want
+      TZ: "UTC"
+      WINGS_UID: 998
+      WINGS_GID: 998
+      WINGS_USERNAME: pelican
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/var/lib/docker/containers/:/var/lib/docker/containers/"
@@ -158,391 +245,290 @@ services:
       - "/var/log/pelican/:/var/log/pelican/"
       - "/tmp/pelican/:/tmp/pelican/"
       - "/etc/ssl/certs:/etc/ssl/certs:ro"
-    networks:
-      - wings1
+
+volumes:
+  pelican-data:
+  pelican-logs:
 
 networks:
-  pelican:
-    name: pelican
-  wings1:
-    name: wings1
+  default:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+  wings0:
+    name: wings0
     driver: bridge
     ipam:
       config:
-        - subnet: 172.50.0.0/16
+        - subnet: 172.21.0.0/16
     driver_opts:
-      com.docker.network.bridge.name: wings1
+      com.docker.network.bridge.name: wings0
 ```
 
 ---
 
-Now we must create a `Caddyfile` that the Panel container will use internally for its networking. This is passed via a volume bind-mount in our `docker-compose.yml` file (already taken care of above). Paste the below YAML into a file named `Caddyfile` (capital "C", no file extension) in your Pelican project directory.
+Restart the stack with `docker compose down && docker compose up -d`. Both the Panel and Wings containers should start up. If you check the Panel logs with `docker logs -f pelican_panel`, you should not see any errors, but when you check the Wings logs with `docker logs -f pelican_wings` you will see the below error:
 
-```json title="/home/aflorzy/pelican/Caddyfile"
-{
-    admin off
-    email andrewtflores@yahoo.com
-}
+<Image src={wings_config_not_found} alt="Pelican Wings Error" />
 
-:80 {
-    root * /var/www/html/public
-    encode gzip
-
-    php_fastcgi 127.0.0.1:9000
-    file_server
-}
-```
-
-It may seem unintuitive to add a `Caddyfile`, as it is typically used as a reverse-proxy solution parallel to NPM and Traefik. However, it allows the web server to be exposed from inside the Panel container, per [suggestions from a user](https://discord.com/channels/1218730176297439332/1304953032982790242/1305864079885467649) on the Pelican Discord
-
-<Image src={pelicanCaddyDiscord} alt="Discord user's Caddyfile solution" />
-
-## Setting up the Panel
-
-You should now be able to start the Docker Compose stack! Run `docker compose up -d` and wait for the containers to finish starting. The panel container takes about a minute to complete its database initialization. You can monitor its status by running `docker logs -f pelican_panel`.
+This is completely normal, as the Wings container is looking for its configuration file, but we haven't set up the node in the panel yet so the config file hasn't been generated. Let's fix that now!
 
 ---
 
-<Image src={wingsLogsError} alt="Wings docker logs showing error" />
+Create a Proxy Host in NPM for the Wings node with the following settings:
 
-If you examine the Wings container logs now, you'll notice that there is an error about a missing `config.yml` file. That is expected and we will be creating it in another step. For now, simply ignore it.
-
----
+- Domain Name: `wings.local.example.com`
+- Scheme: http
+- Forward Hostname/IP: 192.168.1.XXX (IP of your Pelican server)
+- Forward Port: 8080
+- Websockets Support: Enabled
+- SSL Tab -> Select your certificate for the domain and check "Force SSL" and "HTTP/2 Support"
 
 <section class="img-row">
-  <Image src={npmPanel1} alt="NPM Pelican Panel proxy host entry Details tab" />
-  <Image src={npmPanel2} alt="NPM Pelican Panel proxy host entry SSL tab" />
+  <Image src={npm_wings_details} alt="NPM Proxy Host Details for Wings" />
+  <Image src={npm_wings_ssl} alt="NPM Proxy Host SSL Settings for Wings" />
 </section>
 
-Now go to Nginx Proxy Manager and add a new Proxy Host with the FQDN you set in the Compose file and point it at the IP of your server with port 8080. I created a Proxy Host with the Domain Name `pelican.local.aflorzy.com` and used `http` Scheme, `192.168.1.33` Forward Hostname/IP, and `8080` Forward Port. I did not check any boxes on the Details tab, but selected my `*.local.aflorzy.com` certificate on the SSL tab and checked "Force SSL" and "HTTP/2 Support".
+---
 
-Create a Proxy Host entry in NPM for `wings1.local.aflorzy.com`. Use `http` scheme, `192.168.1.33` Forward Hostname/IP, and `8443` Forward Port. Make sure to check "Websockets Support" so you can monitor the server logs in real-time after creating a server. Finally, select your wildcard certificate in the SSL tab and check "Force SSL" and "HTTP/2 Support".
+Then navigate to the Nodes tab in the Pelican panel and click "Create Node". Fill out the form with the following settings:
+
+- Domain name: `wings.local.example.com` (same as the domain you set up in NPM, no https:// prefix)
+- Display Name: `wings node 1` (or whatever you want to call it)
+- Communication of SSL: "HTTPS with (reverse) proxy"
+- Connection Port: 443
+- Listening Port: 8080
+
+<Image src={pelican_nodes_empty} alt="Pelican Nodes Tab Empty" />
 
 ---
+
+<Image src={pelican_nodes_create} alt="Pelican Nodes Tab Create" />
+
+---
+
+Click the Forward arrow in the bottom right, then update any Advanced Settings you'd like. Note that the "Upload Limit" cannot exceed what was set in the Caddyfile for the panel (512M in our case). It might be beneficial to set Memory, Disk, and CPU limits if your server's resources are shared with other services. Click "+ Create Node" when you're done.
 
 <Image
-  src={panelInstaller1}
-  alt="Panel installation wizard: Server Requirements tab"
+  src={pelican_nodes_create_advanced}
+  alt="Pelican Nodes Tab Create Advanced"
 />
 
-You should now be able to visit your Panel at `https://<your-FQDN>/installer`! Unlike Pterodactyl, Pelican has a short installation wizard to capture a few details about your installation upon the first visit. Note that you will be hit with a login screen instead of the installation wizard unless you append `/installer` to the end of your URL.
-
 ---
 
-<Image src={panelInstaller2} alt="Panel installation wizard: Environment tab" />
+The next screen will provide you with your `config.yml` file. Copy and paste them into a new file on your server at `/etc/pelican/config.yml`. This file is not in our main `~/pelican` directory because the location must match the same path as inside the Wings container, which is also `/etc/pelican/config.yml`. This is already defined as a bind-mount in our docker-compose.yml file.
 
-Fill out your relevant information here. App Name and App URL should already be filled out, but populate E-Mail, Username, and Password with your own information.
-
----
-
-<Image src={panelInstaller3} alt="Panel installation wizard: Database tab" />
-
-Accept the default Database selections.
-
----
-
-<Image src={panelInstaller4} alt="Panel installation wizard: Cache tab" />
-
-Accept the default Cache selections.
-
----
-
-<Image src={panelInstaller5} alt="Panel installation wizard: Queue tab" />
-
-Accept the default Queue selections.
-
----
-
-<Image src={panelInstaller6} alt="Panel installation wizard: Session tab" />
-
-Accept the default selections, and click "Finish"!
-
-## Setting up a Node (Wings)
-
-<Image src={nodesNoneCreated} alt="Nodes tab showing Create Node button" />
-
-Head to the Nodes tab and click "Create Node".
-
----
-
-<Image src={nodeCreation1} alt="Create Node Basic Settings tab" />
-
-Enter your Wings FQDN in the Domain Name field. Pelican will run a DNS lookup on this address to ensure it is registered as a valid DNS record. You can see that the DNS Record Check is marked as "Valid" for me and the IP address of my NPM instance is showing to the right. My NPM server IP shows here because that is where `wings1.local.aflorzy.com` is defined as a Proxy Host.
-
-Now is a great time to add your Proxy Host entry in NPM if you haven't already. That should solve an "Invalid" DNS Record Check on this page. I do this in the next step.
-
----
-
-<section class="img-row">
-  <Image src={npmWings1} alt="NPM Pelican Wings proxy host entry Details tab" />
-  <Image src={npmWings2} alt="NPM Pelican Wings proxy host entry SSL tab" />
-</section>
-
-Create a Proxy Host entry in NPM for `wings1.local.aflorzy.com`. Use `http` scheme, `192.168.1.33` Forward Hostname/IP, and `8443` Forward Port. Make sure to check "Websockets Support" so you can monitor the server logs in real-time after creating a server. Finally, select your wildcard certificate in the SSL tab and check "Force SSL" and "HTTP/2 Support".
-
----
-
-<Image src={nodeCreation2} alt="Create Node Advanced Settings tab" />
-
-Back in the Pelican UI, click "Next Step" on the Node creation screen and fill out the fields in the Advanced Settings tab. The only things I recommend changing are:
-
-- Upload Limit: This could be helpful if you plan on uploading large files to your servers, such as an existing Minecraft world. I changed mine to 512MiB since I have mature Minecraft worlds whose data files have grown quite large.
-- Memory: Set this to Limited and give some value that is smaller than the Memory allocated to your server/VM.
-- Disk: Set this to Limited and give some value that is smaller than the Disk space allocated to your server/VM.
-- CPU: Set this to Limited if you have other services besides Pelican/Wings running on your server.
-
-Finally, click "Create Node"!
-
----
+Note: Depending on when/how the /etc/pelican directory was created, it may require elevated privileges to create the config.yml file inside of it. If you get a "Permission denied" error in your terminal, run `sudo chown $USER /etc/pelican` to change its ownership to you. Then you can run `touch /etc/pelican/config.yml` without issue.
 
 <Image
-  src={nodeConfigurationFile}
-  alt="Generated node config under Configuration File tab"
+  src={pelican_nodes_configuration_file}
+  alt="Pelican Nodes Configuration File"
 />
 
-At this point, you will be presented with a pre-generated Configuration File for your Wings node. This is not automatically created as a file on your server, which is **good** because we have to make some modifications to it.
+---
 
-First, create a file on your server named `config.yml` in the directory `/etc/pelican` and paste the pre-generated YAML contents in it.
+Restart your Docker stack again with `docker compose down && docker compose up -d` and check the Wings logs with `docker logs -f pelican_wings`. You should see that Wings has successfully connected to the panel. The most important part is the "Green Heart" shown in the Nodes tab of the panel, which indicates that the node is healthy and connected to the panel. If you don't have the green heart, resolve that before continuing!
 
-Next, copy the YAML below and paste it after the configuration code you just pasted.
+<Image src={wings_green_heart} alt="Wings Green Heart" />
 
-<mark>IMPORTANT</mark> Make sure to **DISABLE** ssl by setting `ssl.enabled:
-false`
+If you're still getting a red heart, be sure to check your NPM proxy host entry is pointing to the correct IP address and port of your server, AND that the `token_id` and `token` lines in `config.yml` match the ones inside the Node "Configuration File" tab.
 
-Keeping `enabled: true` will try to use the `ssl.cert` and `ssl.key` file paths that are referenced in that section. These do not exist since we are using certificates that were generated with LetsEncrypt inside of Nginx Proxy Manager. No certificate configuration is needed for this whole process except for adding individual certificates
-(`pelican.domain.com`, `wings1.domain.com`, `minecraft.domain.com`) or a
-wildcard certificate (`*.domain.com`) inside of NPM.
-
-```yaml
-docker:
-  network:
-    interface: 172.50.0.1
-    dns:
-      - 192.168.1.1 # Replace with your default gateway if different
-      - 1.0.0.1
-    name: wings1
-    ispn: false
-    driver: bridge
-    network_mode: wings1
-    is_internal: false
-    enable_icc: true
-    network_mtu: 1500
-    interfaces:
-      v4:
-        subnet: 172.50.0.0/16
-        gateway: 172.50.0.1
-      v6:
-        subnet: fdba:17c8:6c94::/64
-        gateway: fdba:17c8:6c94::1011
-allowed_mounts: []
-allowed_origins: []
-allow_cors_private_network: false
-ignore_panel_config_updates: false
-```
+<Image src={wings_red_heart} alt="Wings Red Heart" />
 
 ---
 
-The final contents of `/etc/pelican/config.yml` should look similar to the following:
+## Setting up our first Minecraft server
 
-```yaml title="/etc/pelican/config.yml" collapse={22-100}
-debug: false
-uuid: 6e6104e1-2022-4ed2-8dcc-2b45af4cfae5
-token_id: xKdo7ktpJqY5w4RN
-token: qh2zP4AsMy5whnS0TBAeZATJKrAyjUJkP8NtZwcKzZhAcgYPXnWej012TDzrkAs9
-api:
-  host: 0.0.0.0
-  port: 443
-  ssl:
-    enabled: false
-    cert: /etc/letsencrypt/live/wings1.local.aflorzy.com/fullchain.pem
-    key: /etc/letsencrypt/live/wings1.local.aflorzy.com/privkey.pem
-  upload_limit: 1000
-system:
-  data: /var/lib/pelican/volumes
-  sftp:
-    bind_port: 2022
-allowed_mounts: []
-remote: 'https://pelican.local.aflorzy.com'
+Now that we have our Wings node set up and connected to the panel, we can create our first Minecraft server! There are two small things we need to take care first: provisioning Port Allocations and importing an Egg for Minecraft servers.
 
-docker:
-  network:
-    interface: 172.50.0.1
-    dns:
-    - 192.168.1.1
-    - 1.0.0.1
-    name: wings1
-    ispn: false
-    driver: bridge
-    network_mode: wings1
-    is_internal: false
-    enable_icc: true
-    network_mtu: 1500
-    interfaces:
-      v4:
-        subnet: 172.50.0.0/16
-        gateway: 172.50.0.1
-      v6:
-        subnet: fdba:17c8:6c94::/64
-        gateway: fdba:17c8:6c94::1011
-allowed_mounts: []
-allowed_origins: []
-allow_cors_private_network: false
-ignore_panel_config_updates: false
-```
+For the port allocations, edit your Node and find the Allocations section at the bottom of the "Basic Settings" tab.
+
+<Image src={node_empty_allocations} alt="Pelican Node Empty Allocations" />
 
 ---
 
-At this point, your Wings container should have a configuration file in the location that it needs. However, you will need to restart the container for it to recognize the new file.
-
-```bash
-docker compose down
-docker compose up -d
-```
-
-I prefer to restart the whole Docker Compose stack.
-
----
+A window will pop up to "Create new allocation". In the "IP Address" dropdown, choose `0.0.0.0`. Then in the "Ports" field, enter a range of ports that you want to use for your Minecraft servers. For example, you could enter `25560-25569` to allocate 10 ports for Minecraft servers. Click "Submit" when you're done.
 
 <Image
-  src={wingsLogsSuccess}
-  alt="Wings container logs with successful output"
+  src={node_create_allocation_ip}
+  alt="Pelican Node Create Allocation IP"
 />
-
-Check the logs of your Wings container to make sure it picked up the `config.yml` file correctly and there are no errors. You should see output similar to that in the above screenshot.
 
 ---
 
-<Image src={nodeCreated} alt="Node showing in the table with a green heart" />
+Then we need to add a Game Egg. Go to the Eggs tab on the left side menu. You will see some listed here if you chose some during the panel installation step. If you want to add more, choose the Import button in the top-left.
 
-Now return to the Pelican Panel web interface and navigate to the Nodes tab. You should see a green heart under the Health header! If you don't, please check your node configuration before giving up or trying anything else. Also check to make sure you have a Proxy Hosts entry for `wings1.domain.com` in NPM and that it's pointing at the correct IP address for your node. You will not be able to create any game servers until you see a green heart on this screen!
+<Image src={pelican_empty_eggs} alt="Pelican Empty Eggs" />
 
-## Setting up a Minecraft Server
+---
 
-Time to create a server! The first step for doing this is to create port allocations on your node. Navigate to the Nodes tab and click on your node. Scroll down to the Allocations section and click "Create Allocations".
+Now for the fun part! Go to the "Servers" tab in the panel and click "New Server".
+
+<Image src={pelican_empty_servers} alt="Pelican Empty Servers" />
+
+---
+
+Give the server a name, ensure your Node is selected, then choose a port allocation from the dropdown (one of the ports you allocated earlier). Then click "Next" in the bottom right.
 
 <Image
-  src={nodeAllocation1}
-  alt="Specifying port allocations for node wings1"
+  src={pelican_server_create_information}
+  alt="Pelican Server Create Information"
 />
 
-I recommend using IP address `0.0.0.0` as this IP is internal to the docker container. Assign an alias to the allocations if needed, and assign the port range 25560-25570 for Ports. Click "Submit" to save the allocations.
-
 ---
 
-<Image src={serversNoneCreated} alt="Servers tab showing Create Node button" />
-
-Now Navigate to the Servers tab and click "Create New". I will be creating a Minecraft server in this case, but the process for other games should be similar.
-
----
-
-<Image src={serverCreation1} alt="Server creation Information tab" />
-
-Choose a server name like "Minecraft Latest". Choose "wings1" in the Node dropdown. Select a port allocation that the server will run on. Click Next.
-
----
-
-<Image src={serverCreation2} alt="Server creation Egg Configuration tab" />
-
-Select your game flavor in the Egg dropdown. I am choosing Vanilla Minecraft here. Optionally specify your desired version of Minecraft in the Server Version field. Leave the rest of the selections as default.
-
----
+Choose your Egg from the dropdown (the one you imported earlier) and click "Next" in the bottom right. No other settings on this step should need to be changed.
 
 <Image
-  src={serverCreation3}
-  alt="Server creation Environment Configuration tab 1"
+  src={pelican_server_create_egg_configuration}
+  alt="Pelican Server Create Egg Configuration"
 />
-<Image
-  src={serverCreation4}
-  alt="Server creation Environment Configuration tab 2"
-/>
-
-Set limits for Memory and Disk Space with the same considerations that were mentioned when allocating resources to the Node.
 
 ---
 
-<Image src={serverCreated} alt="Server's tab new server showing in list" />
+Set server-specific environment variables if you'd like, but for a basic Minecraft server, there is no need to change anything here. Click "Create Server" in the bottom right.
 
-Finally, click "Create Server". You will now see a screen where you can view the Server's configuration and allocation. On the right-hand side, you'll see the Server Status that should say "Installing" right away.
+<Image
+  src={pelican_server_create_environment_configuration}
+  alt="Pelican Server Create Environment Configuration"
+/>
 
 ---
 
+If all goes well, you'll see the server "Installing"! Go back to the "Servers" tab on the left sidebar, then click the "View Console" button on the server to see the startup status.
+
+<Image src={pelican_server_installing} alt="Pelican Server Installing" />
+
+---
+
+If it doesn't start automatically, click the "Start" button!
+
+<Image src={pelican_server_start} alt="Pelican Server Start" />
+
+---
+
+Accept Minecraft's EULA.
+
+<Image src={minecraft_eula} alt="Minecraft EULA" />
+
+---
+
+Congratulations! Your Minecraft server is now up and running with Pelican in Docker!
+
+## Connecting to your Server
+
+There are a few situations where you might want to connect to your server, and each has some details specific to it.
+
+### 1. Connecting from LAN using IP address
+
+This is already working! You can connect to your server on your LAN (home network) using the Pelican server's IP address and the port you allocated (e.g., `192.168.1.50:25565`).
+
 <Image
-  src={serverManagementDashboard}
-  alt="Minecraft server management dashboard"
+  src={minecraft_lan_ip_connection}
+  alt="Minecraft LAN IP Connection Screen"
 />
 
-Click the "Console" button at the top to view the server management dashboard. Click "Start" to spin up the Minecraft server.
+### 2. Connecting from WAN using IP address
 
-## Connecting to the Server using a FQDN
+This requires forwarding the server port on your router (Google your router's model for detailed instructions) from the WAN to your Pelican server address.
 
-In order to connect to your servers using a domain name, you need to configure a couple of things that regard Nginx Proxy Manager. First, if you are running NPM as a Docker container, you need to edit your compose stack or `docker run` command to expose the ports that your game servers will be running on. During the Node creation step, I allocated ports 25560-25570 for servers I might create. I now need to add the same port range inside of my NPM Docker Compose stack under `ports`.
+For a general overview, log into your router's admin panel (e.g. http://192.168.1.1) and go to the Port Forwarding section (might be under Advanced settings).
 
-```yaml
+Then you will need to add an entry here along the lines of:
+"Forward traffic from WAN on port `25565` (or whichever port you want) to my server on LAN IP `192.168.1.50` on port `25565`".
+
+Save that, then you will need to find your WAN public IP address ([whatismyip.com](https://www.whatismyip.com/) works great for this) and give it to whomever you want to connect to your server. They will open Minecraft and connect to `XX.XX.XX.XX:25565` where the `XX...` is replaced by your public IP.
+
+Note that you might not be able to connect to your server from that same address while on your LAN. Many routers don't support **NAT loopback** (also called NAT hairpinning), which is when a request from inside your network goes out to your own public IP and back in. Instead, use the LAN IP address from situation #1 above.
+
+<Banner type={BannerType.Error}>
+  Your public IP address is **sensitive information** and can be dangerous in the hands of the wrong people.
+
+They can DDoS attack you, exploit vulnerable services on open ports on your network, use GeoLocation to find the city you live in, connect to your server (use a whitelist to avoid this), and more.
+
+It is important that you understand the risks before forwarding ports and sharing your public WAN IP.
+
+</Banner>
+
+### 3. Connecting from LAN using FQDN
+
+This section is about connecting to your server with a Fully Qualified Domain Name (FQDN) like `minecraft.local.example.com` instead of an IP address.
+
+#### How DNS resolution works
+
+When you type an FQDN into Minecraft, your PC first has to turn it into an IP address. It asks your router (or Pi-hole/AdGuard Home, if your router uses one as its DNS server). The router checks its own local DNS entries first. It only finds a match if someone has added an "A" or "CNAME" record there. If there's no match, it asks upstream DNS servers like Google, Cloudflare or Quad9, which know every public FQDN on the internet. That's how `www.google.com` gets resolved to one of Google's servers.
+
+So to use an FQDN on your LAN, we add a local DNS record that points the name at a machine on your network.
+
+#### Adding the DNS record
+
+Like the port forwarding section above, you'll probably need to Google your router's model for exact steps. In general, log into your router's admin panel (e.g. http://192.168.1.1) and find the DNS Server section (it might be under Advanced settings).
+
+Add an entry along the lines of:
+"Domain Name ('A' Record): `minecraft.local.example.com` -> LAN IP: `192.168.1.50` (Pelican server)"
+
+That's it! Connect in Minecraft with `minecraft.local.example.com:25565`. The DNS record handles the name and the port goes straight to Wings, so no proxy is involved.
+
+<Image
+  src={minecraft_lan_fqdn_connection}
+  alt="Minecraft LAN FQDN Connection"
+/>
+
+<Collapsible title="Alternative: Reusing an FQDN pointed to NPM">
+
+If you already have a DNS record (wildcard or individual) that points to Nginx Proxy Manager, the name resolves to NPM's IP rather than Pelican's. In that case, NPM has to pass the game traffic along to Pelican. Normal Proxy Hosts in NPM only handle HTTP, while Minecraft uses raw TCP (and UDP for voice chat), so we need a **Stream**.
+
+In NPM, create a new Stream under "Hosts -> Streams" and enter the following details:
+
+| Field          | Value        | Note                             |
+| -------------- | ------------ | -------------------------------- |
+| Incoming Port  | 25565        | Whichever port your server is on |
+| Forward Host   | 192.168.1.50 | Pelican server IP                |
+| Forward Port   | 25565        | Same as above                    |
+| TCP Forwarding | Yes          |                                  |
+| UDP Forwarding | Yes          | Used for MC voice chat           |
+
+<Image src={npm_stream} alt="NPM Stream" />
+
+Repeat this for every port allocation you use in Pelican. NPM doesn't support port ranges yet. The underlying Nginx can do it, but there's an open [GitHub issue](https://github.com/NginxProxyManager/nginx-proxy-manager/issues/1969) tracking it in NPM.
+
+If NPM runs in Docker, you'll also need to map each port onto the container:
+
+```yaml {5,6}
 ports:
-  - 80:80
-  - 81:81
-  - 443:443
+  - 80:80 # Existing NPM port
+  - 81:81 # Existing NPM port
+  - 443:443 # Existing NPM port
+  - 25559:25559 # Game server port
   - 25560-25570:25560-25570 # Game server port ranges
 ```
 
----
+Your DNS record should point to NPM's IP (e.g. `minecraft.local.example.com -> 192.168.1.100`), not Pelican's.
 
-Next, you need to create a "Stream" in the NPM UI. Click the Hosts tab and select Streams in the list. Click "Add Stream" and fill in the information for one of the ports.
+If you use a wildcard record like `*.local.example.com`, keep in mind that **any** subdomain will reach your server on that port. For example, `scoobydoo.local.example.com:25565` works too. If you don't want that, create a separate record for each subdomain instead of a wildcard.
 
-<section class="img-row">
-  <Image
-    src={npmStreamDropdown}
-    alt="NPM hosts dropdown with stream selected"
-  />
-  <Image src={npmStream} alt="NPM stream configuration" />
-</section>
+</Collapsible>
 
-Note that you will have to manually add an entry for each port you want to create a Stream for. This can be pretty tedious if you have many entries to add. There is an open [feature request](https://github.com/NginxProxyManager/nginx-proxy-manager/issues/1969) with NPM on GitHub to solve this so it may become easier in the future.
+### 4. Connecting from WAN using FQDN
 
-| Field          | Value                        |
-| -------------- | ---------------------------- |
-| Incoming Port  | 25560                        |
-| Forward Host   | 192.168.1.33                 |
-| Forward Port   | 25560                        |
-| TCP Forwarding | Yes                          |
-| UDP Forwarding | Yes (used for MC voice chat) |
+This is the final method I will cover and it's the holy grail of what I was chasing when trying to create a Minecraft server when I was 13. All the public servers I used to play had super clean URLs like `minecraft.example.com` and it seemed like magic to me. Fast forward to the late 2020s and we've cracked the code!
 
----
+The process here is pretty simple and combines the LAN FQDN method and WAN IP methods from earlier. Here are the steps:
 
-<Image
-  src={minecraftAdGuardDnsRewrite}
-  alt="Minecraft DNS rewrite in AdGuard Home"
-/>
+1. Create a DNS ("A") record in your cloud _domain provider_ (the place you bought example.com from) and point it to your WAN (public) IP address
+2. Forward your server ports on your home router to your Pelican server (e.g. WAN 25565 -> LAN 192.168.1.50:25565)
 
-Finally, decide which FQDN you want to access your servers at and create a DNS/CNAME record for it on your network using PiHole or AdGuard Home. I chose `minecraft.local.aflorzy.com` and pointed it at my NPM server's IP.
+This is the same idea as the [LAN DNS record](#adding-the-dns-record) from section 3, except the record lives at your public domain provider and points to your public IP.
 
-<Image
-  src={wildcardAdGuardDnsRewrite}
-  alt="Wildcard DNS rewrite in AdGuard Home"
-/>
-
-It is possible to create a wildcard DNS matcher for your domain in PiHole or AdGuard Home so that all matching request are directed at your NPM instance. However, the downside of this is that the connection URL to Minecraft will not be limited to `minecraft.local.aflorzy.com:25560`. For example, I can connect to the same server using `scoobydoo.local.aflorzy.com:25560`. This can be fixed by creating a single DNS CNAME entry for each subdomain that NPM should handle.
-
----
-
-<section class="img-row">
-  <Image
-    src={minecraftDirectConnect}
-    alt="Minecraft Direct Connect screen with FQDN entered"
-  />
-  <Image src={minecraftLoading} alt="Minecraft 'Logging In' screen" />
-</section>
-
-Now it's time to open up Minecraft and connect to your server! I am able to connect to my server at `minecraft.local.aflorzy.com:25560`.
-
-## Exposing Servers to the WAN
-
-If you've gotten to this point, the only remaining step is to forward ports 80, 443, and 25560-25570 on your firewall and edit your DNS provider's settings to point an A or CNAME record at your public IP address.
+And you're done! Similar to the WAN IP method, you might not be able to connect to this address from a device on your LAN. Many routers don't support **NAT loopback** (also called NAT hairpinning or NAT reflection), which is when a request from inside your network goes out to your own public IP and back in. You can work around this with a local DNS override (the same [LAN DNS record](#adding-the-dns-record) from section 3), so the same FQDN resolves to `192.168.1.50` at home and to your public IP everywhere else.
 
 ## Final Thoughts
 
-If you've made it to this point and are able to create and connect to servers, congratulations! If not, don't get discouraged. The setup for Pelican and Pterodactyl is not nearly as straightforward as other Homelab services. We've all been there.
+Congratulations on setting up your Pelican game server! It is an amazing application to use once you're able to get it running and I'm grateful to put this post out into the world to help other struggling homelabbers and gamers.
 
-Take a closer look through this guide again, and keep searching around for other people's guides. Consider joining the [Pelican Discord server](https://discord.gg/pelican-panel) to see questions and solutions that other users have posted about. It is a thriving community so feel free to ask your own questions there.
+If you're still in need of assistance, join the [Pelican Discord server](https://pelican.dev/discord) and search the community support forum. They are more than willing to help, but know that they only officially support their own installation guides and won't be able to help fix issues encountered while following my guide here. I try to follow as close to the official docs as possible and to update this regularly, but running Wings in Docker and using NPM are not approaches they support.
+
+If you have questions for me, you can find my contact information in the footer of this site.
 
 Thank you for joining me in this journey of hosting Minecraft servers at home. The process has been long and arduous but is worth it in the end. Have a great day!

@@ -76,6 +76,8 @@ words:
   - Unraid
   - usermod
   - parkervcp
+  - whatismyip
+  - hairpinning
 ignoreRegExpList:
   - /```[\s\S]*?```/
 files:
