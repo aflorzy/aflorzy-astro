@@ -17,7 +17,7 @@ if (slug === undefined) {
 // Permanently redirect retired post slugs to the posts that replaced them
 const movedPosts: Record<string, string> = {
   "pelican-in-docker-2026": "setup-pelican-in-docker",
-  "update-pelican-in-docker": "setup-pelican-in-docker",
+  "update-pelican-in-docker": "setup-pelican-in-docker#updating-pelican",
 };
 
 const movedTo = movedPosts[slug.replace(/\/$/, "")];

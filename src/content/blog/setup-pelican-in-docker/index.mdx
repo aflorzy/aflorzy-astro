@@ -523,6 +523,54 @@ This is the same idea as the [LAN DNS record](#adding-the-dns-record) from secti
 
 And you're done! Similar to the WAN IP method, you might not be able to connect to this address from a device on your LAN. Many routers don't support **NAT loopback** (also called NAT hairpinning or NAT reflection), which is when a request from inside your network goes out to your own public IP and back in. You can work around this with a local DNS override (the same [LAN DNS record](#adding-the-dns-record) from section 3), so the same FQDN resolves to `192.168.1.50` at home and to your public IP everywhere else.
 
+## Updating Pelican
+
+Since we're using the official images, updating Pelican is just a matter of pulling the newest images and recreating the containers. There's no need to clone repositories or build anything ourselves.
+
+Panel and Wings releases are usually published around the same time, and running the latest version of both is recommended. You can follow new releases here: [Panel](https://github.com/pelican-dev/panel/releases), [Wings](https://github.com/pelican-dev/wings/releases).
+
+### 1. Back up your data
+
+Before updating, it's a good idea to back up your data and skim the release notes for any breaking changes. If something goes wrong, a backup lets you roll back instead of starting over.
+
+The two things worth backing up are:
+
+- **Panel:** the `pelican-data` Docker volume, which holds the database and configuration
+- **Wings:** the `/etc/pelican` directory, which holds the node configuration
+
+If your server runs in a virtual machine (e.g. on Proxmox), the easiest option is to take a snapshot of the VM before updating.
+
+### 2. Pull the new images and restart
+
+```bash
+cd ~/pelican
+docker compose pull # Download the newest panel and wings images
+docker compose up -d # Recreate any containers whose image changed
+```
+
+Docker Compose only recreates the containers that have a new image, so this command is safe to run even if only one of them was updated.
+
+Once everything is running, you can delete the old images to free up disk space:
+
+```bash
+docker image prune
+```
+
+### 3. Verify the update
+
+Check that both containers are running and watch the Panel logs for errors:
+
+```bash
+docker compose ps
+docker logs --follow pelican_panel
+```
+
+Then log into the Panel, go to the "Nodes" tab, and make sure your node still has a green heart. If it shows a red heart, check the Wings logs with `docker logs --follow pelican_wings`.
+
+<Image src={wings_green_heart} alt="Wings Node Green Heart" />
+
+If something broke, read the release notes for the version you updated to. Breaking changes and the steps to fix them are usually listed there. You can also search the [Pelican Discord server](https://pelican.dev/discord) for others who hit the same issue.
+
 ## Final Thoughts
 
 Congratulations on setting up your Pelican game server! It is an amazing application to use once you're able to get it running and I'm grateful to put this post out into the world to help other struggling homelabbers and gamers.
