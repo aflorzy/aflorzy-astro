@@ -1,0 +1,30 @@
+---
+interface Props {
+  title: string;
+  level?: 2 | 3 | 4 | 5 | 6;
+  id?: string;
+  open?: boolean;
+}
+
+const { title, level = 4, id, open = false } = Astro.props as Props;
+
+// Match the slugs MDX generates for regular headings so anchor links work
+const slug =
+  id ??
+  title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+
+const Heading = `h${level}` as const;
+---
+
+<details class="collapsible" open={open}>
+  <summary>
+    <Heading id={slug}>{title}</Heading>
+  </summary>
+  <div class="collapsible-content">
+    <slot />
+  </div>
+</details>

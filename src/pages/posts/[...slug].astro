@@ -14,6 +14,17 @@ if (slug === undefined) {
   throw new Error("Slug is required");
 }
 
+// Permanently redirect retired post slugs to the posts that replaced them
+const movedPosts: Record<string, string> = {
+  "pelican-in-docker-2026": "setup-pelican-in-docker",
+  "update-pelican-in-docker": "setup-pelican-in-docker#updating-pelican",
+};
+
+const movedTo = movedPosts[slug.replace(/\/$/, "")];
+if (movedTo !== undefined) {
+  return Astro.redirect(`/posts/${movedTo}`, 301);
+}
+
 // 2. Query for the entry directly using the request slug
 const entry = await getEntry("blog", slug);
 
