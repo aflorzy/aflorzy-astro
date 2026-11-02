@@ -1,0 +1,107 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+  // "inline" renders a collapsible block for narrow screens,
+  // "sidebar" renders a sticky list for wide screens
+  variant: "inline" | "sidebar";
+}
+
+const { headings, variant } = Astro.props as Props;
+
+// Only h2/h3 are useful for navigation; deeper levels make the list noisy
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const sectionCount = items.filter((h) => h.depth === 2).length;
+---
+
+{
+  variant === "inline" ? (
+    <details class="toc toc--inline">
+      <summary>
+        On this page
+        <span class="toc-count">{sectionCount} sections</span>
+      </summary>
+      <nav aria-label="Table of contents">
+        <ol>
+          {items.map((h) => (
+            <li class={`toc-depth-${h.depth}`}>
+              <a href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </details>
+  ) : (
+    <nav class="toc toc--sidebar" aria-label="Table of contents">
+      <p class="toc-title">On this page</p>
+      <ol>
+        {items.map((h) => (
+          <li class={`toc-depth-${h.depth}`}>
+            <a href={`#${h.slug}`}>{h.text}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
+<script>
+  // Highlight the section currently being read in the sidebar ToC
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(".toc--sidebar a")
+  );
+  const headings = links
+    .map((link) => document.getElementById(link.hash.slice(1)))
+    .filter((h): h is HTMLElement => h !== null);
+
+  const setActive = (id: string) => {
+    for (const link of links) {
+      if (link.hash === `#${id}`) {
+        link.setAttribute("aria-current", "location");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    }
+  };
+
+  if (headings.length > 0) {
+    // The active section is the last heading that has scrolled past the top
+    // quarter of the viewport
+    const update = () => {
+      const threshold = window.innerHeight * 0.25;
+      let current = headings[0];
+      for (const heading of headings) {
+        if (heading.getBoundingClientRect().top <= threshold) {
+          current = heading;
+        } else {
+          break;
+        }
+      }
+      setActive(current.id);
+    };
+
+    let ticking = false;
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(() => {
+            update();
+            ticking = false;
+          });
+        }
+      },
+      { passive: true }
+    );
+    update();
+  }
+
+  // Collapse the inline ToC after jumping to a section on mobile
+  for (const link of document.querySelectorAll(".toc--inline a")) {
+    link.addEventListener("click", () => {
+      link.closest("details")?.removeAttribute("open");
+    });
+  }
+</script>

@@ -1,0 +1,28 @@
+---
+import type { MarkdownHeading } from "astro";
+import TableOfContents from "./TableOfContents.astro";
+
+interface Props {
+  headings?: MarkdownHeading[];
+}
+
+const { headings = [] } = Astro.props as Props;
+
+// Short entries don't need a table of contents
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const showToc = tocHeadings.filter((h) => h.depth === 2).length >= 3;
+---
+
+<div class:list={["post-body", { "post-body--with-toc": showToc }]}>
+  {showToc && <TableOfContents headings={tocHeadings} variant="inline" />}
+  <div class="post-content">
+    <slot />
+  </div>
+  {
+    showToc && (
+      <aside class="post-aside">
+        <TableOfContents headings={tocHeadings} variant="sidebar" />
+      </aside>
+    )
+  }
+</div>
