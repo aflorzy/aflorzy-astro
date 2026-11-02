@@ -1,6 +1,7 @@
 ---
 import { getEntry } from "astro:content";
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
+import { readingTime } from "../../scripts/readingTime";
 
 // 1. Get the slug from the incoming server request
 const { slug } = Astro.params;
@@ -18,9 +19,12 @@ if (entry === undefined) {
 }
 
 // 4. (Optional) Render the entry to HTML in the template
-const { Content } = await entry.render();
+const { Content, headings } = await entry.render();
 ---
 
-<ProjectLayout frontmatter={entry.data}>
+<ProjectLayout
+  frontmatter={entry.data}
+  headings={headings}
+  readingTime={readingTime(entry.body)}>
   <Content />
 </ProjectLayout>

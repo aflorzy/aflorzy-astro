@@ -29,7 +29,7 @@ Posts with `draft: true` are excluded from all listings and the search endpoint.
 
 ### Layout Chain
 
-`BaseLayout.astro` is the root — it owns `<html>`, Header, Footer, global SCSS, OG/Twitter meta, and GTM (via Partytown). `MarkdownPostLayout.astro` extends it and adds JSON-LD (`BlogPosting` schema), published/updated dates, tags, and authors. `ProjectLayout.astro` similarly extends BaseLayout.
+`BaseLayout.astro` is the root — it owns `<html>`, Header, Footer, global SCSS, OG/Twitter meta, and GTM (via Partytown). `MarkdownPostLayout.astro` extends it and adds JSON-LD (`BlogPosting` schema). `ProjectLayout.astro` similarly extends BaseLayout. Both render the shared `PostHeader.astro` (title, description, authors, dates, reading time, tags/attributes) in BaseLayout's `title` slot position, and wrap content in `PostBody.astro`, which adds `TableOfContents.astro` when an entry has 3+ `h2`s: a collapsible block on narrow screens and a sticky sidebar with scroll-spy at 1024px+. Pages pass `headings` from `entry.render()` and `readingTime(entry.body)` (`src/scripts/readingTime.ts`).
 
 ### Preact Components
 
@@ -58,7 +58,7 @@ SCSS with partials in `src/styles/`. All partials are imported through `global.s
 - **`astro-expressive-code`** — code blocks with line numbers and collapsible sections.
 - **`astro-icon`** with `@iconify-json/mdi` — Material Design Icons via `<Icon name="mdi:..." />`.
 - **`remark-modified-time`** (`src/scripts/remark/remark-modified-time.mjs`) — sets `lastModified` frontmatter. The git-based implementation is currently commented out (timing issue in CI); it sets an empty string instead.
-- **Switch/Case components** (`src/components/switch-case/`) — custom Astro component pattern for conditional slot rendering used in `MarkdownPostLayout`.
+- **Switch/Case components** (`src/components/switch-case/`) — custom Astro component pattern for conditional slot rendering used in `ProjectLayout` (project logos).
 
 ### Deployment
 

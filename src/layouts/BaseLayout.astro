@@ -80,7 +80,8 @@ const resolvedOgImage = new URL(ogImageUrl ?? "/images/favicon.png", origin);
 
     <Header />
 
-    <h1>{pageTitle}</h1>
+    <!-- Layouts with their own header (posts, projects) replace the default title -->
+    <slot name="title"><h1>{pageTitle}</h1></slot>
 
     <div class="content">
       <slot />

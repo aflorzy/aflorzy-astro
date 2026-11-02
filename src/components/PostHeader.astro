@@ -1,0 +1,116 @@
+---
+import { Icon } from "astro-icon/components";
+import { formatDate } from "../scripts/formatDate";
+import Tag from "./Tag.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  authors?: string[];
+  contributors?: string[];
+  pubDate?: Date;
+  lastModified?: Date;
+  readingTime?: number;
+  tags?: string[];
+  attributes?: string[];
+}
+
+const {
+  title,
+  description,
+  authors = [],
+  contributors = [],
+  pubDate,
+  lastModified,
+  readingTime,
+  tags = [],
+  attributes = [],
+} = Astro.props as Props;
+
+// Frontmatter dates are parsed as UTC midnight, so format in UTC to avoid
+// shifting them back a day in western timezones
+const formatDay = (date: Date) =>
+  formatDate(date, { dateStyle: "medium", timeZone: "UTC" });
+const isoDay = (date: Date) => date.toISOString().slice(0, 10);
+
+const showUpdated =
+  lastModified !== undefined &&
+  (pubDate === undefined || isoDay(lastModified) !== isoDay(pubDate));
+
+// Only list contributors who aren't already credited as authors
+const extraContributors = contributors.filter((c) => !authors.includes(c));
+---
+
+<div class="post-header">
+  <h1>{title}</h1>
+
+  {description && <p class="post-summary">{description}</p>}
+
+  <ul class="post-meta">
+    {
+      authors.length > 0 && (
+        <li>
+          <Icon name="mdi:account-outline" aria-hidden="true" />
+          <span>{authors.join(", ")}</span>
+        </li>
+      )
+    }
+    {
+      extraContributors.length > 0 && (
+        <li>
+          <Icon name="mdi:account-multiple-outline" aria-hidden="true" />
+          <span>with {extraContributors.join(", ")}</span>
+        </li>
+      )
+    }
+    {
+      pubDate && (
+        <li>
+          <Icon name="mdi:calendar-blank-outline" aria-hidden="true" />
+          <time datetime={isoDay(pubDate)}>{formatDay(pubDate)}</time>
+        </li>
+      )
+    }
+    {
+      showUpdated && lastModified && (
+        <li>
+          <Icon name="mdi:update" aria-hidden="true" />
+          <span>
+            Updated{" "}
+            <time datetime={isoDay(lastModified)}>
+              {formatDay(lastModified)}
+            </time>
+          </span>
+        </li>
+      )
+    }
+    {
+      readingTime && (
+        <li>
+          <Icon name="mdi:clock-outline" aria-hidden="true" />
+          <span>{readingTime} min read</span>
+        </li>
+      )
+    }
+  </ul>
+
+  {
+    tags.length > 0 && (
+      <div class="tags post-tags">
+        {tags.map((tag) => (
+          <Tag tag={tag} />
+        ))}
+      </div>
+    )
+  }
+
+  {
+    attributes.length > 0 && (
+      <div class="attributes post-tags">
+        {attributes.map((attribute) => (
+          <span class="attribute">{attribute}</span>
+        ))}
+      </div>
+    )
+  }
+</div>

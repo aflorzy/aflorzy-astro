@@ -1,12 +1,9 @@
 ---
-import { Image } from "astro:assets";
-import daytrackr from "../assets/daytrackr.png";
-import flotrade from "../assets/flotrade.png";
-import * as use from "../components/switch-case";
-import Tag from "../components/Tag.astro";
+import PostBody from "../components/PostBody.astro";
+import PostHeader from "../components/PostHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 
-const { frontmatter, created, updated } = Astro.props;
+const { frontmatter, headings = [], readingTime } = Astro.props;
 
 type BlogFM = {
   title: string;
@@ -21,7 +18,6 @@ type BlogFM = {
 const fm = frontmatter as BlogFM;
 const ogType = fm.pubDate ? "article" : "website";
 const ogImageUrl = typeof fm.image === "string" ? fm.image : fm.image?.url;
-const tags: string[] = (fm.tags ?? []) as string[];
 
 // JSON-LD (schema.org) for blog posts
 const origin = Astro.site ?? Astro.url.origin;
@@ -48,61 +44,28 @@ const jsonData = {
 ---
 
 <BaseLayout
-  pageTitle={frontmatter.title}
-  pageDescription={frontmatter.description}
+  pageTitle={fm.title}
+  pageDescription={fm.description}
   ogType={ogType}
   ogImageUrl={ogImageUrl}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(jsonData)} />
   </Fragment>
-  {created && <p>Published {created}</p>}
-  {updated && updated !== created && <p>Updated {updated}</p>}
+  <Fragment slot="title"></Fragment>
 
-  {
-    frontmatter.description && (
-      <p>
-        <em>{frontmatter.description}</em>
-      </p>
-    )
-  }
+  <article class="post">
+    <PostHeader
+      title={fm.title}
+      description={fm.description}
+      authors={authors}
+      pubDate={fm.pubDate}
+      lastModified={fm.lastModified}
+      readingTime={readingTime}
+      tags={fm.tags}
+    />
 
-  {
-    frontmatter.authors?.length && (
-      <p>Written by {frontmatter.authors.join(", ")}</p>
-    )
-  }
-
-  <use.switch value={frontmatter.title}>
-    <use.case slot="FloTrade">
-      <Image
-        src={flotrade}
-        alt="FloTrade logo"
-        format="webp"
-        height="300"
-        quality="mid"
-      />
-    </use.case>
-
-    <use.case slot="DayTrackr">
-      <Image
-        src={daytrackr}
-        alt="DayTrackr logo"
-        format="webp"
-        height="300"
-        quality="mid"
-      />
-    </use.case>
-  </use.switch>
-
-  {
-    tags.length > 0 && (
-      <div class="tags">
-        {tags.map((tag: string) => (
-          <Tag tag={tag} />
-        ))}
-      </div>
-    )
-  }
-
-  <slot />
+    <PostBody headings={headings}>
+      <slot />
+    </PostBody>
+  </article>
 </BaseLayout>

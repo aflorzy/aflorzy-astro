@@ -1,0 +1,208 @@
+@use "sass:color";
+@use "colors";
+
+$toc-breakpoint: 1024px;
+$toc-width: 220px;
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Header block shared by blog posts and projects */
+.post-header {
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid colors.$color-primary;
+
+  h1 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.25;
+  }
+}
+
+.post-summary {
+  font-size: 1.125rem;
+  color: color.mix(colors.$color-light, colors.$color-dark, 80%);
+  margin: 0 0 1rem;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: color.mix(colors.$color-light, colors.$color-dark, 70%);
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0;
+  }
+
+  svg {
+    width: 1.1em;
+    height: 1.1em;
+    color: colors.$color-secondary;
+  }
+}
+
+.post-tags {
+  font-size: 0.875rem;
+
+  /* Override the roomier global gap; these sit in a dense header */
+  &.tags,
+  &.attributes {
+    gap: 0.5rem;
+  }
+}
+
+.post-hero {
+  margin: 0 auto 1.5rem;
+}
+
+/* Headings land below the top edge instead of flush against it */
+.post-content :is(h2, h3, h4) {
+  scroll-margin-top: 1.5rem;
+}
+
+/* Table of contents */
+/* Undo the global nav styles meant for the site header */
+nav.toc,
+.toc nav {
+  display: block;
+}
+
+.toc {
+  font-size: 0.9rem;
+
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    margin: 0;
+  }
+
+  a {
+    display: block;
+    padding: 0.25rem 0.75rem;
+    color: color.mix(colors.$color-light, colors.$color-dark, 80%);
+    line-height: 1.4;
+
+    &:hover {
+      color: colors.$color-tertiary;
+      text-decoration: none;
+    }
+  }
+
+  .toc-depth-3 a {
+    padding-left: 1.75rem;
+    font-size: 0.85rem;
+  }
+}
+
+.toc--inline {
+  border: 1px solid colors.$color-primary;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  background-color: color.adjust(colors.$color-dark, $lightness: 3%);
+
+  summary {
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    font-weight: bold;
+    color: colors.$color-secondary;
+  }
+
+  .toc-count {
+    font-weight: normal;
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+    color: color.mix(colors.$color-light, colors.$color-dark, 65%);
+  }
+
+  nav {
+    padding: 0 0.25rem 0.75rem;
+  }
+
+  &[open] summary {
+    border-bottom: 1px solid colors.$color-primary;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.toc--sidebar {
+  .toc-title {
+    margin: 0 0 0.5rem;
+    padding-left: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: colors.$color-secondary;
+  }
+
+  ol {
+    border-left: 2px solid colors.$color-primary;
+  }
+
+  a {
+    margin-left: -2px;
+    border-left: 2px solid transparent;
+    transition:
+      color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out;
+
+    &[aria-current] {
+      color: colors.$color-tertiary;
+      border-left-color: colors.$color-tertiary;
+    }
+  }
+}
+
+.post-aside {
+  display: none;
+}
+
+@media screen and (min-width: $toc-breakpoint) {
+  .post-body--with-toc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) $toc-width;
+    gap: 3rem;
+
+    .toc--inline {
+      display: none;
+    }
+
+    .post-aside {
+      display: block;
+    }
+
+    .toc--sidebar {
+      position: sticky;
+      top: 1.5rem;
+      max-height: calc(100vh - 3rem);
+      overflow-y: auto;
+    }
+  }
+}
+
+/* Give pages with a sidebar extra room so the article column stays wide */
+@media screen and (min-width: 1280px) {
+  body:has(.post-body--with-toc) {
+    max-width: 1200px;
+  }
+}
