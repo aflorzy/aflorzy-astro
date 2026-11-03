@@ -39,6 +39,8 @@ jobs:
           registry: ${{ vars.REGISTRY_URL }}
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
+      # Inline cache only: a separate registry cache export uploads the same layers as the
+      # image push in parallel, which trips a duplicate-blob panic in Gitea 1.22's registry
       # Image path stays florzytech/aflorzy-astro to match app-deployments/apps/aflorzy-astro/docker-compose.yml
       - uses: docker/build-push-action@v6
         with:
@@ -47,5 +49,5 @@ jobs:
           tags: |
             ${{ vars.REGISTRY_URL }}/${{ github.repository }}:latest
             ${{ vars.REGISTRY_URL }}/${{ github.repository }}:${{ steps.vars.outputs.sha_short }}.${{ github.run_number }}
-          cache-from: type=registry,ref=${{ vars.REGISTRY_URL }}/${{ github.repository }}:buildcache
-          cache-to: type=registry,ref=${{ vars.REGISTRY_URL }}/${{ github.repository }}:buildcache,mode=max
+          cache-from: type=registry,ref=${{ vars.REGISTRY_URL }}/${{ github.repository }}:latest
+          cache-to: type=inline
