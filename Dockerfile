@@ -1,9 +1,11 @@
 FROM node:lts-alpine AS runtime
 WORKDIR /app
 
-COPY . .
+# Install dependencies first so this layer is reused until the lockfile changes
+COPY package.json package-lock.json ./
+RUN npm ci
 
-RUN npm install
+COPY . .
 RUN npm run build
 
 ENV HOST=0.0.0.0
@@ -12,4 +14,4 @@ ENV MODE=production
 
 EXPOSE 4321
 
-CMD node ./dist/server/entry.mjs
+CMD ["node", "./dist/server/entry.mjs"]
