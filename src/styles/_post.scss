@@ -76,6 +76,49 @@ html {
   scroll-margin-top: 1.5rem;
 }
 
+/* Link icon after each heading; clicking copies the section URL */
+.heading-anchor {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.4em;
+  font-size: 0.75em;
+  vertical-align: middle;
+  color: colors.$color-secondary;
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+
+  &:hover {
+    color: colors.$color-tertiary;
+  }
+
+  &.is-copied::after {
+    content: "Copied!";
+    position: absolute;
+    left: calc(100% + 0.4em);
+    padding: 0.1em 0.5em;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: normal;
+    white-space: nowrap;
+    color: colors.$color-dark;
+    background-color: colors.$color-secondary;
+  }
+}
+
+.post-content :is(h2, h3, h4):hover .heading-anchor,
+.heading-anchor:focus-visible,
+.heading-anchor.is-copied {
+  opacity: 1;
+}
+
+/* No hover on touch screens, so keep the icon faintly visible */
+@media (hover: none) {
+  .heading-anchor {
+    opacity: 0.6;
+  }
+}
+
 /* Table of contents */
 /* Undo the global nav styles meant for the site header */
 nav.toc,

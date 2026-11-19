@@ -26,3 +26,27 @@ const showToc = tocHeadings.filter((h) => h.depth === 2).length >= 3;
     )
   }
 </div>
+
+<script>
+  // Heading anchors are added at build time by rehype-heading-anchors.
+  // Clicking one still jumps to the section, and also copies its URL.
+  for (const anchor of document.querySelectorAll<HTMLAnchorElement>(
+    ".post-content .heading-anchor"
+  )) {
+    anchor.addEventListener("click", async () => {
+      if (!navigator.clipboard) return;
+      const url = new URL(anchor.hash, window.location.href).href;
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch {
+        return;
+      }
+      anchor.classList.add("is-copied");
+      anchor.setAttribute("aria-label", "Link copied");
+      window.setTimeout(() => {
+        anchor.classList.remove("is-copied");
+        anchor.setAttribute("aria-label", "Copy link to this section");
+      }, 2000);
+    });
+  }
+</script>

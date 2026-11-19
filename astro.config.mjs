@@ -13,6 +13,8 @@ import sitemap from "@astrojs/sitemap";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import expressiveCode from "astro-expressive-code";
+import { rehypeHeadingIds } from "@astrojs/markdown-remark";
+import { rehypeHeadingAnchors } from "./src/scripts/rehype/rehype-heading-anchors.mjs";
 import { remarkModifiedTime } from "./src/scripts/remark/remark-modified-time.mjs";
 
 // https://astro.build/config
@@ -46,5 +48,6 @@ export default defineConfig({
 
   markdown: {
     remarkPlugins: [remarkModifiedTime],
+    rehypePlugins: [rehypeHeadingIds, rehypeHeadingAnchors],
   },
 });

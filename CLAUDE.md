@@ -58,6 +58,7 @@ SCSS with partials in `src/styles/`. All partials are imported through `global.s
 - **`astro-expressive-code`** — code blocks with line numbers and collapsible sections.
 - **`astro-icon`** with `@iconify-json/mdi` — Material Design Icons via `<Icon name="mdi:..." />`.
 - **`remark-modified-time`** (`src/scripts/remark/remark-modified-time.mjs`) — sets `lastModified` frontmatter. The git-based implementation is currently commented out (timing issue in CI); it sets an empty string instead.
+- **`rehype-heading-anchors`** (`src/scripts/rehype/rehype-heading-anchors.mjs`) — appends a link icon (`.heading-anchor`) to every `h2`–`h4` in Markdown/MDX content. It runs after Astro's `rehypeHeadingIds` (both in `markdown.rehypePlugins`, which MDX inherits) so ids exist, and adds no text nodes so TOC heading text stays clean. A script in `PostBody.astro` copies the section URL on click. Headings rendered by components (e.g. `Collapsible` titles) don't get one.
 - **Switch/Case components** (`src/components/switch-case/`) — custom Astro component pattern for conditional slot rendering used in `ProjectLayout` (project logos).
 
 ### Deployment
