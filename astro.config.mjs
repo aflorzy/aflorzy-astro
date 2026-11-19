@@ -23,6 +23,11 @@ export default defineConfig({
     mode: "standalone",
   }),
 
+  image: {
+    // Return 404 instead of 500 for images missing from the current build
+    endpoint: "./src/scripts/image-endpoint.ts",
+  },
+
   site: "https://blog.aflorzy.com",
   integrations: [
     preact(),
