@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # Windows Zone.Identifier files
 *Zone.Identifier
+
+# MCP server audit logs
+audit.log
